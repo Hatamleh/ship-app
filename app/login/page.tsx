@@ -61,6 +61,12 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
+          <img
+            src="/ship-logo.svg"
+            alt="ShipApp"
+            title="ShipApp logo"
+            className="mx-auto h-14 w-14"
+          />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">
             {t('auth.loginTitle')}
           </h2>
@@ -68,7 +74,10 @@ export default function LoginPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded">
+            <div
+              data-testid="error-message"
+              className="error-message bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded"
+            >
               {error}
             </div>
           )}
@@ -82,6 +91,7 @@ export default function LoginPage() {
                 id="email"
                 name="email"
                 type="email"
+                data-testid="email-input"
                 required
                 value={formData.email}
                 onChange={handleChange}
@@ -98,6 +108,7 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
+                data-testid="password-input"
                 required
                 value={formData.password}
                 onChange={handleChange}
@@ -111,7 +122,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-nord-polar-0 bg-primary hover:bg-nord-frost-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:bg-nord-polar-3 disabled:cursor-not-allowed"
+              data-testid="login-button"
+              className="login-button w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-nord-polar-0 bg-primary hover:bg-nord-frost-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:bg-nord-polar-3 disabled:cursor-not-allowed"
             >
               {loading ? t('common.loading') : t('auth.login')}
             </button>
