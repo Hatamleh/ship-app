@@ -8,6 +8,7 @@ import ShipmentFilters from '@/components/shipments/ShipmentFilters'
 import ShipmentsTable from '@/components/shipments/ShipmentsTable'
 import KebabMenu from '@/components/shipments/KebabMenu'
 import DeleteModal from '@/components/shipments/DeleteModal'
+import PromoModal from '@/components/shipments/PromoModal'
 import type { Shipment } from '@/lib/types'
 
 function ShipmentsPageContent() {
@@ -159,6 +160,9 @@ function ShipmentsPageContent() {
 
   return (
     <div>
+      {/* Random promo overlay — teaches addLocatorHandler */}
+      <PromoModal />
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
