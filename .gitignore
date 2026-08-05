@@ -42,3 +42,7 @@ shipping-app.iml
 
 .claude
 lessons
+
+# env
+.env
+.env.local

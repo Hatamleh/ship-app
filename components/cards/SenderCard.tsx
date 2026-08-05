@@ -34,7 +34,7 @@ export default function SenderCard({
         </div>
       </div>
       <p className="text-xs text-muted-foreground/70 mt-3">
-        يتم تعبئة بيانات المرسل من حسابك تلقائياً ولا يمكن تعديلها
+        Sender details are filled from your account automatically and cannot be edited
       </p>
     </div>
   )

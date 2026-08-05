@@ -101,14 +101,14 @@ export default function ShipmentDetailPage() {
     if (status === 'draft') {
       return (
         <span className="px-3 py-1 text-sm font-medium rounded-full bg-nord-polar-2 text-foreground">
-          مسودة
+          Draft
         </span>
       )
     }
     // All non-draft statuses are "finalized"
     return (
       <span className="px-3 py-1 text-sm font-medium rounded-full bg-nord-aurora-green/20 text-premium">
-        مُكتمل
+        Finalized
       </span>
     )
   }
@@ -116,7 +116,7 @@ export default function ShipmentDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-muted-foreground">جاري تحميل الشحنة...</div>
+        <div className="text-muted-foreground">Loading shipment...</div>
       </div>
     )
   }
@@ -125,13 +125,13 @@ export default function ShipmentDetailPage() {
     return (
       <div>
         <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-6">
-          {error || 'الشحنة غير موجودة'}
+          {error || 'Shipment not found'}
         </div>
         <Link
           href="/shipments"
           className="text-primary hover:text-blue-800"
         >
-          → العودة إلى الشحنات
+          → Back to Shipments
         </Link>
       </div>
     )
@@ -145,16 +145,16 @@ export default function ShipmentDetailPage() {
           href="/shipments"
           className="text-primary hover:text-blue-800 text-sm mb-4 inline-block"
         >
-          → العودة إلى الشحنات
+          → Back to Shipments
         </Link>
 
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-foreground">
-              {shipment.status === 'draft' ? `مسودة شحنة #${shipment.id}` : shipment.trackingNumber}
+              {shipment.status === 'draft' ? `Draft Shipment #${shipment.id}` : shipment.trackingNumber}
             </h1>
             <p className="mt-2 text-muted-foreground">
-              تم الإنشاء في {new Date(shipment.createdAt).toLocaleDateString('ar-SA')}
+              Created on {new Date(shipment.createdAt).toLocaleDateString('en-US')}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -166,21 +166,21 @@ export default function ShipmentDetailPage() {
                   className="flex items-center gap-2 px-6 py-2 border border-gray-600 text-muted-foreground rounded-md hover:bg-background transition-colors"
                 >
                   <Edit className="w-4 h-4" />
-                  تعديل
+                  Edit
                 </Link>
                 <button
                   onClick={handleFinalize}
                   disabled={finalizing}
                   className="px-6 py-2 bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
-                  {finalizing ? 'جاري الإتمام...' : 'إتمام الشحنة'}
+                  {finalizing ? 'Finalizing...' : 'Finalize Shipment'}
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(true)}
                   className="flex items-center gap-2 px-6 py-2 border border-red-600 text-red-600 rounded-md hover:bg-red-50 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
-                  حذف
+                  Delete
                 </button>
               </>
             ) : (
@@ -190,14 +190,14 @@ export default function ShipmentDetailPage() {
                   className="flex items-center gap-2 px-6 py-2 border border-blue-600 text-primary rounded-md hover:bg-blue-50 transition-colors"
                 >
                   <Copy className="w-4 h-4" />
-                  تكرار
+                  Repeat
                 </button>
                 <button
                   onClick={() => setShowDeleteModal(true)}
                   className="flex items-center gap-2 px-6 py-2 border border-red-600 text-red-600 rounded-md hover:bg-red-50 transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
-                  حذف
+                  Delete
                 </button>
               </>
             )}
@@ -208,18 +208,18 @@ export default function ShipmentDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Sender Information */}
         <div className="bg-muted p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">معلومات المرسل</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">Sender Information</h2>
           <div className="space-y-3">
             <div>
-              <div className="text-sm text-muted-foreground">الاسم</div>
+              <div className="text-sm text-muted-foreground">Name</div>
               <div className="font-medium text-foreground">{shipment.from.name}</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">الهاتف</div>
+              <div className="text-sm text-muted-foreground">Phone</div>
               <div className="font-medium text-foreground">{shipment.from.phone}</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">العنوان</div>
+              <div className="text-sm text-muted-foreground">Address</div>
               <div className="font-medium text-foreground">
                 {shipment.from.street}<br />
                 {shipment.from.city}, {shipment.from.postalCode}<br />
@@ -231,18 +231,18 @@ export default function ShipmentDetailPage() {
 
         {/* Receiver Information */}
         <div className="bg-muted p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">معلومات المستلم</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">Receiver Information</h2>
           <div className="space-y-3">
             <div>
-              <div className="text-sm text-muted-foreground">الاسم</div>
+              <div className="text-sm text-muted-foreground">Name</div>
               <div className="font-medium text-foreground">{shipment.to.name}</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">الهاتف</div>
+              <div className="text-sm text-muted-foreground">Phone</div>
               <div className="font-medium text-foreground">{shipment.to.phone}</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">العنوان</div>
+              <div className="text-sm text-muted-foreground">Address</div>
               <div className="font-medium text-foreground">
                 {shipment.to.street}<br />
                 {shipment.to.city}, {shipment.to.postalCode}<br />
@@ -254,24 +254,24 @@ export default function ShipmentDetailPage() {
 
         {/* Package Details */}
         <div className="bg-muted p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">تفاصيل الطرد</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">Package Details</h2>
           <div className="space-y-3">
             <div>
-              <div className="text-sm text-muted-foreground">نوع الشحنة</div>
+              <div className="text-sm text-muted-foreground">Shipment Type</div>
               <div className="font-medium text-foreground">{shipment.service.shipmentType}</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">الوزن</div>
-              <div className="font-medium text-foreground">{shipment.package.weight} كجم</div>
+              <div className="text-sm text-muted-foreground">Weight</div>
+              <div className="font-medium text-foreground">{shipment.package.weight} kg</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">الأبعاد (طول × عرض × ارتفاع)</div>
+              <div className="text-sm text-muted-foreground">Dimensions (L × W × H)</div>
               <div className="font-medium text-foreground">
-                {shipment.package.length} × {shipment.package.width} × {shipment.package.height} سم
+                {shipment.package.length} × {shipment.package.width} × {shipment.package.height} cm
               </div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">وصف المحتويات</div>
+              <div className="text-sm text-muted-foreground">Item Description</div>
               <div className="font-medium text-foreground">{shipment.package.description}</div>
             </div>
           </div>
@@ -279,27 +279,27 @@ export default function ShipmentDetailPage() {
 
         {/* Service & Options */}
         <div className="bg-muted p-6 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4 text-foreground">الخدمة والخيارات</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">Service & Options</h2>
           <div className="space-y-3">
             <div>
-              <div className="text-sm text-muted-foreground">نوع الخدمة</div>
+              <div className="text-sm text-muted-foreground">Service Type</div>
               <div className="font-medium text-foreground">{shipment.service.type}</div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">طريقة الاستلام</div>
+              <div className="text-sm text-muted-foreground">Pickup Method</div>
               <div className="font-medium text-foreground">
-                {shipment.service.pickupMethod === 'home' ? 'الاستلام من المنزل' : 'التوصيل إلى مكتب البريد'}
+                {shipment.service.pickupMethod === 'home' ? 'Home Pickup' : 'Drop Off at Postal Office'}
               </div>
             </div>
             <div>
-              <div className="text-sm text-muted-foreground">خيارات إضافية</div>
+              <div className="text-sm text-muted-foreground">Additional Options</div>
               <div className="space-y-1">
                 {shipment.options.insurance && (
                   <div className="flex items-center text-sm">
                     <svg className="w-4 h-4 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    التأمين
+                    Insurance
                   </div>
                 )}
                 {shipment.options.signature && (
@@ -307,7 +307,7 @@ export default function ShipmentDetailPage() {
                     <svg className="w-4 h-4 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    التوقيع مطلوب
+                    Signature Required
                   </div>
                 )}
                 {shipment.options.packaging && (
@@ -315,7 +315,7 @@ export default function ShipmentDetailPage() {
                     <svg className="w-4 h-4 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    التغليف الاحترافي
+                    Professional Packaging
                   </div>
                 )}
                 {shipment.options.liquid && (
@@ -323,11 +323,11 @@ export default function ShipmentDetailPage() {
                     <svg className="w-4 h-4 text-green-500 ml-2" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    يحتوي على سوائل
+                    Contains Liquid
                   </div>
                 )}
                 {!shipment.options.insurance && !shipment.options.signature && !shipment.options.packaging && !shipment.options.liquid && (
-                  <div className="text-sm text-muted-foreground">لم يتم اختيار خيارات إضافية</div>
+                  <div className="text-sm text-muted-foreground">No additional options selected</div>
                 )}
               </div>
             </div>
@@ -337,33 +337,33 @@ export default function ShipmentDetailPage() {
 
       {/* Cost Breakdown */}
       <div className="mt-6 bg-muted p-6 rounded-lg shadow">
-        <h2 className="text-lg font-semibold mb-4 text-foreground">تفاصيل التكلفة</h2>
+        <h2 className="text-lg font-semibold mb-4 text-foreground">Cost Details</h2>
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">تكلفة الشحن الأساسية</span>
+            <span className="text-muted-foreground">Base Shipping Cost</span>
             <span className="font-medium text-foreground">${shipment.rate.base?.toFixed(2) || '0.00'}</span>
           </div>
           {shipment.rate.insurance > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">التأمين</span>
+              <span className="text-muted-foreground">Insurance</span>
               <span className="font-medium text-foreground">${shipment.rate.insurance.toFixed(2)}</span>
             </div>
           )}
           {shipment.rate.signature > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">التوقيع المطلوب</span>
+              <span className="text-muted-foreground">Signature Required</span>
               <span className="font-medium text-foreground">${shipment.rate.signature.toFixed(2)}</span>
             </div>
           )}
           {shipment.rate.packaging > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">التغليف الاحترافي</span>
+              <span className="text-muted-foreground">Professional Packaging</span>
               <span className="font-medium text-foreground">${shipment.rate.packaging.toFixed(2)}</span>
             </div>
           )}
           <div className="border-t border-border pt-2 mt-2">
             <div className="flex justify-between">
-              <span className="text-lg font-semibold text-foreground">التكلفة الإجمالية</span>
+              <span className="text-lg font-semibold text-foreground">Total Cost</span>
               <span className="text-lg font-bold text-primary">${shipment.rate.total?.toFixed(2) || '0.00'}</span>
             </div>
           </div>

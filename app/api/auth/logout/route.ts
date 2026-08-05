@@ -10,7 +10,7 @@ export async function POST() {
     const cookie = clearAuthCookie()
 
     const response = NextResponse.json(
-      { message: 'تم تسجيل الخروج بنجاح' },
+      { message: 'Logged out successfully' },
       { status: 200 }
     )
 
@@ -19,6 +19,6 @@ export async function POST() {
     return response
   } catch (error) {
     console.error('Logout error:', error)
-    return NextResponse.json({ error: 'فشل تسجيل الخروج' }, { status: 500 })
+    return NextResponse.json({ error: 'Logout failed' }, { status: 500 })
   }
 }

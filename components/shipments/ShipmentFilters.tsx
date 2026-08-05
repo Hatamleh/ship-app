@@ -16,32 +16,32 @@ export default function ShipmentFilters({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-muted-foreground mb-1">
-            الحالة
+            Status
           </label>
           <select
             value={statusFilter}
             onChange={(e) => onStatusChange(e.target.value)}
             className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
           >
-            <option value="all">جميع الحالات</option>
-            <option value="draft">مسودة</option>
-            <option value="finalized">مُكتمل</option>
+            <option value="all">All Statuses</option>
+            <option value="draft">Draft</option>
+            <option value="finalized">Finalized</option>
           </select>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-muted-foreground mb-1">
-            النوع
+            Type
           </label>
           <select
             value={typeFilter}
             onChange={(e) => onTypeChange(e.target.value)}
             className="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
           >
-            <option value="all">جميع الأنواع</option>
-            <option value="Domestic">محلي</option>
-            <option value="IntraGulf">خليجي</option>
-            <option value="International">دولي</option>
+            <option value="all">All Types</option>
+            <option value="Domestic">Domestic</option>
+            <option value="IntraGulf">Intra-Gulf</option>
+            <option value="International">International</option>
           </select>
         </div>
       </div>

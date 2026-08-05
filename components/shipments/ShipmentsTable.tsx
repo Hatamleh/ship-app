@@ -20,7 +20,7 @@ export default function ShipmentsTable({ shipments, onMenuClick }: ShipmentsTabl
     // All non-draft statuses are considered "finalized"
     return (
       <span className="px-2 py-1 text-xs font-medium rounded-full bg-nord-aurora-green/20 text-premium">
-        مُكتمل
+        Finalized
       </span>
     )
   }
@@ -68,16 +68,16 @@ export default function ShipmentsTable({ shipments, onMenuClick }: ShipmentsTabl
               {t('table.trackingNumber')}
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              المرسل
+              Sender
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              المستلم
+              Receiver
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              الوجهة
+              Destination
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
-              النوع
+              Type
             </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
               {t('table.status')}

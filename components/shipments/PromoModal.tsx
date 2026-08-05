@@ -30,16 +30,16 @@ export default function PromoModal() {
         <div className="flex-shrink-0 w-12 h-12 mx-auto mb-4 bg-nord-frost-1/20 rounded-full flex items-center justify-center">
           <Sparkles className="w-6 h-6 text-primary" />
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-2">عرض خاص!</h3>
+        <h3 className="text-xl font-bold text-foreground mb-2">Special Offer!</h3>
         <p className="text-muted-foreground mb-6">
-          احصل على خصم 20% على الشحن السريع هذا الأسبوع فقط!
+          Get 20% off express shipping this week only!
         </p>
         <button
           onClick={() => setShow(false)}
           data-testid="promo-close"
           className="px-6 py-2 text-sm font-medium text-nord-polar-0 bg-primary rounded-md hover:bg-nord-frost-3 transition-colors"
         >
-          إغلاق
+          Close
         </button>
       </div>
     </div>

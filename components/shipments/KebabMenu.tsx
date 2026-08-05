@@ -35,7 +35,7 @@ export default function KebabMenu({
               onClick={onClose}
             >
               <Eye className="w-4 h-4" />
-              عرض
+              View
             </Link>
             <Link
               href={`/?edit=${shipmentId}`}
@@ -43,21 +43,21 @@ export default function KebabMenu({
               onClick={onClose}
             >
               <Edit className="w-4 h-4" />
-              تعديل
+              Edit
             </Link>
             <button
               onClick={() => onFinalize?.(shipmentId)}
               className="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors"
             >
               <FileCheck className="w-4 h-4" />
-              إتمام الشحنة
+              Finalize Shipment
             </button>
             <button
               onClick={() => onDelete(shipmentId)}
               className="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-nord-aurora-red/20 transition-colors"
             >
               <Trash2 className="w-4 h-4" />
-              حذف
+              Delete
             </button>
           </>
         ) : (
@@ -68,7 +68,7 @@ export default function KebabMenu({
               onClick={onClose}
             >
               <Eye className="w-4 h-4" />
-              عرض
+              View
             </Link>
             <Link
               href={`/?repeat=${shipmentId}`}
@@ -76,14 +76,14 @@ export default function KebabMenu({
               onClick={onClose}
             >
               <Copy className="w-4 h-4" />
-              تكرار
+              Repeat
             </Link>
             <button
               onClick={() => onDelete(shipmentId)}
               className="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-nord-aurora-red/20 transition-colors"
             >
               <Trash2 className="w-4 h-4" />
-              حذف
+              Delete
             </button>
           </>
         )}

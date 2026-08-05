@@ -17,6 +17,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ user }, { status: 200 })
   } catch (error) {
     console.error('Get current user error:', error)
-    return NextResponse.json({ error: 'فشل في الحصول على معلومات المستخدم' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to get user information' }, { status: 500 })
   }
 }

@@ -2,24 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import type { CardRules, ServiceOption, ShipmentType } from '@/lib/types'
-
-// Convert English country names to Arabic
-const countryToArabic: Record<string, string> = {
-  'Saudi Arabia': 'المملكة العربية السعودية',
-  'United Arab Emirates': 'الإمارات العربية المتحدة',
-  'Kuwait': 'الكويت',
-  'Bahrain': 'البحرين',
-  'Qatar': 'قطر',
-  'Oman': 'عُمان',
-  'Egypt': 'مصر',
-  'Jordan': 'الأردن',
-  'Lebanon': 'لبنان',
-  'Iraq': 'العراق',
-}
-
-function toArabicCountry(country: string): string {
-  return countryToArabic[country] || country
-}
+import { t } from '@/lib/translations'
 
 export function useShipmentForm(editId?: string | null, repeatId?: string | null) {
   const router = useRouter()
@@ -96,7 +79,7 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
         ...prev,
         senderName: user.fullName,
         senderPhone: user.phone,
-        senderCountry: toArabicCountry(user.country),
+        senderCountry: user.country,
         senderCity: user.city,
         senderStreet: user.street,
         senderPostalCode: user.postalCode,
@@ -115,10 +98,10 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
 
       if (!response.ok) {
         if (response.status === 404) {
-          setErrors({ general: 'الشحنة غير موجودة' })
+          setErrors({ general: 'Shipment not found' })
           return
         }
-        throw new Error('فشل في تحميل الشحنة')
+        throw new Error('Failed to load shipment')
       }
 
       const data = await response.json()
@@ -130,14 +113,14 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
         // From (Sender)
         senderName: shipment.from?.name || '',
         senderPhone: shipment.from?.phone || '',
-        senderCountry: toArabicCountry(shipment.from?.country || ''),
+        senderCountry: shipment.from?.country || '',
         senderCity: shipment.from?.city || '',
         senderStreet: shipment.from?.street || '',
         senderPostalCode: shipment.from?.postalCode || '',
         // To (Receiver)
         receiverName: shipment.to?.name || '',
         receiverPhone: shipment.to?.phone || '',
-        receiverCountry: toArabicCountry(shipment.to?.country || ''),
+        receiverCountry: shipment.to?.country || '',
         receiverCity: shipment.to?.city || '',
         receiverStreet: shipment.to?.street || '',
         receiverPostalCode: shipment.to?.postalCode || '',
@@ -199,7 +182,7 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
         setErrors((prev) => {
           const newErrors = { ...prev }
           Object.keys(newErrors).forEach((key) => {
-            if (newErrors[key] === 'Shipping from Gulf countries to Iraq is currently not possible') {
+            if (newErrors[key] === t('errors.gulfToIraqNotAllowed')) {
               delete newErrors[key]
             }
           })
@@ -335,10 +318,10 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     // Required validation
     if (fieldRule.required) {
       if (typeof value === 'string' && value.trim() === '') {
-        return fieldRule.validation?.errorMessage || 'هذا الحقل مطلوب'
+        return fieldRule.validation?.errorMessage || 'This field is required'
       }
       if (value === null || value === undefined || value === '') {
-        return fieldRule.validation?.errorMessage || 'هذا الحقل مطلوب'
+        return fieldRule.validation?.errorMessage || 'This field is required'
       }
     }
 
@@ -350,8 +333,8 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     if (fieldRule.validation?.minLength && value) {
       if (checkLength < fieldRule.validation.minLength) {
         return isPhoneField
-          ? `رقم الهاتف يجب أن يكون ${fieldRule.validation.minLength} أرقام على الأقل`
-          : `الحد الأدنى ${fieldRule.validation.minLength} أحرف`
+          ? `Phone number must be at least ${fieldRule.validation.minLength} digits`
+          : `Minimum ${fieldRule.validation.minLength} characters`
       }
     }
 
@@ -359,8 +342,8 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     if (fieldRule.validation?.maxLength && value) {
       if (checkLength > fieldRule.validation.maxLength) {
         return isPhoneField
-          ? `رقم الهاتف لا يمكن أن يتجاوز ${fieldRule.validation.maxLength} رقم`
-          : `الحد الأقصى ${fieldRule.validation.maxLength} حرف`
+          ? `Phone number cannot exceed ${fieldRule.validation.maxLength} digits`
+          : `Maximum ${fieldRule.validation.maxLength} characters`
       }
     }
 
@@ -368,19 +351,19 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     if (fieldRule.validation?.pattern && value) {
       const regex = new RegExp(fieldRule.validation.pattern)
       if (!regex.test(value)) {
-        return fieldRule.validation?.errorMessage || 'التنسيق غير صالح'
+        return fieldRule.validation?.errorMessage || 'Invalid format'
       }
     }
 
     // Number validations
     if (fieldRule.type === 'number' && value) {
       const numValue = parseFloat(value)
-      if (isNaN(numValue)) return 'الرجاء إدخال رقم صالح'
+      if (isNaN(numValue)) return 'Please enter a valid number'
       if (fieldRule.validation?.min !== undefined && numValue < fieldRule.validation.min) {
-        return `القيمة يجب أن تكون على الأقل ${fieldRule.validation.min}`
+        return `Value must be at least ${fieldRule.validation.min}`
       }
       if (fieldRule.validation?.max !== undefined && numValue > fieldRule.validation.max) {
-        return `القيمة لا يمكن أن تتجاوز ${fieldRule.validation.max}`
+        return `Value cannot exceed ${fieldRule.validation.max}`
       }
     }
 
@@ -394,7 +377,7 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     if (senderRules) {
       Object.entries(senderRules.fields).forEach(([fieldName, field]) => {
         if (field.required && !formData[fieldName]) {
-          newErrors[fieldName] = field.validation?.errorMessage || 'مطلوب'
+          newErrors[fieldName] = field.validation?.errorMessage || 'Required'
         }
       })
     }
@@ -403,7 +386,7 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     if (receiverRules) {
       Object.entries(receiverRules.fields).forEach(([fieldName, field]) => {
         if (field.required && !formData[fieldName]) {
-          newErrors[fieldName] = field.validation?.errorMessage || 'مطلوب'
+          newErrors[fieldName] = field.validation?.errorMessage || 'Required'
         }
       })
       if (receiverRules.validationErrors) {
@@ -415,15 +398,15 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
     if (packageRules) {
       const weight = parseFloat(formData.weight)
       if (isNaN(weight) || weight <= 0) {
-        newErrors.weight = 'الوزن مطلوب'
+        newErrors.weight = 'Weight is required'
       } else if (weight > packageRules.maxWeight) {
-        newErrors.weight = `الوزن لا يمكن أن يتجاوز ${packageRules.maxWeight} كجم`
+        newErrors.weight = `Weight cannot exceed ${packageRules.maxWeight} kg`
       }
     }
 
     // Validate service selected
     if (!selectedService) {
-      newErrors.service = 'الرجاء اختيار خدمة'
+      newErrors.service = 'Please select a service'
     }
 
     setErrors(newErrors)
@@ -559,7 +542,7 @@ export function useShipmentForm(editId?: string | null, repeatId?: string | null
         // If there are validation errors from backend, show them in the form
         if (error.validationErrors && typeof error.validationErrors === 'object') {
           setErrors(error.validationErrors)
-          throw new Error(error.message || 'الرجاء تصحيح الأخطاء في النموذج')
+          throw new Error(error.message || 'Please correct the errors in the form')
         }
 
         // If there are validation details, format them nicely

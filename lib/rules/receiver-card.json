@@ -1,74 +1,74 @@
 {
   "cardName": "receiver",
-  "title": "معلومات المستلم",
+  "title": "Receiver Information",
   "enabled": false,
   "fields": {
     "receiverName": {
       "type": "text",
-      "label": "الاسم الكامل",
+      "label": "Full Name",
       "required": true,
       "validation": {
         "required": true,
         "minLength": 2,
-        "errorMessage": "يجب أن يكون الاسم على الأقل حرفين"
+        "errorMessage": "Name must be at least 2 characters"
       },
-      "placeholder": "أدخل الاسم الكامل للمستلم"
+      "placeholder": "Enter the receiver's full name"
     },
     "receiverPhone": {
       "type": "text",
-      "label": "رقم الهاتف",
+      "label": "Phone Number",
       "required": true,
       "validation": {
         "required": true,
         "minLength": 10,
         "maxLength": 15,
-        "errorMessage": "يجب أن يكون رقم الهاتف بين 10-15 رقم"
+        "errorMessage": "Phone number must be between 10-15 digits"
       },
-      "placeholder": "مثال: 0501234567"
+      "placeholder": "e.g. 0501234567"
     },
     "receiverCountry": {
       "type": "select",
-      "label": "الدولة",
+      "label": "Country",
       "required": true,
       "validation": {
         "required": true,
-        "errorMessage": "الرجاء اختيار الدولة"
+        "errorMessage": "Please select a country"
       },
-      "placeholder": "اختر الدولة"
+      "placeholder": "Select a country"
     },
     "receiverCity": {
       "type": "text",
-      "label": "المدينة",
+      "label": "City",
       "required": true,
       "validation": {
         "required": true,
         "minLength": 2,
-        "errorMessage": "المدينة مطلوبة"
+        "errorMessage": "City is required"
       },
-      "placeholder": "أدخل المدينة"
+      "placeholder": "Enter the city"
     },
     "receiverStreet": {
       "type": "text",
-      "label": "عنوان الشارع",
+      "label": "Street Address",
       "required": false,
       "validation": {
         "required": false,
         "minLength": 5,
-        "errorMessage": "عنوان الشارع مطلوب"
+        "errorMessage": "Street address is required"
       },
-      "placeholder": "أدخل عنوان الشارع"
+      "placeholder": "Enter the street address"
     },
     "receiverPostalCode": {
       "type": "text",
-      "label": "الرمز البريدي",
+      "label": "Postal Code",
       "required": true,
       "validation": {
         "required": true,
         "minLength": 3,
         "maxLength": 10,
-        "errorMessage": "يجب أن يكون الرمز البريدي بين 3-10 أحرف"
+        "errorMessage": "Postal code must be between 3-10 characters"
       },
-      "placeholder": "أدخل الرمز البريدي"
+      "placeholder": "Enter the postal code"
     }
   }
 }

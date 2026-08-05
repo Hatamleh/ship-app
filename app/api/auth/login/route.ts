@@ -13,21 +13,21 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     if (!email || !password) {
-      return NextResponse.json({ error: 'البريد الإلكتروني وكلمة المرور مطلوبان' }, { status: 400 })
+      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 })
     }
 
     // Find user by email (with password for verification)
     const user = await userRepository.findByEmailWithPassword(email.toLowerCase())
 
     if (!user) {
-      return NextResponse.json({ error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' }, { status: 401 })
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 })
     }
 
     // Verify password
     const isPasswordValid = await verifyPassword(password, user.password)
 
     if (!isPasswordValid) {
-      return NextResponse.json({ error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' }, { status: 401 })
+      return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 })
     }
 
     // Create auth cookie with JWT
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json(
       {
-        message: 'تم تسجيل الدخول بنجاح',
+        message: 'Logged in successfully',
         user: userWithoutPassword,
       },
       { status: 200 }
@@ -49,6 +49,6 @@ export async function POST(request: NextRequest) {
     return response
   } catch (error) {
     console.error('Login error:', error)
-    return NextResponse.json({ error: 'فشل تسجيل الدخول' }, { status: 500 })
+    return NextResponse.json({ error: 'Login failed' }, { status: 500 })
   }
 }

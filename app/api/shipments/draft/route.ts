@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     if (!validation.isValid) {
       return NextResponse.json(
         {
-          error: 'تنسيق البيانات غير صالح',
+          error: 'Invalid data format',
           validationErrors: validation.errors,
         },
         { status: 400 }
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: 'تم حفظ المسودة بنجاح',
+        message: 'Draft saved successfully',
         shipment,
       },
       { status: 201 }
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating draft shipment:', error)
     return NextResponse.json(
-      { error: 'فشل حفظ المسودة' },
+      { error: 'Failed to save draft' },
       { status: 500 }
     )
   }

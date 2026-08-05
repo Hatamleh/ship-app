@@ -1,42 +1,42 @@
 {
   "pickupFees": {
-    "المملكة العربية السعودية": {
+    "Saudi Arabia": {
       "home": 8.00,
       "postal_office": 3.00
     },
-    "الإمارات العربية المتحدة": {
+    "United Arab Emirates": {
       "home": 10.00,
       "postal_office": 3.00
     },
-    "الكويت": {
+    "Kuwait": {
       "home": 7.00,
       "postal_office": 2.50
     },
-    "البحرين": {
+    "Bahrain": {
       "home": 6.00,
       "postal_office": 2.00
     },
-    "عُمان": {
+    "Oman": {
       "home": 7.00,
       "postal_office": 2.50
     },
-    "قطر": {
+    "Qatar": {
       "home": 8.00,
       "postal_office": 3.00
     },
-    "الأردن": {
+    "Jordan": {
       "home": 12.00,
       "postal_office": 4.00
     },
-    "لبنان": {
+    "Lebanon": {
       "home": 12.00,
       "postal_office": 4.00
     },
-    "مصر": {
+    "Egypt": {
       "home": 15.00,
       "postal_office": 5.00
     },
-    "العراق": {
+    "Iraq": {
       "home": 18.00,
       "postal_office": 6.00
     }

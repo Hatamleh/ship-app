@@ -10,21 +10,29 @@
     "lint": "next lint",
     "setup": "prisma generate && prisma db push && prisma db seed",
     "seed": "prisma db seed",
+    "ingest": "tsx scripts/ingest.ts",
     "reset": "rm -f prisma/dev.db prisma/dev.db-shm prisma/dev.db-wal && npm run setup"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@langchain/core": "^1.2.4",
+    "@langchain/langgraph": "^1.4.9",
+    "@langchain/openai": "^1.5.5",
+    "@langchain/textsplitters": "^1.0.1",
     "@prisma/client": "^5.7.1",
     "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
     "cookie": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
+    "langchain": "^1.5.4",
     "lucide-react": "^0.546.0",
     "next": "^14.0.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

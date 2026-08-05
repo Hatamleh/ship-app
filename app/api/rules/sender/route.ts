@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import senderCardRules from '@/lib/rules/sender-card.json'
 import countriesData from '@/lib/rules/countries.json'
+import { isGulfCountry as isGulfCountryName } from '@/lib/validators/shipment-validator'
 
 /**
  * POST /api/rules/sender
@@ -20,8 +21,8 @@ export async function POST(request: NextRequest) {
 
     // Add country options to the senderCountry field
     const countryOptions = countriesData.countries.map((country) => ({
-      value: country.nameAr,
-      label: country.nameAr,
+      value: country.name,
+      label: country.name,
     }))
 
     // Update the senderCountry field with options
@@ -30,10 +31,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if sender country is a Gulf country
-    const senderCountryData = countriesData.countries.find(
-      (c) => c.nameAr === senderCountry || c.name === senderCountry
-    )
-    const isGulfCountry = senderCountryData?.isGulf || false
+    const isGulfCountry = senderCountry ? isGulfCountryName(senderCountry) : false
 
     // Rule: Street address is optional for non-Gulf countries, required for Gulf countries
     if (rules.fields.senderStreet) {
@@ -47,7 +45,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error loading sender rules:', error)
     return NextResponse.json(
-      { error: 'فشل في تحميل قواعد المرسل' },
+      { error: 'Failed to load sender rules' },
       { status: 500 }
     )
   }

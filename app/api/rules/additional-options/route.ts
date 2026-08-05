@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const rules = JSON.parse(JSON.stringify(additionalOptionsRules))
 
     // Rule 1: Signature is required when sending to Jordan or Egypt
-    const isReceiverJordanOrEgypt = receiverCountry === 'الأردن' || receiverCountry === 'مصر' || receiverCountry === 'Jordan' || receiverCountry === 'Egypt'
+    const isReceiverJordanOrEgypt = receiverCountry === 'Jordan' || receiverCountry === 'Egypt'
     if (rules.fields.signatureRequired) {
       rules.fields.signatureRequired.checked = isReceiverJordanOrEgypt
       rules.fields.signatureRequired.disabled = isReceiverJordanOrEgypt
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     // Rule 2: Pickup method restrictions based on weight
     // If weight > 17kg, only drop-off is allowed UNLESS sending from Iraq
-    const isSenderIraq = senderCountry === 'العراق' || senderCountry === 'Iraq'
+    const isSenderIraq = senderCountry === 'Iraq'
     const isHeavyPackage = weight > 17
 
     if (rules.fields.pickupMethod) {
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error loading additional options rules:', error)
     return NextResponse.json(
-      { error: 'فشل في تحميل الخيارات الإضافية' },
+      { error: 'Failed to load additional options' },
       { status: 500 }
     )
   }

@@ -1,0 +1,115 @@
+import { createAgent } from 'langchain'
+import { HumanMessage, AIMessage } from '@langchain/core/messages'
+import { getChatModel } from './llm'
+import { buildTools } from './tools'
+
+const SYSTEM_PROMPT = `You are the shipping assistant for ShipTest, a shipping management app.
+
+You help the signed-in user with their own shipments and with the company's shipping rules.
+
+Rules you must follow:
+- Never do pricing arithmetic yourself. Call quote_price — its numbers are what the app actually charges.
+- Never guess whether a shipment is allowed. Call check_rules.
+- For policy background and explanations, call search_policy_docs and mention which document you used.
+- You can only see the signed-in user's own shipments. If a shipment is not theirs, say so plainly; do not speculate about it.
+- If a tool returns an error or empty result, say what happened. Do not invent shipments, prices or tracking numbers.
+- Money is in USD. Weight is in kilograms, dimensions in centimetres.
+- Be concise. Prefer a direct answer plus the key numbers over a long explanation.
+
+Formatting: your answer is displayed in a narrow chat panel about 400px wide.
+- Do not use Markdown tables. Use short bullet points instead, one item per line.
+- Keep each line short. Put a label in bold and the value after it, e.g. "**Total:** $82.00".
+- Two or three bullets beat a table for comparing options.`
+
+export interface AgentToolCall {
+  name: string
+  args: Record<string, unknown>
+  result?: string
+}
+
+export interface AgentResult {
+  reply: string
+  toolCalls: AgentToolCall[]
+  model: string
+  latencyMs: number
+}
+
+export interface ChatTurn {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+/**
+ * Run one turn of the agent for a specific user.
+ *
+ * `history` is the prior conversation. The tools are rebuilt per call because
+ * they close over the userId — see lib/ai/tools.ts.
+ */
+export async function runAgent(
+  userId: number,
+  message: string,
+  history: ChatTurn[] = [],
+  options?: { maxSteps?: number }
+): Promise<AgentResult> {
+  const startedAt = Date.now()
+  const llm = getChatModel()
+
+  const agent = createAgent({
+    model: llm,
+    tools: buildTools(userId),
+    systemPrompt: SYSTEM_PROMPT,
+  })
+
+  const messages = [
+    ...history.map((turn) =>
+      turn.role === 'user' ? new HumanMessage(turn.content) : new AIMessage(turn.content)
+    ),
+    new HumanMessage(message),
+  ]
+
+  const result = await agent.invoke(
+    { messages },
+    // Bound the ReAct loop so a confused model cannot spin forever.
+    { recursionLimit: options?.maxSteps ?? 12 }
+  )
+
+  const produced = (result.messages ?? []) as any[]
+
+  // Collect the tool calls the agent made, and pair each with its result, so
+  // tests can assert on which tools ran rather than only on the prose.
+  const toolResultsById = new Map<string, string>()
+  for (const m of produced) {
+    if (m?.tool_call_id) {
+      toolResultsById.set(
+        m.tool_call_id,
+        typeof m.content === 'string' ? m.content : JSON.stringify(m.content)
+      )
+    }
+  }
+
+  const toolCalls: AgentToolCall[] = []
+  for (const m of produced) {
+    for (const call of m?.tool_calls ?? []) {
+      toolCalls.push({
+        name: call.name,
+        args: call.args ?? {},
+        result: call.id ? toolResultsById.get(call.id) : undefined,
+      })
+    }
+  }
+
+  const last = produced[produced.length - 1]
+  const reply =
+    typeof last?.content === 'string'
+      ? last.content
+      : Array.isArray(last?.content)
+        ? last.content.map((p: any) => p?.text ?? '').join('')
+        : ''
+
+  return {
+    reply,
+    toolCalls,
+    model: llm.model,
+    latencyMs: Date.now() - startedAt,
+  }
+}

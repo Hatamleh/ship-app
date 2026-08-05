@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import receiverCardRules from '@/lib/rules/receiver-card.json'
 import countriesData from '@/lib/rules/countries.json'
+import { isGulfCountry } from '@/lib/validators/shipment-validator'
 
 /**
  * POST /api/rules/receiver
@@ -22,8 +23,8 @@ export async function POST(request: NextRequest) {
 
     // Build country options (always show all countries)
     const countryOptions = countriesData.countries.map((country) => ({
-      value: country.nameAr,
-      label: country.nameAr,
+      value: country.name,
+      label: country.name,
     }))
 
     // Update the receiverCountry field with options
@@ -32,10 +33,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if receiver country is a Gulf country
-    const receiverCountryData = countriesData.countries.find(
-      (c) => c.nameAr === receiverCountry || c.name === receiverCountry
-    )
-    const isReceiverGulfCountry = receiverCountryData?.isGulf || false
+    const isReceiverGulfCountry = receiverCountry ? isGulfCountry(receiverCountry) : false
 
     // Rule: Street address is optional for non-Gulf countries, required for Gulf countries
     if (rules.fields.receiverStreet) {
@@ -46,18 +44,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if sender country is a Gulf country
-    const senderCountryDataForValidation = countriesData.countries.find(
-      (c) => c.nameAr === senderCountry || c.name === senderCountry
-    )
-    const isSenderGulf = senderCountryDataForValidation?.isGulf || false
+    const isSenderGulf = senderCountry ? isGulfCountry(senderCountry) : false
 
     // Build validation errors object
     const validationErrors: Record<string, string> = {}
 
     // Rule: Cannot ship from Gulf countries to Iraq
-    const isIraq = receiverCountry === 'العراق' || receiverCountry === 'Iraq'
-    if (isSenderGulf && isIraq) {
-      validationErrors.receiverCountry = 'الشحن من دول الخليج إلى العراق غير ممكن حالياً'
+    if (isSenderGulf && receiverCountry === 'Iraq') {
+      validationErrors.receiverCountry =
+        'Shipping from Gulf countries to Iraq is not currently available'
     }
 
     return NextResponse.json({
@@ -72,7 +67,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error loading receiver rules:', error)
     return NextResponse.json(
-      { error: 'فشل في تحميل قواعد المستلم' },
+      { error: 'Failed to load receiver rules' },
       { status: 500 }
     )
   }

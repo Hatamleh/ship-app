@@ -16,14 +16,14 @@ function HomePageContent() {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground mb-2" data-testid="page-title">
-          {isEditMode ? 'تعديل الشحنة' : isRepeatMode ? 'تكرار الشحنة' : 'إنشاء شحنة جديدة'}
+          {isEditMode ? 'Edit Shipment' : isRepeatMode ? 'Repeat Shipment' : 'Create a New Shipment'}
         </h1>
         <p className="text-muted-foreground">
           {isEditMode
-            ? 'قم بتحديث تفاصيل الشحنة أدناه'
+            ? 'Update the shipment details below'
             : isRepeatMode
-            ? 'راجع وعدّل تفاصيل الشحنة أدناه'
-            : 'املأ تفاصيل الشحنة أدناه'}
+            ? 'Review and edit the shipment details below'
+            : 'Fill in the shipment details below'}
         </p>
       </div>
       <ShipmentForm editId={editId} repeatId={repeatId} />

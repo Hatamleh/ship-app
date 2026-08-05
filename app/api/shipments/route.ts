@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching shipments:', error)
     return NextResponse.json(
-      { error: 'فشل تحميل الشحنات' },
+      { error: 'Failed to load shipments' },
       { status: 500 }
     )
   }
@@ -89,13 +89,13 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof Error) {
       return NextResponse.json(
-        { error: 'فشل إنشاء الشحنة', details: error.message },
+        { error: 'Failed to create shipment', details: error.message },
         { status: 400 }
       )
     }
 
     return NextResponse.json(
-      { error: 'فشل إنشاء الشحنة' },
+      { error: 'Failed to create shipment' },
       { status: 500 }
     )
   }

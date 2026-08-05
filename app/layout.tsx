@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
-import { Readex_Pro } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { AuthProvider } from '@/contexts/AuthContext'
 import AuthenticatedLayout from '@/components/AuthenticatedLayout'
 import './globals.css'
 
-const readexPro = Readex_Pro({
-  subsets: ['arabic', 'latin'],
+const inter = Inter({
+  subsets: ['latin'],
   display: 'swap',
-  variable: '--font-readex',
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
-  title: 'شحناتي - نظام إدارة الشحن',
+  title: 'My Shipments - Shipping Management System',
   description:
-    'تطبيق شامل لإدارة الشحن',
+    'A comprehensive shipping management application',
 }
 
 export default function RootLayout({
@@ -22,8 +22,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ar" dir="rtl" className={readexPro.variable}>
-      <body className={`${readexPro.className} bg-grid-fade`}>
+    <html lang="en" dir="ltr" className={inter.variable}>
+      <body className={`${inter.className} bg-grid-fade`}>
         <AuthProvider>
           <AuthenticatedLayout>{children}</AuthenticatedLayout>
         </AuthProvider>

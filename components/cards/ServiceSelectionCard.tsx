@@ -59,7 +59,7 @@ export default function ServiceSelectionCard({
                 {service.description}
               </p>
               <div className="text-xs text-muted-foreground/70">
-                {t('rate.base')}: {service.basePrice}$ + {service.pricePerKg}$/كجم
+                {t('rate.base')}: {service.basePrice}$ + {service.pricePerKg}$/kg
               </div>
             </button>
           ))}

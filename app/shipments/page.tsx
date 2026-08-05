@@ -153,7 +153,7 @@ function ShipmentsPageContent() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="text-muted-foreground">جاري تحميل الشحنات...</div>
+        <div className="text-muted-foreground">Loading shipments...</div>
       </div>
     )
   }
@@ -167,21 +167,21 @@ function ShipmentsPageContent() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-foreground">شحناتي</h1>
-            <p className="mt-2 text-muted-foreground">عرض وإدارة جميع شحناتك</p>
+            <h1 className="text-3xl font-bold text-foreground">My Shipments</h1>
+            <p className="mt-2 text-muted-foreground">View and manage all your shipments</p>
           </div>
           <Link
             href="/"
             className="px-4 py-2 bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 transition-colors"
           >
-            + إنشاء شحنة
+            + Create Shipment
           </Link>
         </div>
 
         {/* Success message */}
         {showSuccess && (
           <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded mb-6">
-            تم حفظ الشحنة بنجاح!
+            Shipment saved successfully!
           </div>
         )}
 
@@ -247,7 +247,7 @@ export default function ShipmentsPage() {
     <Suspense
       fallback={
         <div className="flex items-center justify-center py-12">
-          <div className="text-muted-foreground">جاري تحميل الشحنات...</div>
+          <div className="text-muted-foreground">Loading shipments...</div>
         </div>
       }
     >

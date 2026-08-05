@@ -38,7 +38,7 @@ export default function RegisterPage() {
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('كلمات المرور غير متطابقة')
+      setError('Passwords do not match')
       return
     }
 
@@ -109,7 +109,7 @@ export default function RegisterPage() {
 
           {/* Account Information */}
           <div className="bg-muted p-6 rounded-lg shadow border border-border">
-            <h3 className="text-lg font-semibold mb-4 text-primary">معلومات الحساب</h3>
+            <h3 className="text-lg font-semibold mb-4 text-primary">Account Information</h3>
             <div className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-muted-foreground">
@@ -149,7 +149,7 @@ export default function RegisterPage() {
                     htmlFor="confirmPassword"
                     className="block text-sm font-medium text-muted-foreground"
                   >
-                    تأكيد كلمة المرور *
+                    Confirm Password *
                   </label>
                   <input
                     id="confirmPassword"
@@ -159,7 +159,7 @@ export default function RegisterPage() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className="mt-3 w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
-                    placeholder="أعد إدخال كلمة المرور"
+                    placeholder="Re-enter your password"
                   />
                 </div>
               </div>
@@ -168,9 +168,9 @@ export default function RegisterPage() {
 
           {/* Personal Information */}
           <div className="bg-muted p-6 rounded-lg shadow border border-border">
-            <h3 className="text-lg font-semibold mb-4 text-primary">المعلومات الشخصية</h3>
+            <h3 className="text-lg font-semibold mb-4 text-primary">Personal Information</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              سيتم استخدام هذه المعلومات كبيانات المرسل الافتراضية
+              This information will be used as your default sender details
             </p>
             <div className="space-y-4">
               <div>
@@ -219,16 +219,16 @@ export default function RegisterPage() {
                     className="mt-3 w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
                   >
                     <option value="">{t('placeholders.selectCountry')}</option>
-                    <option value="المملكة العربية السعودية">المملكة العربية السعودية</option>
-                    <option value="الإمارات العربية المتحدة">الإمارات العربية المتحدة</option>
-                    <option value="الكويت">الكويت</option>
-                    <option value="البحرين">البحرين</option>
-                    <option value="قطر">قطر</option>
-                    <option value="عُمان">عُمان</option>
-                    <option value="مصر">مصر</option>
-                    <option value="الأردن">الأردن</option>
-                    <option value="لبنان">لبنان</option>
-                    <option value="العراق">العراق</option>
+                    <option value="Saudi Arabia">Saudi Arabia</option>
+                    <option value="United Arab Emirates">United Arab Emirates</option>
+                    <option value="Kuwait">Kuwait</option>
+                    <option value="Bahrain">Bahrain</option>
+                    <option value="Qatar">Qatar</option>
+                    <option value="Oman">Oman</option>
+                    <option value="Egypt">Egypt</option>
+                    <option value="Jordan">Jordan</option>
+                    <option value="Lebanon">Lebanon</option>
+                    <option value="Iraq">Iraq</option>
                   </select>
                 </div>
               </div>

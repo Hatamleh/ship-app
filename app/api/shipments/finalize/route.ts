@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     if (!validation.isValid) {
       return NextResponse.json(
         {
-          error: 'فشل التحقق من صحة البيانات',
+          error: 'Validation failed',
           validationErrors: validation.errors,
         },
         { status: 400 }
@@ -65,8 +65,8 @@ export async function POST(request: NextRequest) {
     } catch (error) {
       return NextResponse.json(
         {
-          error: 'فشل حساب التكلفة',
-          details: error instanceof Error ? error.message : 'خدمة أو وزن غير صالح',
+          error: 'Failed to calculate cost',
+          details: error instanceof Error ? error.message : 'Invalid service or weight',
         },
         { status: 400 }
       )
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: 'تم إتمام الشحنة بنجاح',
+        message: 'Shipment finalized successfully',
         shipment,
         rateBreakdown: rateCalculation.breakdown,
       },
@@ -101,13 +101,13 @@ export async function POST(request: NextRequest) {
 
     if (error instanceof Error) {
       return NextResponse.json(
-        { error: 'فشل إتمام الشحنة', details: error.message },
+        { error: 'Failed to finalize shipment', details: error.message },
         { status: 400 }
       )
     }
 
     return NextResponse.json(
-      { error: 'فشل إتمام الشحنة' },
+      { error: 'Failed to finalize shipment' },
       { status: 500 }
     )
   }

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
+import ChatDrawer from '@/components/agent/ChatDrawer'
 import { t } from '@/lib/translations'
 
 export default function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
@@ -79,12 +80,21 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
         </svg>
       ),
     },
+    {
+      name: 'Assistant',
+      href: '/assistant',
+      icon: (
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+        </svg>
+      ),
+    },
   ]
 
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-muted shadow-lg flex flex-col border-l border-border">
+      <aside className="w-64 bg-muted shadow-lg flex flex-col border-r border-border">
         {/* Logo Section */}
         <div className="p-6 border-b border-border">
           <div className="flex items-center gap-2">
@@ -101,7 +111,7 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
               />
             </svg>
-            <span className="text-xl font-bold text-foreground">شحناتي</span>
+            <span className="text-xl font-bold text-foreground">My Shipments</span>
           </div>
         </div>
 
@@ -162,6 +172,9 @@ export default function AuthenticatedLayout({ children }: { children: React.Reac
           {children}
         </div>
       </main>
+
+      {/* AI assistant, available on every authenticated page */}
+      <ChatDrawer />
     </div>
   )
 }

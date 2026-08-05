@@ -121,3 +121,24 @@ model Shipment {
   @@index([createdAt])
   @@index([userId])
 }
+
+// A chunk of the project documentation, indexed for retrieval (RAG).
+// Populated by `npm run ingest` from logic.md, stories/*.md and lib/rules/*.json.
+model DocChunk {
+  id      Int    @id @default(autoincrement())
+
+  // Where the chunk came from, e.g. "stories/09-business-rules-stories.md"
+  source  String
+  // The nearest markdown heading, used for citations
+  heading String
+  // The chunk text that gets embedded and shown as a source
+  content String
+
+  // The embedding vector, stored as a JSON array of floats.
+  // SQLite has no native vector type, so similarity is computed in JS.
+  embedding String
+
+  createdAt DateTime @default(now())
+
+  @@index([source])
+}

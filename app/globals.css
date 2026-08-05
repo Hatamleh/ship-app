@@ -20,7 +20,7 @@
 
   /* Extras */
   --radius: 0.25rem;         /* Sharp border radius for coding theme */
-  --font-arabic: var(--font-readex), 'Readex Pro', sans-serif;
+  --font-body: var(--font-inter), 'Inter', sans-serif;
   --font-cairo: 'Cairo', sans-serif;
   --font-headers: 'Oswald', sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', monospace;
