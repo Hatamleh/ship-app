@@ -10,9 +10,9 @@
   a summary rather than a form card. It is a <section> with a heading so it can
   be found with getByRole('region', { name: 'Sender Information' }).
 -->
-<section aria-labelledby="sender-heading" class="bg-muted p-4 rounded-lg shadow border border-border">
+<section aria-labelledby="sender-heading" class="surface p-4">
   <div class="flex items-center gap-3">
-    <div class="w-10 h-10 bg-nord-frost-1/20 rounded-full flex items-center justify-center">
+    <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
       <User class="w-5 h-5 text-primary" aria-hidden="true" />
     </div>
     <div class="flex-1">

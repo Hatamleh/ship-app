@@ -65,7 +65,7 @@
 </svelte:head>
 
 <div class="mb-8">
-  <a href="/shipments" class="text-primary hover:text-nord-frost-3 text-sm mb-4 inline-block">
+  <a href="/shipments" class="text-primary hover:text-primary-hover text-sm mb-4 inline-block">
     ← Back to Shipments
   </a>
 
@@ -81,12 +81,12 @@
 
     <div class="flex items-center gap-4">
       {#if isDraft}
-        <span class="px-3 py-1 text-sm font-medium rounded-full bg-nord-polar-2 text-foreground">
+        <span class="chip">
           Draft
         </span>
         <a
           href="/?edit={shipment.id}"
-          class="px-4 py-2 text-sm border border-border rounded-md text-muted-foreground hover:bg-nord-polar-2"
+          class="btn text-sm"
         >
           Edit
         </a>
@@ -94,19 +94,19 @@
           type="button"
           onclick={finalize}
           disabled={working}
-          class="px-4 py-2 text-sm bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 disabled:opacity-50"
+          class="btn btn-primary text-sm"
         >
           {working ? 'Finalizing...' : 'Finalize Shipment'}
         </button>
       {:else}
         <span
-          class="px-3 py-1 text-sm font-medium rounded-full bg-nord-aurora-green/20 text-premium"
+          class="chip border-premium text-premium"
         >
           Finalized
         </span>
         <a
           href="/?repeat={shipment.id}"
-          class="px-4 py-2 text-sm border border-border rounded-md text-muted-foreground hover:bg-nord-polar-2"
+          class="btn text-sm"
         >
           Repeat
         </a>
@@ -115,7 +115,7 @@
         type="button"
         onclick={remove}
         disabled={working}
-        class="px-4 py-2 text-sm text-destructive border border-destructive rounded-md hover:bg-nord-aurora-red/20 disabled:opacity-50"
+        class="btn btn-danger text-sm"
       >
         Delete
       </button>
@@ -126,7 +126,7 @@
 {#if errorMessage}
   <div
     role="alert"
-    class="mb-6 bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded"
+    class="mb-6 bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded"
   >
     {errorMessage}
   </div>
@@ -135,7 +135,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
   <section
     aria-labelledby="sender-heading"
-    class="bg-muted p-6 rounded-lg shadow border border-border"
+    class="surface p-6"
   >
     <h2 id="sender-heading" class="text-lg font-semibold mb-4 text-foreground">
       Sender Information
@@ -161,7 +161,7 @@
 
   <section
     aria-labelledby="receiver-heading"
-    class="bg-muted p-6 rounded-lg shadow border border-border"
+    class="surface p-6"
   >
     <h2 id="receiver-heading" class="text-lg font-semibold mb-4 text-foreground">
       Receiver Information
@@ -187,7 +187,7 @@
 
   <section
     aria-labelledby="package-heading"
-    class="bg-muted p-6 rounded-lg shadow border border-border"
+    class="surface p-6"
   >
     <h2 id="package-heading" class="text-lg font-semibold mb-4 text-foreground">Package Details</h2>
     <dl class="space-y-3">
@@ -218,7 +218,7 @@
 
   <section
     aria-labelledby="service-heading"
-    class="bg-muted p-6 rounded-lg shadow border border-border"
+    class="surface p-6"
   >
     <h2 id="service-heading" class="text-lg font-semibold mb-4 text-foreground">
       Service &amp; Options
@@ -254,7 +254,7 @@
 
 <section
   aria-labelledby="cost-heading"
-  class="bg-muted p-6 rounded-lg shadow border border-border"
+  class="surface p-6"
 >
   <h2 id="cost-heading" class="text-lg font-semibold mb-4 text-foreground">Cost Details</h2>
   <dl class="space-y-2">

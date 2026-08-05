@@ -11,7 +11,7 @@
 <!-- A definition list so each number is programmatically tied to its label. -->
 <dl class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
   {#each stats as stat (stat.label)}
-    <div class="bg-muted p-4 rounded-lg shadow border border-border">
+    <div class="surface p-4">
       <dt class="text-sm text-muted-foreground">{stat.label}</dt>
       <dd class="text-2xl font-bold {stat.tone}">{stat.value}</dd>
     </div>

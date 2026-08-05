@@ -74,12 +74,13 @@
 
 <div class="mb-8 flex items-center justify-between">
   <div>
-    <h1 class="text-3xl font-bold text-foreground">My Shipments</h1>
+    <p class="eyebrow">Dashboard</p>
+    <h1 class="text-3xl font-bold text-foreground">My <span class="grad">Shipments</span></h1>
     <p class="mt-2 text-muted-foreground">View and manage all your shipments</p>
   </div>
   <a
     href="/"
-    class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-nord-polar-0 bg-primary hover:bg-nord-frost-3"
+    class="btn btn-primary text-sm"
   >
     + Create Shipment
   </a>
@@ -88,7 +89,7 @@
 {#if showSuccess}
   <div
     role="status"
-    class="mb-6 bg-nord-aurora-green/20 border border-premium text-premium px-4 py-3 rounded"
+    class="mb-6 bg-premium/20 border border-premium text-premium px-4 py-3 rounded"
   >
     Shipment saved successfully!
   </div>
@@ -97,7 +98,7 @@
 {#if errorMessage}
   <div
     role="alert"
-    class="mb-6 bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded"
+    class="mb-6 bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded"
   >
     {errorMessage}
   </div>

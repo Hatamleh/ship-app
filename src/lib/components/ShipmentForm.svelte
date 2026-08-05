@@ -33,7 +33,7 @@
   {#if state.submitError}
     <div
       role="alert"
-      class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded mb-8"
+      class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded mb-8"
     >
       {state.submitError}
     </div>
@@ -42,7 +42,7 @@
   {#if state.errors.general}
     <div
       role="alert"
-      class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded mb-8"
+      class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded mb-8"
     >
       {state.errors.general}
     </div>
@@ -108,7 +108,7 @@
       type="button"
       onclick={() => state.submit(true)}
       disabled={state.loading}
-      class="flex items-center gap-2 px-6 py-3 border border-border text-muted-foreground rounded-md hover:bg-nord-polar-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      class="btn"
     >
       <Save class="w-4 h-4" aria-hidden="true" />
       {state.loading ? t('form.saving') : t('form.saveDraft')}
@@ -117,7 +117,7 @@
     <button
       type="submit"
       disabled={state.loading}
-      class="flex items-center gap-2 px-6 py-3 bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      class="btn btn-primary"
     >
       <CheckCircle class="w-4 h-4" aria-hidden="true" />
       {state.loading ? t('form.finalizing') : t('form.finalizeShipment')}

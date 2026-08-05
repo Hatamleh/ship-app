@@ -63,7 +63,8 @@
 
 <div class="max-w-3xl">
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-foreground mb-2">Shipping Rules Assistant</h1>
+    <p class="eyebrow">Documentation Q&amp;A</p>
+    <h1 class="text-3xl font-bold text-foreground mb-2">Shipping Rules <span class="grad">Assistant</span></h1>
     <p class="text-muted-foreground">
       Ask about the shipping rules. Answers come only from the project documentation, with
       citations.
@@ -84,12 +85,12 @@
       bind:value={question}
       disabled={loading}
       placeholder="e.g. What is the maximum weight for a Domestic shipment?"
-      class="flex-1 px-3 py-2 bg-nord-polar-2 text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+      class="field flex-1"
     />
     <button
       type="submit"
       disabled={loading || question.trim() === ''}
-      class="px-4 py-2 bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+      class="btn btn-primary"
     >
       <Search class="w-4 h-4" aria-hidden="true" />
       Ask
@@ -117,14 +118,14 @@
   {#if errorMessage}
     <div
       role="alert"
-      class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded"
+      class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded"
     >
       {errorMessage}
     </div>
   {/if}
 
   {#if answer}
-    <section aria-label="Answer" class="bg-muted border border-border rounded-lg p-6 mb-6">
+    <section aria-label="Answer" class="surface p-6 mb-6">
       <Markdown content={answer} />
     </section>
   {/if}

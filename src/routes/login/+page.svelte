@@ -50,7 +50,7 @@
   <div class="max-w-md w-full space-y-8">
     <div>
       <img src="/ship-logo.svg" alt="ShipApp" class="mx-auto h-14 w-14" />
-      <h1 class="mt-6 text-center text-3xl font-extrabold text-foreground">
+      <h1 class="mt-6 text-center text-3xl font-extrabold text-foreground font-display">
         {t('auth.loginTitle')}
       </h1>
     </div>
@@ -59,13 +59,13 @@
       {#if errorMessage}
         <div
           role="alert"
-          class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded"
+          class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded"
         >
           {errorMessage}
         </div>
       {/if}
 
-      <div class="bg-muted p-6 rounded-lg shadow border border-border space-y-4">
+      <div class="surface p-6 space-y-4">
         <div>
           <label for="email" class="block text-sm font-medium text-muted-foreground">
             {t('auth.email')}
@@ -78,7 +78,7 @@
             required
             bind:value={email}
             placeholder={t('placeholders.enterEmail')}
-            class="mt-3 w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+            class="field mt-3"
           />
         </div>
 
@@ -94,7 +94,7 @@
             required
             bind:value={password}
             placeholder={t('placeholders.enterPassword')}
-            class="mt-3 w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+            class="field mt-3"
           />
         </div>
       </div>
@@ -102,7 +102,7 @@
       <button
         type="submit"
         disabled={loading}
-        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-nord-polar-0 bg-primary hover:bg-nord-frost-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:bg-nord-polar-3 disabled:cursor-not-allowed"
+        class="btn btn-primary w-full"
       >
         {loading ? t('common.loading') : t('auth.login')}
       </button>
@@ -110,7 +110,7 @@
 
     <p class="text-center text-sm text-muted-foreground">
       {t('auth.dontHaveAccount')}
-      <a href="/register" class="font-medium text-primary hover:text-nord-frost-3">
+      <a href="/register" class="font-medium text-primary hover:text-primary-hover">
         {t('auth.registerHere')}
       </a>
     </p>

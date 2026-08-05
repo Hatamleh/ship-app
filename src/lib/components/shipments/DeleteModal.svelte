@@ -35,12 +35,12 @@
       aria-modal="true"
       aria-labelledby="delete-title"
       aria-describedby="delete-description"
-      class="bg-muted rounded-lg shadow-xl max-w-md w-full mx-4 border border-border"
+      class="surface max-w-md w-full mx-4 shadow-glow"
     >
       <div class="p-6">
         <div class="flex items-center gap-4 mb-4">
           <div
-            class="flex-shrink-0 w-12 h-12 bg-nord-aurora-red/20 rounded-full flex items-center justify-center"
+            class="flex-shrink-0 w-12 h-12 bg-destructive/20 rounded-full flex items-center justify-center"
           >
             <Trash2 class="w-6 h-6 text-destructive" aria-hidden="true" />
           </div>
@@ -56,7 +56,7 @@
           <button
             type="button"
             onclick={onCancel}
-            class="px-4 py-2 text-sm font-medium text-muted-foreground bg-nord-polar-2 border border-border rounded-md hover:bg-nord-polar-3 transition-colors"
+            class="btn text-sm"
           >
             Cancel
           </button>
@@ -64,7 +64,7 @@
             type="button"
             bind:this={confirmButton}
             onclick={onConfirm}
-            class="px-4 py-2 text-sm font-medium text-white bg-destructive rounded-md hover:bg-nord-aurora-red/80 transition-colors"
+            class="btn btn-danger text-sm"
           >
             Delete
           </button>

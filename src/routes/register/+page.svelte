@@ -61,7 +61,7 @@
   <div class="max-w-2xl w-full space-y-8">
     <div>
       <img src="/ship-logo.svg" alt="ShipApp" class="mx-auto h-14 w-14" />
-      <h1 class="mt-6 text-center text-3xl font-extrabold text-foreground">
+      <h1 class="mt-6 text-center text-3xl font-extrabold text-foreground font-display">
         {t('auth.registerTitle')}
       </h1>
     </div>
@@ -70,13 +70,13 @@
       {#if errorMessage}
         <div
           role="alert"
-          class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded"
+          class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded"
         >
           {errorMessage}
         </div>
       {/if}
 
-      <fieldset class="bg-muted p-6 rounded-lg shadow border border-border">
+      <fieldset class="surface p-6">
         <legend class="text-lg font-semibold mb-4 text-primary">Account Information</legend>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="md:col-span-2">
@@ -89,7 +89,7 @@
               autocomplete="email"
               required
               bind:value={form.email}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
           <div>
@@ -102,7 +102,7 @@
               autocomplete="new-password"
               required
               bind:value={form.password}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
           <div>
@@ -119,13 +119,13 @@
               required
               bind:value={form.confirmPassword}
               placeholder="Re-enter your password"
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
         </div>
       </fieldset>
 
-      <fieldset class="bg-muted p-6 rounded-lg shadow border border-border">
+      <fieldset class="surface p-6">
         <legend class="text-lg font-semibold mb-4 text-primary">Personal Information</legend>
         <p class="text-sm text-muted-foreground mb-4">
           This information will be used as your default sender details
@@ -141,7 +141,7 @@
               autocomplete="name"
               required
               bind:value={form.fullName}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
           <div>
@@ -154,7 +154,7 @@
               autocomplete="tel"
               required
               bind:value={form.phone}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
           <div class="md:col-span-2">
@@ -165,7 +165,7 @@
               id="country"
               required
               bind:value={form.country}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             >
               <option value="">{t('placeholders.selectCountry')}</option>
               {#each countriesData.countries as country (country.code)}
@@ -182,7 +182,7 @@
               type="text"
               required
               bind:value={form.city}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
           <div>
@@ -195,7 +195,7 @@
               autocomplete="postal-code"
               required
               bind:value={form.postalCode}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
           <div class="md:col-span-2">
@@ -208,7 +208,7 @@
               autocomplete="street-address"
               required
               bind:value={form.street}
-              class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+              class="field"
             />
           </div>
         </div>
@@ -217,7 +217,7 @@
       <button
         type="submit"
         disabled={loading}
-        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-nord-polar-0 bg-primary hover:bg-nord-frost-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:bg-nord-polar-3 disabled:cursor-not-allowed"
+        class="btn btn-primary w-full"
       >
         {loading ? t('common.loading') : t('auth.register')}
       </button>
@@ -225,7 +225,7 @@
 
     <p class="text-center text-sm text-muted-foreground">
       {t('auth.alreadyHaveAccount')}
-      <a href="/login" class="font-medium text-primary hover:text-nord-frost-3">
+      <a href="/login" class="font-medium text-primary hover:text-primary-hover">
         {t('auth.loginHere')}
       </a>
     </p>

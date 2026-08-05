@@ -46,10 +46,10 @@
 
   function inputClass(hasError: boolean, isDisabled: boolean) {
     return [
-      'w-full px-3 py-2 border rounded-md bg-nord-polar-2 text-foreground',
+      'w-full px-3 py-2 border rounded-md bg-ever-surface text-foreground',
       'focus:outline-none focus:ring-2 focus:ring-primary',
       hasError ? 'border-destructive' : 'border-border',
-      isDisabled ? 'bg-nord-polar-3 cursor-not-allowed opacity-50' : '',
+      isDisabled ? 'bg-ever-raised cursor-not-allowed opacity-50' : '',
     ].join(' ')
   }
 
@@ -59,7 +59,7 @@
 </script>
 
 <fieldset
-  class="bg-muted p-6 rounded-lg shadow border border-border {disabled || !rules
+  class="surface p-6 {disabled || !rules
     ? 'opacity-50'
     : ''}"
 >
@@ -77,7 +77,7 @@
       {title}
     </legend>
     {#if shipmentType}
-      <span class="text-xs bg-nord-frost-1/20 text-primary px-2 py-1 rounded">
+      <span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded">
         {shipmentType}
       </span>
     {/if}

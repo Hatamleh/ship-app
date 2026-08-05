@@ -248,7 +248,7 @@ function User($$renderer, $$props) {
 function SenderCard($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		let { formData } = $$props;
-		$$renderer.push(`<section aria-labelledby="sender-heading" class="bg-muted p-4 rounded-lg shadow border border-border"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-nord-frost-1/20 rounded-full flex items-center justify-center">`);
+		$$renderer.push(`<section aria-labelledby="sender-heading" class="surface p-4"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">`);
 		User($$renderer, {
 			class: "w-5 h-5 text-primary",
 			"aria-hidden": "true"
@@ -445,16 +445,16 @@ function DynamicCard($$renderer, $$props) {
 		const fieldEntries = derived(() => rules ? Object.entries(rules.fields).filter(([, f]) => f.visible !== false) : []);
 		function inputClass(hasError, isDisabled) {
 			return [
-				"w-full px-3 py-2 border rounded-md bg-nord-polar-2 text-foreground",
+				"w-full px-3 py-2 border rounded-md bg-ever-surface text-foreground",
 				"focus:outline-none focus:ring-2 focus:ring-primary",
 				hasError ? "border-destructive" : "border-border",
-				isDisabled ? "bg-nord-polar-3 cursor-not-allowed opacity-50" : ""
+				isDisabled ? "bg-ever-raised cursor-not-allowed opacity-50" : ""
 			].join(" ");
 		}
 		function isFullWidth(name) {
 			return name.includes("Street") || name.includes("Country") || name.includes("Description");
 		}
-		$$renderer.push(`<fieldset${attr_class(`bg-muted p-6 rounded-lg shadow border border-border ${disabled || !rules ? "opacity-50" : ""}`)}><div class="flex items-center justify-between mb-4"><legend class="flex items-center gap-2 text-xl font-semibold text-primary">`);
+		$$renderer.push(`<fieldset${attr_class(`surface p-6 ${disabled || !rules ? "opacity-50" : ""}`)}><div class="flex items-center justify-between mb-4"><legend class="flex items-center gap-2 text-xl font-semibold text-primary">`);
 		if (title().toLowerCase().includes("sender")) {
 			$$renderer.push("<!--[0-->");
 			User($$renderer, {
@@ -483,7 +483,7 @@ function DynamicCard($$renderer, $$props) {
 		$$renderer.push(`<!--]--> ${escape_html(title())}</legend> `);
 		if (shipmentType) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<span class="text-xs bg-nord-frost-1/20 text-primary px-2 py-1 rounded">${escape_html(shipmentType)}</span>`);
+			$$renderer.push(`<span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded">${escape_html(shipmentType)}</span>`);
 		} else $$renderer.push("<!--[-1-->");
 		$$renderer.push(`<!--]--></div> `);
 		if (!rules) {
@@ -660,7 +660,7 @@ function Truck($$renderer, $$props) {
 function ServiceSelectionCard($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		let { serviceRules = null, selectedService = null, onServiceSelect, disabled = false } = $$props;
-		$$renderer.push(`<fieldset${attr_class(`bg-muted p-6 rounded-lg shadow border border-border ${disabled || !serviceRules ? "opacity-50" : ""}`)}><legend class="flex items-center gap-2 text-xl font-semibold text-primary mb-4">`);
+		$$renderer.push(`<fieldset${attr_class(`surface p-6 ${disabled || !serviceRules ? "opacity-50" : ""}`)}><legend class="flex items-center gap-2 text-xl font-semibold text-primary mb-4">`);
 		Truck($$renderer, {
 			class: "w-5 h-5",
 			"aria-hidden": "true"
@@ -679,7 +679,7 @@ function ServiceSelectionCard($$renderer, $$props) {
 			for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
 				let service = each_array[$$index];
 				const checked = selectedService?.id === service.id;
-				$$renderer.push(`<label${attr_class(`block p-4 border-2 rounded-lg transition-all cursor-pointer ${checked ? "border-primary bg-nord-frost-1/20" : "border-border hover:border-primary/50"} ${disabled ? "cursor-not-allowed" : ""}`)}><div class="flex items-start gap-3"><input type="radio" name="serviceType"${attr("value", service.id)}${attr("checked", checked, true)}${attr("disabled", disabled, true)} class="mt-1 h-4 w-4 text-primary border-border focus:ring-primary disabled:cursor-not-allowed"/> <div class="flex-1"><div class="flex justify-between items-center mb-1"><span class="font-semibold text-foreground">${escape_html(service.name)}</span> <span class="text-sm text-muted-foreground">${escape_html(service.deliveryDays)}
+				$$renderer.push(`<label${attr_class(`block p-4 border-2 rounded-lg transition-all cursor-pointer ${checked ? "border-primary bg-primary/20" : "border-border hover:border-primary/50"} ${disabled ? "cursor-not-allowed" : ""}`)}><div class="flex items-start gap-3"><input type="radio" name="serviceType"${attr("value", service.id)}${attr("checked", checked, true)}${attr("disabled", disabled, true)} class="mt-1 h-4 w-4 text-primary border-border focus:ring-primary disabled:cursor-not-allowed"/> <div class="flex-1"><div class="flex justify-between items-center mb-1"><span class="font-semibold text-foreground">${escape_html(service.name)}</span> <span class="text-sm text-muted-foreground">${escape_html(service.deliveryDays)}
                   ${escape_html(service.deliveryDays === 1 ? t("rate.day") : t("rate.days"))}</span></div> <p class="text-sm text-muted-foreground mb-2">${escape_html(service.description)}</p> <div class="text-xs text-muted-foreground/70">${escape_html(t("rate.base"))}: $${escape_html(service.basePrice)} + $${escape_html(service.pricePerKg)}/kg</div></div></div></label>`);
 			}
 			$$renderer.push(`<!--]--></div>`);
@@ -783,7 +783,7 @@ function AdditionalOptionsCard($$renderer, $$props) {
 			field: rules?.fields?.[name]
 		})).filter((entry) => entry.field));
 		const pickupField = derived(() => rules?.fields?.pickupMethod);
-		$$renderer.push(`<fieldset${attr_class(`bg-muted p-6 rounded-lg shadow border border-border ${disabled || !rules ? "opacity-50" : ""}`)}><legend class="flex items-center gap-2 text-xl font-semibold text-primary mb-4">`);
+		$$renderer.push(`<fieldset${attr_class(`surface p-6 ${disabled || !rules ? "opacity-50" : ""}`)}><legend class="flex items-center gap-2 text-xl font-semibold text-primary mb-4">`);
 		Settings($$renderer, {
 			class: "w-5 h-5",
 			"aria-hidden": "true"
@@ -933,7 +933,7 @@ function RateCard($$renderer, $$props) {
 				value: rateBreakdown.liquidCost
 			}
 		].filter((line) => line.value > 0) : []);
-		$$renderer.push(`<section aria-labelledby="rate-heading"${attr_class(`bg-muted p-6 rounded-lg shadow border border-border ${disabled || calculatedPrice === null ? "opacity-50" : ""}`)}><h2 id="rate-heading" class="flex items-center gap-2 text-xl font-semibold text-primary mb-4">`);
+		$$renderer.push(`<section aria-labelledby="rate-heading"${attr_class(`surface p-6 ${disabled || calculatedPrice === null ? "opacity-50" : ""}`)}><h2 id="rate-heading" class="flex items-center gap-2 text-xl font-semibold text-primary mb-4">`);
 		Dollar_sign($$renderer, {
 			class: "w-5 h-5",
 			"aria-hidden": "true"
@@ -1347,12 +1347,12 @@ function ShipmentForm_1($$renderer, $$props) {
 		$$renderer.push(`<form class="max-w-7xl mx-auto">`);
 		if (state.submitError) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<div role="alert" class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded mb-8">${escape_html(state.submitError)}</div>`);
+			$$renderer.push(`<div role="alert" class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded mb-8">${escape_html(state.submitError)}</div>`);
 		} else $$renderer.push("<!--[-1-->");
 		$$renderer.push(`<!--]--> `);
 		if (state.errors.general) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<div role="alert" class="bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded mb-8">${escape_html(state.errors.general)}</div>`);
+			$$renderer.push(`<div role="alert" class="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded mb-8">${escape_html(state.errors.general)}</div>`);
 		} else $$renderer.push("<!--[-1-->");
 		$$renderer.push(`<!--]--> <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8"><div class="lg:col-span-3 space-y-6">`);
 		SenderCard($$renderer, { formData: state.form });
@@ -1402,12 +1402,12 @@ function ShipmentForm_1($$renderer, $$props) {
 			rateBreakdown: state.rateBreakdown,
 			disabled: !state.packageCompleted
 		});
-		$$renderer.push(`<!----></div></div> <div class="flex justify-end gap-4"><button type="button"${attr("disabled", state.loading, true)} class="flex items-center gap-2 px-6 py-3 border border-border text-muted-foreground rounded-md hover:bg-nord-polar-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">`);
+		$$renderer.push(`<!----></div></div> <div class="flex justify-end gap-4"><button type="button"${attr("disabled", state.loading, true)} class="btn">`);
 		Save($$renderer, {
 			class: "w-4 h-4",
 			"aria-hidden": "true"
 		});
-		$$renderer.push(`<!----> ${escape_html(state.loading ? t("form.saving") : t("form.saveDraft"))}</button> <button type="submit"${attr("disabled", state.loading, true)} class="flex items-center gap-2 px-6 py-3 bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">`);
+		$$renderer.push(`<!----> ${escape_html(state.loading ? t("form.saving") : t("form.saveDraft"))}</button> <button type="submit"${attr("disabled", state.loading, true)} class="btn btn-primary">`);
 		Circle_check_big($$renderer, {
 			class: "w-4 h-4",
 			"aria-hidden": "true"
@@ -1429,7 +1429,7 @@ function _page($$renderer, $$props) {
 				$$renderer.push(`<title>${escape_html(heading())} - My Shipments</title>`);
 			});
 		});
-		$$renderer.push(`<div class="mb-8"><h1 class="text-3xl font-bold text-foreground mb-2">${escape_html(heading())}</h1> <p class="text-muted-foreground">${escape_html(description())}</p></div> <!---->`);
+		$$renderer.push(`<div class="mb-8"><p class="eyebrow">${escape_html(editId() ? "Editing" : repeatId() ? "Repeating" : "New shipment")}</p> <h1 class="text-3xl font-bold text-foreground mb-2">${escape_html(heading().split(" ").slice(0, -1).join(" "))} <span class="grad">${escape_html(heading().split(" ").slice(-1))}</span></h1> <p class="text-muted-foreground">${escape_html(description())}</p></div> <!---->`);
 		ShipmentForm_1($$renderer, {
 			user: data.user,
 			editId: editId(),

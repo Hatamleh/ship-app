@@ -22,7 +22,7 @@
   getByRole('radio', { name: /Domestic Express/ }) and assert .toBeChecked().
 -->
 <fieldset
-  class="bg-muted p-6 rounded-lg shadow border border-border {disabled || !serviceRules
+  class="surface p-6 {disabled || !serviceRules
     ? 'opacity-50'
     : ''}"
 >
@@ -45,7 +45,7 @@
         {@const checked = selectedService?.id === service.id}
         <label
           class="block p-4 border-2 rounded-lg transition-all cursor-pointer
-            {checked ? 'border-primary bg-nord-frost-1/20' : 'border-border hover:border-primary/50'}
+            {checked ? 'border-primary bg-primary/20' : 'border-border hover:border-primary/50'}
             {disabled ? 'cursor-not-allowed' : ''}"
         >
           <div class="flex items-start gap-3">

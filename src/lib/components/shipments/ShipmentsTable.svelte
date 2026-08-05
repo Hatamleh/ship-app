@@ -46,17 +46,17 @@
     <div class="mt-6">
       <a
         href="/"
-        class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-nord-polar-0 bg-primary hover:bg-nord-frost-3"
+        class="btn btn-primary text-sm"
       >
         + {t('table.createShipment')}
       </a>
     </div>
   </div>
 {:else}
-  <div class="rounded-lg border border-border overflow-x-auto">
+  <div class="surface overflow-x-auto">
     <table class="min-w-full divide-y divide-border">
       <caption class="sr-only">Your shipments</caption>
-      <thead class="bg-nord-polar-2">
+      <thead class="bg-ever-surface">
         <tr>
           <th scope="col" class="px-4 py-3 w-16">
             <span class="sr-only">Actions</span>
@@ -101,7 +101,7 @@
       </thead>
       <tbody class="bg-muted divide-y divide-border">
         {#each shipments as shipment (shipment.id)}
-          <tr class="hover:bg-nord-polar-2">
+          <tr class="hover:bg-ever-surface">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium relative" data-menu-root>
               <button
                 type="button"
@@ -109,7 +109,7 @@
                 aria-label="Actions for {label(shipment)}"
                 aria-haspopup="menu"
                 aria-expanded={openMenuId === shipment.id}
-                class="text-muted-foreground hover:text-primary p-1 rounded hover:bg-nord-polar-2"
+                class="text-muted-foreground hover:text-primary p-1 rounded hover:bg-ever-surface"
               >
                 <MoreVertical class="w-5 h-5" aria-hidden="true" />
               </button>
@@ -123,7 +123,7 @@
                   <a
                     role="menuitem"
                     href="/shipments/{shipment.id}"
-                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors"
                   >
                     <Eye class="w-4 h-4" aria-hidden="true" />
                     View
@@ -133,7 +133,7 @@
                     <a
                       role="menuitem"
                       href="/?edit={shipment.id}"
-                      class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors"
+                      class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors"
                     >
                       <Pencil class="w-4 h-4" aria-hidden="true" />
                       Edit
@@ -145,7 +145,7 @@
                         openMenuId = null
                         onFinalize(shipment.id)
                       }}
-                      class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors"
+                      class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors"
                     >
                       <FileCheck class="w-4 h-4" aria-hidden="true" />
                       Finalize Shipment
@@ -154,7 +154,7 @@
                     <a
                       role="menuitem"
                       href="/?repeat={shipment.id}"
-                      class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors"
+                      class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors"
                     >
                       <Repeat class="w-4 h-4" aria-hidden="true" />
                       Repeat
@@ -168,7 +168,7 @@
                       openMenuId = null
                       onDelete(shipment.id)
                     }}
-                    class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-nord-aurora-red/20 transition-colors"
+                    class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/20 transition-colors"
                   >
                     <Trash2 class="w-4 h-4" aria-hidden="true" />
                     Delete
@@ -191,13 +191,13 @@
             <td class="px-6 py-4 whitespace-nowrap">
               {#if shipment.status === 'draft'}
                 <span
-                  class="px-2 py-1 text-xs font-medium rounded-full bg-nord-polar-2 text-muted-foreground"
+                  class="tag"
                 >
                   {t('status.Draft')}
                 </span>
               {:else}
                 <span
-                  class="px-2 py-1 text-xs font-medium rounded-full bg-nord-aurora-green/20 text-premium"
+                  class="tag border-premium text-premium"
                 >
                   Finalized
                 </span>

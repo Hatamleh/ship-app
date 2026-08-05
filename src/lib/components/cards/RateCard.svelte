@@ -27,7 +27,7 @@
 
 <section
   aria-labelledby="rate-heading"
-  class="bg-muted p-6 rounded-lg shadow border border-border {disabled || calculatedPrice === null
+  class="surface p-6 {disabled || calculatedPrice === null
     ? 'opacity-50'
     : ''}"
 >

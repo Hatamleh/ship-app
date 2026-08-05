@@ -26,7 +26,11 @@
 </svelte:head>
 
 <div class="mb-8">
-  <h1 class="text-3xl font-bold text-foreground mb-2">{heading}</h1>
+  <p class="eyebrow">{editId ? 'Editing' : repeatId ? 'Repeating' : 'New shipment'}</p>
+  <h1 class="text-3xl font-bold text-foreground mb-2">
+    {heading.split(' ').slice(0, -1).join(' ')}
+    <span class="grad">{heading.split(' ').slice(-1)}</span>
+  </h1>
   <p class="text-muted-foreground">{description}</p>
 </div>
 

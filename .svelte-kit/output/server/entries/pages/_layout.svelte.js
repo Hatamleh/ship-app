@@ -98,7 +98,7 @@ function Bot($$renderer, $$props) {
 function ChatDrawer($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		$$renderer.push("<!--[0-->");
-		$$renderer.push(`<button type="button"${attr("aria-label", t("ai.openChat"))} class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-primary text-nord-polar-0 shadow-lg flex items-center justify-center hover:bg-nord-frost-3 transition-colors">`);
+		$$renderer.push(`<button type="button"${attr("aria-label", t("ai.openChat"))} class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-primary text-ever-ink shadow-lg flex items-center justify-center hover:bg-primary-hover transition-colors">`);
 		Bot($$renderer, {
 			class: "w-6 h-6",
 			"aria-hidden": "true"
@@ -135,14 +135,14 @@ function _layout($$renderer, $$props) {
 			$$renderer.push(`<!---->`);
 		} else {
 			$$renderer.push("<!--[-1-->");
-			$$renderer.push(`<div class="flex h-screen bg-background"><aside class="w-64 bg-muted shadow-lg flex flex-col border-r border-border"><div class="p-6 border-b border-border"><div class="flex items-center gap-2"><svg class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg> <span class="text-xl font-bold text-foreground">My Shipments</span></div></div> <div class="p-6 border-b border-border"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-nord-frost-1/20 rounded-full flex items-center justify-center"><span class="text-primary font-semibold text-sm" aria-hidden="true">${escape_html(data.user.fullName.charAt(0).toUpperCase())}</span></div> <div class="flex-1 min-w-0"><p class="text-sm font-medium text-foreground truncate">${escape_html(data.user.fullName)}</p> <p class="text-xs text-muted-foreground truncate">${escape_html(data.user.email)}</p></div></div></div> <nav aria-label="Main" class="flex-1 p-4 space-y-2"><!--[-->`);
+			$$renderer.push(`<div class="flex h-screen bg-background"><aside class="w-64 bg-muted shadow-lg flex flex-col border-r border-border"><div class="p-6 border-b border-border"><div class="flex items-center gap-2"><svg class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg> <span class="text-xl font-bold text-foreground">My Shipments</span></div></div> <div class="p-6 border-b border-border"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center"><span class="text-primary font-semibold text-sm" aria-hidden="true">${escape_html(data.user.fullName.charAt(0).toUpperCase())}</span></div> <div class="flex-1 min-w-0"><p class="text-sm font-medium text-foreground truncate">${escape_html(data.user.fullName)}</p> <p class="text-xs text-muted-foreground truncate">${escape_html(data.user.email)}</p></div></div></div> <nav aria-label="Main" class="flex-1 p-4 space-y-2"><!--[-->`);
 			const each_array = ensure_array_like(navItems);
 			for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
 				let item = each_array[$$index];
 				const isActive = page.url.pathname === item.href;
-				$$renderer.push(`<a${attr("href", item.href)}${attr("aria-current", isActive ? "page" : void 0)}${attr_class(`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive ? "bg-nord-frost-1/20 text-primary font-medium" : "text-muted-foreground hover:bg-nord-polar-2"}`)}>${escape_html(item.name)}</a>`);
+				$$renderer.push(`<a${attr("href", item.href)}${attr("aria-current", isActive ? "page" : void 0)}${attr_class(`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive ? "bg-primary/20 text-primary font-medium" : "text-muted-foreground hover:bg-ever-surface"}`)}>${escape_html(item.name)}</a>`);
 			}
-			$$renderer.push(`<!--]--></nav> <div class="p-4 border-t border-border"><button type="button"${attr("disabled", loggingOut, true)} class="w-full flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-nord-polar-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">${escape_html(t("nav.logout"))}</button></div></aside> <main class="flex-1 overflow-auto bg-background bg-grid-fade"><div class="p-8">`);
+			$$renderer.push(`<!--]--></nav> <div class="p-4 border-t border-border"><button type="button"${attr("disabled", loggingOut, true)} class="w-full flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-ever-surface rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">${escape_html(t("nav.logout"))}</button></div></aside> <main class="flex-1 overflow-auto bg-background bg-grid-fade"><div class="p-8">`);
 			children($$renderer);
 			$$renderer.push(`<!----></div></main> `);
 			ChatDrawer($$renderer, {});

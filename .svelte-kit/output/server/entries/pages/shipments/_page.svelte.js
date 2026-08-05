@@ -28,7 +28,7 @@ function StatsCards($$renderer, $$props) {
 	const each_array = ensure_array_like(stats());
 	for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
 		let stat = each_array[$$index];
-		$$renderer.push(`<div class="bg-muted p-4 rounded-lg shadow border border-border"><dt class="text-sm text-muted-foreground">${escape_html(stat.label)}</dt> <dd${attr_class(`text-2xl font-bold ${stringify(stat.tone)}`)}>${escape_html(stat.value)}</dd></div>`);
+		$$renderer.push(`<div class="surface p-4"><dt class="text-sm text-muted-foreground">${escape_html(stat.label)}</dt> <dd${attr_class(`text-2xl font-bold ${stringify(stat.tone)}`)}>${escape_html(stat.value)}</dd></div>`);
 	}
 	$$renderer.push(`<!--]--></dl>`);
 }
@@ -37,12 +37,12 @@ function StatsCards($$renderer, $$props) {
 function ShipmentFilters($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		let { statusFilter, typeFilter, onStatusChange, onTypeChange } = $$props;
-		$$renderer.push(`<div class="bg-muted p-4 rounded-lg shadow border border-border mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label for="status-filter" class="block text-sm font-medium text-muted-foreground mb-1">Status</label> `);
+		$$renderer.push(`<div class="surface p-4 mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label for="status-filter" class="block text-sm font-medium text-muted-foreground mb-1">Status</label> `);
 		$$renderer.select({
 			id: "status-filter",
 			value: statusFilter,
 			onchange: (e) => onStatusChange(e.currentTarget.value),
-			class: "w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+			class: "field"
 		}, ($$renderer) => {
 			$$renderer.option({ value: "all" }, ($$renderer) => {
 				$$renderer.push(`All Statuses`);
@@ -59,7 +59,7 @@ function ShipmentFilters($$renderer, $$props) {
 			id: "type-filter",
 			value: typeFilter,
 			onchange: (e) => onTypeChange(e.currentTarget.value),
-			class: "w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+			class: "field"
 		}, ($$renderer) => {
 			$$renderer.option({ value: "all" }, ($$renderer) => {
 				$$renderer.push(`All Types`);
@@ -589,14 +589,14 @@ function ShipmentsTable($$renderer, $$props) {
 		}
 		if (shipments.length === 0) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<div class="text-center py-12"><h2 class="mt-2 text-sm font-medium text-foreground">${escape_html(t("table.noShipments"))}</h2> <p class="mt-1 text-sm text-muted-foreground">${escape_html(t("table.createFirstShipment"))}</p> <div class="mt-6"><a href="/" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-nord-polar-0 bg-primary hover:bg-nord-frost-3">+ ${escape_html(t("table.createShipment"))}</a></div></div>`);
+			$$renderer.push(`<div class="text-center py-12"><h2 class="mt-2 text-sm font-medium text-foreground">${escape_html(t("table.noShipments"))}</h2> <p class="mt-1 text-sm text-muted-foreground">${escape_html(t("table.createFirstShipment"))}</p> <div class="mt-6"><a href="/" class="btn btn-primary text-sm">+ ${escape_html(t("table.createShipment"))}</a></div></div>`);
 		} else {
 			$$renderer.push("<!--[-1-->");
-			$$renderer.push(`<div class="rounded-lg border border-border overflow-x-auto"><table class="min-w-full divide-y divide-border"><caption class="sr-only">Your shipments</caption><thead class="bg-nord-polar-2"><tr><th scope="col" class="px-4 py-3 w-16"><span class="sr-only">Actions</span></th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">${escape_html(t("table.trackingNumber"))}</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Sender</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Receiver</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Destination</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">${escape_html(t("table.status"))}</th></tr></thead><tbody class="bg-muted divide-y divide-border"><!--[-->`);
+			$$renderer.push(`<div class="surface overflow-x-auto"><table class="min-w-full divide-y divide-border"><caption class="sr-only">Your shipments</caption><thead class="bg-ever-surface"><tr><th scope="col" class="px-4 py-3 w-16"><span class="sr-only">Actions</span></th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">${escape_html(t("table.trackingNumber"))}</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Sender</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Receiver</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Destination</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</th><th scope="col" class="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">${escape_html(t("table.status"))}</th></tr></thead><tbody class="bg-muted divide-y divide-border"><!--[-->`);
 			const each_array = ensure_array_like(shipments);
 			for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
 				let shipment = each_array[$$index];
-				$$renderer.push(`<tr class="hover:bg-nord-polar-2"><td class="px-4 py-4 whitespace-nowrap text-sm font-medium relative" data-menu-root=""><button type="button"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} aria-haspopup="menu"${attr("aria-expanded", openMenuId === shipment.id)} class="text-muted-foreground hover:text-primary p-1 rounded hover:bg-nord-polar-2">`);
+				$$renderer.push(`<tr class="hover:bg-ever-surface"><td class="px-4 py-4 whitespace-nowrap text-sm font-medium relative" data-menu-root=""><button type="button"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} aria-haspopup="menu"${attr("aria-expanded", openMenuId === shipment.id)} class="text-muted-foreground hover:text-primary p-1 rounded hover:bg-ever-surface">`);
 				Ellipsis_vertical($$renderer, {
 					class: "w-5 h-5",
 					"aria-hidden": "true"
@@ -604,7 +604,7 @@ function ShipmentsTable($$renderer, $$props) {
 				$$renderer.push(`<!----></button> `);
 				if (openMenuId === shipment.id) {
 					$$renderer.push("<!--[0-->");
-					$$renderer.push(`<div role="menu"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} class="absolute left-0 top-full mt-1 z-20 w-48 bg-muted border border-border rounded-md shadow-lg py-1"><a role="menuitem"${attr("href", `/shipments/${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors">`);
+					$$renderer.push(`<div role="menu"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} class="absolute left-0 top-full mt-1 z-20 w-48 bg-muted border border-border rounded-md shadow-lg py-1"><a role="menuitem"${attr("href", `/shipments/${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors">`);
 					Eye($$renderer, {
 						class: "w-4 h-4",
 						"aria-hidden": "true"
@@ -612,12 +612,12 @@ function ShipmentsTable($$renderer, $$props) {
 					$$renderer.push(`<!----> View</a> `);
 					if (shipment.status === "draft") {
 						$$renderer.push("<!--[0-->");
-						$$renderer.push(`<a role="menuitem"${attr("href", `/?edit=${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors">`);
+						$$renderer.push(`<a role="menuitem"${attr("href", `/?edit=${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors">`);
 						Pencil($$renderer, {
 							class: "w-4 h-4",
 							"aria-hidden": "true"
 						});
-						$$renderer.push(`<!----> Edit</a> <button role="menuitem" type="button" class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors">`);
+						$$renderer.push(`<!----> Edit</a> <button role="menuitem" type="button" class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors">`);
 						File_check($$renderer, {
 							class: "w-4 h-4",
 							"aria-hidden": "true"
@@ -625,14 +625,14 @@ function ShipmentsTable($$renderer, $$props) {
 						$$renderer.push(`<!----> Finalize Shipment</button>`);
 					} else {
 						$$renderer.push("<!--[-1-->");
-						$$renderer.push(`<a role="menuitem"${attr("href", `/?repeat=${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-nord-frost-1/20 hover:text-primary transition-colors">`);
+						$$renderer.push(`<a role="menuitem"${attr("href", `/?repeat=${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors">`);
 						Repeat($$renderer, {
 							class: "w-4 h-4",
 							"aria-hidden": "true"
 						});
 						$$renderer.push(`<!----> Repeat</a>`);
 					}
-					$$renderer.push(`<!--]--> <button role="menuitem" type="button" class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-nord-aurora-red/20 transition-colors">`);
+					$$renderer.push(`<!--]--> <button role="menuitem" type="button" class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/20 transition-colors">`);
 					Trash_2($$renderer, {
 						class: "w-4 h-4",
 						"aria-hidden": "true"
@@ -642,10 +642,10 @@ function ShipmentsTable($$renderer, $$props) {
 				$$renderer.push(`<!--]--></td><th scope="row" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground text-left">${escape_html(shipment.status === "draft" ? "-" : shipment.trackingNumber)}</th><td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">${escape_html(shipment.from.name)}</td><td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">${escape_html(shipment.to.name)}</td><td class="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">${escape_html(shipment.to.city)}, ${escape_html(shipment.to.country)}</td><td class="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">${escape_html(t(`shipmentTypes.${shipment.service.shipmentType}`))}</td><td class="px-6 py-4 whitespace-nowrap">`);
 				if (shipment.status === "draft") {
 					$$renderer.push("<!--[0-->");
-					$$renderer.push(`<span class="px-2 py-1 text-xs font-medium rounded-full bg-nord-polar-2 text-muted-foreground">${escape_html(t("status.Draft"))}</span>`);
+					$$renderer.push(`<span class="tag">${escape_html(t("status.Draft"))}</span>`);
 				} else {
 					$$renderer.push("<!--[-1-->");
-					$$renderer.push(`<span class="px-2 py-1 text-xs font-medium rounded-full bg-nord-aurora-green/20 text-premium">Finalized</span>`);
+					$$renderer.push(`<span class="tag border-premium text-premium">Finalized</span>`);
 				}
 				$$renderer.push(`<!--]--></td></tr>`);
 			}
@@ -661,12 +661,12 @@ function DeleteModal($$renderer, $$props) {
 		let { open = false, shipmentId = null, onConfirm, onCancel } = $$props;
 		if (open) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"><div role="alertdialog" aria-modal="true" aria-labelledby="delete-title" aria-describedby="delete-description" class="bg-muted rounded-lg shadow-xl max-w-md w-full mx-4 border border-border"><div class="p-6"><div class="flex items-center gap-4 mb-4"><div class="flex-shrink-0 w-12 h-12 bg-nord-aurora-red/20 rounded-full flex items-center justify-center">`);
+			$$renderer.push(`<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"><div role="alertdialog" aria-modal="true" aria-labelledby="delete-title" aria-describedby="delete-description" class="surface max-w-md w-full mx-4 shadow-glow"><div class="p-6"><div class="flex items-center gap-4 mb-4"><div class="flex-shrink-0 w-12 h-12 bg-destructive/20 rounded-full flex items-center justify-center">`);
 			Trash_2($$renderer, {
 				class: "w-6 h-6 text-destructive",
 				"aria-hidden": "true"
 			});
-			$$renderer.push(`<!----></div> <div><h2 id="delete-title" class="text-lg font-semibold text-foreground">Delete Shipment</h2> <p class="text-sm text-muted-foreground">Shipment #${escape_html(shipmentId)}</p></div></div> <p id="delete-description" class="text-muted-foreground mb-6">Are you sure you want to delete this shipment? This action cannot be undone.</p> <div class="flex gap-3 justify-end"><button type="button" class="px-4 py-2 text-sm font-medium text-muted-foreground bg-nord-polar-2 border border-border rounded-md hover:bg-nord-polar-3 transition-colors">Cancel</button> <button type="button" class="px-4 py-2 text-sm font-medium text-white bg-destructive rounded-md hover:bg-nord-aurora-red/80 transition-colors">Delete</button></div></div></div></div>`);
+			$$renderer.push(`<!----></div> <div><h2 id="delete-title" class="text-lg font-semibold text-foreground">Delete Shipment</h2> <p class="text-sm text-muted-foreground">Shipment #${escape_html(shipmentId)}</p></div></div> <p id="delete-description" class="text-muted-foreground mb-6">Are you sure you want to delete this shipment? This action cannot be undone.</p> <div class="flex gap-3 justify-end"><button type="button" class="btn text-sm">Cancel</button> <button type="button" class="btn btn-danger text-sm">Delete</button></div></div></div></div>`);
 		} else $$renderer.push("<!--[-1-->");
 		$$renderer.push(`<!--]-->`);
 	});
@@ -740,15 +740,15 @@ function _page($$renderer, $$props) {
 			});
 		});
 		PromoModal($$renderer, {});
-		$$renderer.push(`<!----> <div class="mb-8 flex items-center justify-between"><div><h1 class="text-3xl font-bold text-foreground">My Shipments</h1> <p class="mt-2 text-muted-foreground">View and manage all your shipments</p></div> <a href="/" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-nord-polar-0 bg-primary hover:bg-nord-frost-3">+ Create Shipment</a></div> `);
+		$$renderer.push(`<!----> <div class="mb-8 flex items-center justify-between"><div><p class="eyebrow">Dashboard</p> <h1 class="text-3xl font-bold text-foreground">My <span class="grad">Shipments</span></h1> <p class="mt-2 text-muted-foreground">View and manage all your shipments</p></div> <a href="/" class="btn btn-primary text-sm">+ Create Shipment</a></div> `);
 		if (showSuccess()) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<div role="status" class="mb-6 bg-nord-aurora-green/20 border border-premium text-premium px-4 py-3 rounded">Shipment saved successfully!</div>`);
+			$$renderer.push(`<div role="status" class="mb-6 bg-premium/20 border border-premium text-premium px-4 py-3 rounded">Shipment saved successfully!</div>`);
 		} else $$renderer.push("<!--[-1-->");
 		$$renderer.push(`<!--]--> `);
 		if (errorMessage) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<div role="alert" class="mb-6 bg-nord-aurora-red/20 border border-destructive text-destructive px-4 py-3 rounded">${escape_html(errorMessage)}</div>`);
+			$$renderer.push(`<div role="alert" class="mb-6 bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded">${escape_html(errorMessage)}</div>`);
 		} else $$renderer.push("<!--[-1-->");
 		$$renderer.push(`<!--]--> `);
 		StatsCards($$renderer, {

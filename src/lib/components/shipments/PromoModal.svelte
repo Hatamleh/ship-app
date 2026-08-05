@@ -25,10 +25,10 @@
       role="dialog"
       aria-modal="true"
       aria-labelledby="promo-title"
-      class="bg-muted rounded-lg shadow-xl max-w-md w-full mx-4 border border-border p-8 text-center"
+      class="surface max-w-md w-full mx-4 shadow-glow p-8 text-center"
     >
       <div
-        class="flex-shrink-0 w-12 h-12 mx-auto mb-4 bg-nord-frost-1/20 rounded-full flex items-center justify-center"
+        class="flex-shrink-0 w-12 h-12 mx-auto mb-4 bg-primary/20 rounded-full flex items-center justify-center"
       >
         <Sparkles class="w-6 h-6 text-primary" aria-hidden="true" />
       </div>
@@ -37,7 +37,7 @@
       <button
         type="button"
         onclick={() => (show = false)}
-        class="px-6 py-2 text-sm font-medium text-nord-polar-0 bg-primary rounded-md hover:bg-nord-frost-3 transition-colors"
+        class="btn btn-primary text-sm"
       >
         Close
       </button>

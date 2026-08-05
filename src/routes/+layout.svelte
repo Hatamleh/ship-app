@@ -58,7 +58,7 @@
 
       <div class="p-6 border-b border-border">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-nord-frost-1/20 rounded-full flex items-center justify-center">
+          <div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
             <span class="text-primary font-semibold text-sm" aria-hidden="true">
               {data.user.fullName.charAt(0).toUpperCase()}
             </span>
@@ -77,8 +77,8 @@
             href={item.href}
             aria-current={isActive ? 'page' : undefined}
             class="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors {isActive
-              ? 'bg-nord-frost-1/20 text-primary font-medium'
-              : 'text-muted-foreground hover:bg-nord-polar-2'}"
+              ? 'bg-primary/20 text-primary font-medium'
+              : 'text-muted-foreground hover:bg-ever-surface'}"
           >
             {item.name}
           </a>
@@ -90,7 +90,7 @@
           type="button"
           onclick={logout}
           disabled={loggingOut}
-          class="w-full flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-nord-polar-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="w-full flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-ever-surface rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loggingOut ? t('common.loading') : t('nav.logout')}
         </button>

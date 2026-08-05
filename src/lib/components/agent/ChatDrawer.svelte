@@ -87,7 +87,7 @@
     type="button"
     onclick={() => (open = true)}
     aria-label={t('ai.openChat')}
-    class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-primary text-nord-polar-0 shadow-lg flex items-center justify-center hover:bg-nord-frost-3 transition-colors"
+    class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-primary text-ever-ink shadow-lg flex items-center justify-center hover:bg-primary-hover transition-colors"
   >
     <Bot class="w-6 h-6" aria-hidden="true" />
   </button>
@@ -133,8 +133,8 @@
           <div
             class="w-fit max-w-[90%] min-w-0 px-3 py-2 rounded-lg text-sm text-left {message.role ===
             'user'
-              ? 'ml-auto bg-primary text-nord-polar-0 whitespace-pre-wrap'
-              : 'bg-nord-polar-2 text-foreground'}"
+              ? 'ml-auto bg-primary text-ever-ink whitespace-pre-wrap'
+              : 'bg-ever-surface text-foreground'}"
           >
             {#if message.role === 'user'}
               {message.content}
@@ -149,7 +149,7 @@
               {#each message.toolCalls as call, j (j)}
                 <li
                   title={JSON.stringify(call.args)}
-                  class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-nord-frost-1/20 text-primary"
+                  class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-primary/20 text-primary"
                 >
                   <Wrench class="w-3 h-3" aria-hidden="true" />
                   {call.name}
@@ -171,7 +171,7 @@
       {#if errorMessage}
         <p
           role="alert"
-          class="text-sm text-destructive bg-nord-aurora-red/20 border border-destructive rounded px-3 py-2"
+          class="text-sm text-destructive bg-destructive/20 border border-destructive rounded px-3 py-2"
         >
           {errorMessage}
         </p>
@@ -187,14 +187,14 @@
         rows="2"
         placeholder={t('ai.placeholder')}
         disabled={loading}
-        class="flex-1 resize-none px-3 py-2 text-sm bg-nord-polar-2 text-foreground border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+        class="field flex-1 resize-none text-sm"
       ></textarea>
       <button
         type="button"
         onclick={send}
         disabled={loading || input.trim() === ''}
         aria-label={t('ai.send')}
-        class="px-3 py-2 bg-primary text-nord-polar-0 rounded-md hover:bg-nord-frost-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        class="btn btn-primary px-3 py-2"
       >
         <Send class="w-4 h-4" aria-hidden="true" />
       </button>

@@ -12,7 +12,7 @@
   } = $props()
 </script>
 
-<div class="bg-muted p-4 rounded-lg shadow border border-border mb-6">
+<div class="surface p-4 mb-6">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
       <label for="status-filter" class="block text-sm font-medium text-muted-foreground mb-1">
@@ -22,7 +22,7 @@
         id="status-filter"
         value={statusFilter}
         onchange={(e) => onStatusChange(e.currentTarget.value)}
-        class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+        class="field"
       >
         <option value="all">All Statuses</option>
         <option value="draft">Draft</option>
@@ -38,7 +38,7 @@
         id="type-filter"
         value={typeFilter}
         onchange={(e) => onTypeChange(e.currentTarget.value)}
-        class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+        class="field"
       >
         <option value="all">All Types</option>
         <option value="Domestic">Domestic</option>

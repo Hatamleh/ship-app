@@ -3,51 +3,246 @@
 @tailwind utilities;
 
 :root {
-  /* Base Colors - Nord/Coding Theme */
-  --background: #323846;     /* Dark gray-blue background */
-  --foreground: #D8DEE9;     /* Snow white text */
-  --muted: #2E3440;          /* Darker secondary background */
-  --muted-foreground: #81A1C1; /* Muted frost blue-gray */
-  --border: #4C566A;         /* Polar night border */
-
-  /* Brand & Action Colors - Nord Palette */
-  --primary: #88C0D0;        /* Frost blue - primary actions */
-  --secondary: #81A1C1;      /* Frost blue-gray */
-  --accent-orange: #D08770;  /* Aurora orange */
-  --accent-purple: #B48EAD;  /* Aurora purple */
-  --premium: #A3BE8C;        /* Aurora green - success/premium */
-  --destructive: #BF616A;    /* Aurora red - danger */
-
-  /* Extras */
-  --radius: 0.25rem;         /* Sharp border radius for coding theme */
-  --font-body: var(--font-inter), 'Inter', sans-serif;
-  --font-cairo: 'Cairo', sans-serif;
-  --font-headers: 'Oswald', sans-serif;
-  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  /* Evergreen (QAcart) — soft pine-green.
+     Identical tokens to qacart.com and hatemhatamleh.com so the three read
+     as one brand. */
+  --bg-primary: #2a372f;
+  --bg-secondary: #2e3d34;
+  --bg-card: #34453a;
+  --bg-glass: rgba(215, 198, 170, 0.04);
+  --border: rgba(215, 198, 170, 0.1);
+  --border-hover: rgba(167, 192, 128, 0.35);
+  --text-primary: #ece3cf;
+  --text-secondary: #aeb6a3;
+  --text-muted: #79847a;
+  --accent: #a7c080;
+  --accent-glow: rgba(167, 192, 128, 0.3);
+  --accent-secondary: #83c092;
+  --accent-sand: #dbbc7f;
+  --accent-red: #e67e80;
+  --accent-purple: #d699b6;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
 }
 
 body {
   @apply bg-background text-foreground;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Grid background for auth pages */
-.bg-grid {
-  background-size: 40px 40px;
-  background-image:
-    linear-gradient(to right, rgba(136, 192, 208, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(136, 192, 208, 0.05) 1px, transparent 1px);
+/* Headings carry the display face; body text stays on Inter. */
+h1,
+h2,
+h3,
+legend {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
-/* Optional: Add a subtle radial gradient overlay for depth */
+::selection {
+  background: var(--accent);
+  color: #2b3a32;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   Shared primitives, ported from qacart.com so the app uses the
+   same button, card and label language as the site and the decks.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Small mono uppercase label above a heading — the brand's signature eyebrow. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+/* The italic gradient run inside a heading — the deck's signature move. */
+.grad {
+  background: linear-gradient(
+    120deg,
+    var(--accent),
+    var(--accent-secondary) 55%,
+    var(--accent-purple)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-style: italic;
+}
+
+.surface {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+}
+
+/* Cards lift slightly and pick up a green glow instead of a grey shadow. */
+.surface-interactive {
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.surface-interactive:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 38px -20px var(--accent-glow);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s,
+    filter 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Green→aqua gradient rather than a flat block of --accent: a solid fill at
+   button size reads as a very loud slab of green. */
+.btn-primary {
+  background: linear-gradient(120deg, var(--accent), var(--accent-secondary));
+  color: #23301f;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.btn-primary:hover:not(:disabled) {
+  color: #23301f;
+  filter: brightness(1.05);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+
+.btn-danger {
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+  background: transparent;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(230, 126, 128, 0.15);
+  color: var(--accent-red);
+  border-color: var(--accent-red);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-card);
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.65rem;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+/* Field controls: inset relative to the card they sit on. */
+.field {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.field:disabled {
+  background: var(--bg-primary);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.field-invalid {
+  border-color: var(--accent-red);
+}
+
+/* Subtle pine grid, replacing the blue-tinted one from the Nord theme. */
 .bg-grid-fade {
   background:
-    radial-gradient(ellipse at center, transparent 0%, var(--background) 70%),
-    linear-gradient(to right, rgba(136, 192, 208, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(136, 192, 208, 0.08) 1px, transparent 1px);
+    radial-gradient(ellipse at center, transparent 0%, var(--bg-primary) 70%),
+    linear-gradient(to right, rgba(167, 192, 128, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(167, 192, 128, 0.06) 1px, transparent 1px);
   background-size: 100% 100%, 40px 40px, 40px 40px;
 }
 
-/* Fix Chrome autofill background */
+/* Chrome autofill would otherwise paint fields a bright blue-white. */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -56,19 +251,18 @@ select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus,
 select:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #3B4252 inset !important;
-  -webkit-text-fill-color: #D8DEE9 !important;
-  caret-color: #D8DEE9 !important;
+  -webkit-box-shadow: 0 0 0 1000px #2e3d34 inset !important;
+  -webkit-text-fill-color: #ece3cf !important;
+  caret-color: #ece3cf !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Hide number input spinners */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }

@@ -65,14 +65,14 @@
   .markdown :global(code) {
     padding: 0.125rem 0.25rem;
     border-radius: 0.25rem;
-    background: theme('colors.nord.polar.3');
+    background: theme('colors.ever.raised');
     font-family: theme('fontFamily.mono');
     font-size: 0.9em;
   }
   .markdown :global(pre) {
     padding: 0.75rem;
     border-radius: 0.25rem;
-    background: theme('colors.nord.polar.3');
+    background: theme('colors.ever.raised');
     overflow-x: auto;
     font-size: 0.75rem;
   }

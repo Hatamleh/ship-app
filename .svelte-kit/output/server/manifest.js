@@ -10,7 +10,7 @@ return {
 	assets: new Set(["ship-logo.svg"]),
 	mimeTypes: {".svg":"image/svg+xml"},
 	_: {
-		client: {start:"_app/immutable/entry/start.CqiHltLf.js",app:"_app/immutable/entry/app.X92OXqUs.js",imports:["_app/immutable/entry/start.CqiHltLf.js","_app/immutable/chunks/B9OLAHAB.js","_app/immutable/chunks/Ce_Ma__k.js","_app/immutable/entry/app.X92OXqUs.js","_app/immutable/chunks/Ce_Ma__k.js","_app/immutable/chunks/xihTtKlq.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
+		client: {start:"_app/immutable/entry/start.BgJjH7SS.js",app:"_app/immutable/entry/app.DpmpgeFF.js",imports:["_app/immutable/entry/start.BgJjH7SS.js","_app/immutable/chunks/yuBekkrP.js","_app/immutable/chunks/Ce_Ma__k.js","_app/immutable/entry/app.DpmpgeFF.js","_app/immutable/chunks/Ce_Ma__k.js","_app/immutable/chunks/xihTtKlq.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),

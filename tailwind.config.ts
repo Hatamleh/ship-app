@@ -1,62 +1,60 @@
 import type { Config } from 'tailwindcss'
 
+/**
+ * Evergreen — the QAcart theme.
+ *
+ * Tokens are copied from projects/qacart/src/app.css (shared with
+ * hatemhatamleh.com) so this app reads as part of the same brand: soft
+ * pine-green surfaces, warm cream text, green accent shifting to aqua.
+ */
 const config: Config = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
       colors: {
-        // Nord/Coding Theme Colors
-        nord: {
-          // Polar Night (Backgrounds)
-          polar: {
-            0: '#2E3440',  // Darkest - muted/secondary background
-            1: '#323846',  // Main background
-            2: '#3B4252',  // Lighter background
-            3: '#4C566A',  // Border color
-          },
-          // Snow Storm (Text)
-          snow: {
-            0: '#D8DEE9',  // Main foreground text
-            1: '#E5E9F0',  // Lighter text
-            2: '#ECEFF4',  // Lightest text
-          },
-          // Frost (Blues - Primary/Secondary)
-          frost: {
-            0: '#8FBCBB',  // Teal frost
-            1: '#88C0D0',  // Primary - main brand color
-            2: '#81A1C1',  // Secondary/muted foreground
-            3: '#5E81AC',  // Darker frost
-          },
-          // Aurora (Accent Colors)
-          aurora: {
-            red: '#BF616A',      // Destructive
-            orange: '#D08770',   // Accent orange
-            yellow: '#EBCB8B',   // Warning
-            green: '#A3BE8C',    // Success/Premium
-            purple: '#B48EAD',   // Accent purple
-          },
+        ever: {
+          bg: '#2a372f', // page background
+          surface: '#2e3d34', // inset surfaces: inputs, hovers
+          card: '#34453a', // raised surfaces: cards, panels
+          raised: '#3d5044', // disabled fields, code blocks
+          ink: '#23301f', // text sitting on the green accent
         },
-        // Semantic color mapping
-        background: '#323846',
-        foreground: '#D8DEE9',
-        muted: '#2E3440',
-        'muted-foreground': '#81A1C1',
-        border: '#4C566A',
-        primary: '#88C0D0',
-        secondary: '#81A1C1',
-        destructive: '#BF616A',
-        premium: '#A3BE8C',
+
+        // Semantic tokens used throughout the app
+        background: '#2a372f',
+        foreground: '#ece3cf',
+        muted: '#34453a',
+        'muted-foreground': '#aeb6a3',
+        subtle: '#79847a',
+        border: 'rgba(215, 198, 170, 0.1)',
+        'border-hover': 'rgba(167, 192, 128, 0.35)',
+
+        primary: '#a7c080',
+        'primary-hover': '#8fae6a',
+        secondary: '#83c092',
+        premium: '#83c092',
+        sand: '#dbbc7f',
+        destructive: '#e67e80',
         accent: {
-          orange: '#D08770',
-          purple: '#B48EAD',
+          purple: '#d699b6',
+          sand: '#dbbc7f',
         },
       },
       fontFamily: {
+        // Space Grotesk headings over Inter body — the qacart.com pairing
+        display: ['Space Grotesk', 'sans-serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Courier New', 'monospace'],
+        mono: ['ui-monospace', 'SF Mono', 'Menlo', 'monospace'],
       },
       borderRadius: {
-        DEFAULT: '0.25rem',
+        DEFAULT: '0.5rem',
+        card: '18px', // the card radius used across the brand
+        pill: '100px', // buttons, chips and tags are fully rounded
+      },
+      boxShadow: {
+        // Cards lift into a green glow rather than a grey drop shadow
+        glow: '0 16px 38px -20px rgba(167, 192, 128, 0.3)',
+        'glow-sm': '0 8px 24px rgba(167, 192, 128, 0.3)',
       },
     },
   },
