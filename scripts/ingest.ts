@@ -5,9 +5,9 @@
  * Run with: npm run ingest
  *
  * Sources:
- *   - logic.md            the complete business-rules document
- *   - stories/*.md        the user stories (README excluded, it is just an index)
- *   - lib/rules/*.json    the machine-readable rules, rendered to text
+ *   - logic.md                the complete business-rules document
+ *   - stories/*.md            the user stories (README excluded, it is just an index)
+ *   - src/lib/rules/*.json    the machine-readable rules, rendered to text
  *
  * README.md is deliberately NOT indexed: it still documents endpoints and prices
  * that no longer exist, and would produce confidently wrong answers.
@@ -16,7 +16,7 @@ import { PrismaClient } from '@prisma/client'
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters'
 import fs from 'fs'
 import path from 'path'
-import { getEmbeddings, hasApiKey } from '../lib/ai/llm'
+import { getEmbeddings, hasApiKey } from '../src/lib/server/ai/llm'
 
 const prisma = new PrismaClient()
 
@@ -116,9 +116,9 @@ async function main() {
   }
 
   // lib/rules/*.json — the machine-readable rules
-  const rulesDir = path.join(ROOT, 'lib', 'rules')
+  const rulesDir = path.join(ROOT, 'src', 'lib', 'rules')
   for (const file of fs.readdirSync(rulesDir).filter((f) => f.endsWith('.json')).sort()) {
-    chunks.push(...chunkRulesJson(path.join(rulesDir, file), `lib/rules/${file}`))
+    chunks.push(...chunkRulesJson(path.join(rulesDir, file), `src/lib/rules/${file}`))
   }
 
   console.log(`Collected ${chunks.length} chunks from ${storyFiles.length + 1} documents.`)

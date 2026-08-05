@@ -1,11 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
       colors: {
@@ -56,9 +52,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        arabic: ['IBM Plex Sans Arabic', 'Noto Sans Arabic', 'sans-serif'],
-        cairo: ['Cairo', 'sans-serif'],
-        headers: ['Oswald', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Courier New', 'monospace'],
       },
       borderRadius: {

@@ -1,0 +1,64 @@
+var countries_default = { countries: [
+	{
+		"code": "SA",
+		"name": "Saudi Arabia",
+		"nameAr": "المملكة العربية السعودية",
+		"isGulf": true
+	},
+	{
+		"code": "AE",
+		"name": "United Arab Emirates",
+		"nameAr": "الإمارات العربية المتحدة",
+		"isGulf": true
+	},
+	{
+		"code": "KW",
+		"name": "Kuwait",
+		"nameAr": "الكويت",
+		"isGulf": true
+	},
+	{
+		"code": "BH",
+		"name": "Bahrain",
+		"nameAr": "البحرين",
+		"isGulf": true
+	},
+	{
+		"code": "QA",
+		"name": "Qatar",
+		"nameAr": "قطر",
+		"isGulf": true
+	},
+	{
+		"code": "OM",
+		"name": "Oman",
+		"nameAr": "عُمان",
+		"isGulf": true
+	},
+	{
+		"code": "EG",
+		"name": "Egypt",
+		"nameAr": "مصر",
+		"isGulf": false
+	},
+	{
+		"code": "JO",
+		"name": "Jordan",
+		"nameAr": "الأردن",
+		"isGulf": false
+	},
+	{
+		"code": "LB",
+		"name": "Lebanon",
+		"nameAr": "لبنان",
+		"isGulf": false
+	},
+	{
+		"code": "IQ",
+		"name": "Iraq",
+		"nameAr": "العراق",
+		"isGulf": false
+	}
+] };
+//#endregion
+export { countries_default as t };
