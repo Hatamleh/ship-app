@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { Bot, Send, X, Wrench } from 'lucide-svelte'
+  import Bot from 'lucide-svelte/icons/bot'
+  import Send from 'lucide-svelte/icons/send'
+  import X from 'lucide-svelte/icons/x'
+  import Wrench from 'lucide-svelte/icons/wrench'
   import Markdown from './Markdown.svelte'
   import { t } from '$lib/translations'
 

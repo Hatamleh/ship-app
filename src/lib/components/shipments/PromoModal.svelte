@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Sparkles } from 'lucide-svelte'
+  import Sparkles from 'lucide-svelte/icons/sparkles'
 
   /**
    * A promo overlay that appears RANDOMLY on the shipments page.

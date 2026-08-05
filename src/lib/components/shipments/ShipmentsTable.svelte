@@ -1,5 +1,10 @@
 <script lang="ts">
-  import { MoreVertical, Eye, Pencil, FileCheck, Trash2, Repeat } from 'lucide-svelte'
+  import MoreVertical from 'lucide-svelte/icons/more-vertical'
+  import Eye from 'lucide-svelte/icons/eye'
+  import Pencil from 'lucide-svelte/icons/pencil'
+  import FileCheck from 'lucide-svelte/icons/file-check'
+  import Trash2 from 'lucide-svelte/icons/trash-2'
+  import Repeat from 'lucide-svelte/icons/repeat'
   import type { Shipment } from '$lib/types'
   import { t } from '$lib/translations'
 

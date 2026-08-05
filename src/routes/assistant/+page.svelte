@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { BookOpen, Search } from 'lucide-svelte'
+  import BookOpen from 'lucide-svelte/icons/book-open'
+  import Search from 'lucide-svelte/icons/search'
   import Markdown from '$lib/components/agent/Markdown.svelte'
   import { t } from '$lib/translations'
 

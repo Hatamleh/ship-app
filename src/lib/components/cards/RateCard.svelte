@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DollarSign } from 'lucide-svelte'
+  import DollarSign from 'lucide-svelte/icons/dollar-sign'
   import type { RateBreakdown } from '$lib/types'
   import { t } from '$lib/translations'
 

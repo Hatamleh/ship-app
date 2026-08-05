@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { User, Users, Package, CheckCircle } from 'lucide-svelte'
+  import User from 'lucide-svelte/icons/user'
+  import Users from 'lucide-svelte/icons/users'
+  import Package from 'lucide-svelte/icons/package'
+  import CheckCircle from 'lucide-svelte/icons/check-circle'
   import type { CardRules, FieldRule } from '$lib/types'
   import { t } from '$lib/translations'
 

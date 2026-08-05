@@ -4,6 +4,80 @@ import { t as page } from "../../../chunks/state.js";
 import "../../../chunks/navigation.js";
 import { t as Icon } from "../../../chunks/Icon.js";
 import { t } from "../../../chunks/translations.js";
+//#region src/lib/components/shipments/StatsCards.svelte
+function StatsCards($$renderer, $$props) {
+	let { total, draft, finalized } = $$props;
+	const stats = derived(() => [
+		{
+			label: "Total Shipments",
+			value: total,
+			tone: "text-foreground"
+		},
+		{
+			label: "Draft",
+			value: draft,
+			tone: "text-muted-foreground"
+		},
+		{
+			label: "Finalized",
+			value: finalized,
+			tone: "text-premium"
+		}
+	]);
+	$$renderer.push(`<dl class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><!--[-->`);
+	const each_array = ensure_array_like(stats());
+	for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
+		let stat = each_array[$$index];
+		$$renderer.push(`<div class="bg-muted p-4 rounded-lg shadow border border-border"><dt class="text-sm text-muted-foreground">${escape_html(stat.label)}</dt> <dd${attr_class(`text-2xl font-bold ${stringify(stat.tone)}`)}>${escape_html(stat.value)}</dd></div>`);
+	}
+	$$renderer.push(`<!--]--></dl>`);
+}
+//#endregion
+//#region src/lib/components/shipments/ShipmentFilters.svelte
+function ShipmentFilters($$renderer, $$props) {
+	$$renderer.component(($$renderer) => {
+		let { statusFilter, typeFilter, onStatusChange, onTypeChange } = $$props;
+		$$renderer.push(`<div class="bg-muted p-4 rounded-lg shadow border border-border mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label for="status-filter" class="block text-sm font-medium text-muted-foreground mb-1">Status</label> `);
+		$$renderer.select({
+			id: "status-filter",
+			value: statusFilter,
+			onchange: (e) => onStatusChange(e.currentTarget.value),
+			class: "w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+		}, ($$renderer) => {
+			$$renderer.option({ value: "all" }, ($$renderer) => {
+				$$renderer.push(`All Statuses`);
+			});
+			$$renderer.option({ value: "draft" }, ($$renderer) => {
+				$$renderer.push(`Draft`);
+			});
+			$$renderer.option({ value: "finalized" }, ($$renderer) => {
+				$$renderer.push(`Finalized`);
+			});
+		});
+		$$renderer.push(`</div> <div><label for="type-filter" class="block text-sm font-medium text-muted-foreground mb-1">Type</label> `);
+		$$renderer.select({
+			id: "type-filter",
+			value: typeFilter,
+			onchange: (e) => onTypeChange(e.currentTarget.value),
+			class: "w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
+		}, ($$renderer) => {
+			$$renderer.option({ value: "all" }, ($$renderer) => {
+				$$renderer.push(`All Types`);
+			});
+			$$renderer.option({ value: "Domestic" }, ($$renderer) => {
+				$$renderer.push(`Domestic`);
+			});
+			$$renderer.option({ value: "IntraGulf" }, ($$renderer) => {
+				$$renderer.push(`Intra-Gulf`);
+			});
+			$$renderer.option({ value: "International" }, ($$renderer) => {
+				$$renderer.push(`International`);
+			});
+		});
+		$$renderer.push(`</div></div></div>`);
+	});
+}
+//#endregion
 //#region node_modules/lucide-svelte/dist/icons/ellipsis-vertical.svelte
 function Ellipsis_vertical($$renderer, $$props) {
 	const $$sanitized_props = sanitize_props($$props);
@@ -178,87 +252,6 @@ function Eye($$renderer, $$props) {
 	]));
 }
 //#endregion
-//#region node_modules/lucide-svelte/dist/icons/file-check.svelte
-function File_check($$renderer, $$props) {
-	const $$sanitized_props = sanitize_props($$props);
-	/**
-	* @license lucide-svelte v1.0.1 - ISC
-	*
-	* ISC License
-	*
-	* Copyright (c) 2026 Lucide Icons and Contributors
-	*
-	* Permission to use, copy, modify, and/or distribute this software for any
-	* purpose with or without fee is hereby granted, provided that the above
-	* copyright notice and this permission notice appear in all copies.
-	*
-	* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-	* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-	* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-	* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-	* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-	* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-	* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-	*
-	* ---
-	*
-	* The following Lucide icons are derived from the Feather project:
-	*
-	* airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
-	*
-	* The MIT License (MIT) (for the icons listed above)
-	*
-	* Copyright (c) 2013-present Cole Bemis
-	*
-	* Permission is hereby granted, free of charge, to any person obtaining a copy
-	* of this software and associated documentation files (the "Software"), to deal
-	* in the Software without restriction, including without limitation the rights
-	* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	* copies of the Software, and to permit persons to whom the Software is
-	* furnished to do so, subject to the following conditions:
-	*
-	* The above copyright notice and this permission notice shall be included in all
-	* copies or substantial portions of the Software.
-	*
-	* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	* SOFTWARE.
-	*
-	*/
-	Icon($$renderer, spread_props([
-		{ name: "file-check" },
-		$$sanitized_props,
-		{
-			/**
-			* @component @name FileCheck
-			* @description Lucide SVG icon component, renders SVG Element with children.
-			*
-			* @preview ![img](data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogIHdpZHRoPSIyNCIKICBoZWlnaHQ9IjI0IgogIHZpZXdCb3g9IjAgMCAyNCAyNCIKICBmaWxsPSJub25lIgogIHN0cm9rZT0iIzAwMCIgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6ICNmZmY7IGJvcmRlci1yYWRpdXM6IDJweCIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8cGF0aCBkPSJNNiAyMmEyIDIgMCAwIDEtMi0yVjRhMiAyIDAgMCAxIDItMmg4YTIuNCAyLjQgMCAwIDEgMS43MDQuNzA2bDMuNTg4IDMuNTg4QTIuNCAyLjQgMCAwIDEgMjAgOHYxMmEyIDIgMCAwIDEtMiAyeiIgLz4KICA8cGF0aCBkPSJNMTQgMnY1YTEgMSAwIDAgMCAxIDFoNSIgLz4KICA8cGF0aCBkPSJtOSAxNSAyIDIgNC00IiAvPgo8L3N2Zz4K) - https://lucide.dev/icons/file-check
-			* @see https://lucide.dev/guide/packages/lucide-svelte - Documentation
-			*
-			* @param {Object} props - Lucide icons props and any valid SVG attribute
-			* @returns {FunctionalComponent} Svelte component
-			*
-			*/
-			iconNode: [
-				["path", { "d": "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" }],
-				["path", { "d": "M14 2v5a1 1 0 0 0 1 1h5" }],
-				["path", { "d": "m9 15 2 2 4-4" }]
-			],
-			children: ($$renderer) => {
-				$$renderer.push(`<!--[-->`);
-				slot($$renderer, $$props, "default", {}, null);
-				$$renderer.push(`<!--]-->`);
-			},
-			$$slots: { default: true }
-		}
-	]));
-}
-//#endregion
 //#region node_modules/lucide-svelte/dist/icons/pencil.svelte
 function Pencil($$renderer, $$props) {
 	const $$sanitized_props = sanitize_props($$props);
@@ -336,8 +329,8 @@ function Pencil($$renderer, $$props) {
 	]));
 }
 //#endregion
-//#region node_modules/lucide-svelte/dist/icons/repeat.svelte
-function Repeat($$renderer, $$props) {
+//#region node_modules/lucide-svelte/dist/icons/file-check.svelte
+function File_check($$renderer, $$props) {
 	const $$sanitized_props = sanitize_props($$props);
 	/**
 	* @license lucide-svelte v1.0.1 - ISC
@@ -388,14 +381,14 @@ function Repeat($$renderer, $$props) {
 	*
 	*/
 	Icon($$renderer, spread_props([
-		{ name: "repeat" },
+		{ name: "file-check" },
 		$$sanitized_props,
 		{
 			/**
-			* @component @name Repeat
+			* @component @name FileCheck
 			* @description Lucide SVG icon component, renders SVG Element with children.
 			*
-			* @preview ![img](data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogIHdpZHRoPSIyNCIKICBoZWlnaHQ9IjI0IgogIHZpZXdCb3g9IjAgMCAyNCAyNCIKICBmaWxsPSJub25lIgogIHN0cm9rZT0iIzAwMCIgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6ICNmZmY7IGJvcmRlci1yYWRpdXM6IDJweCIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8cGF0aCBkPSJtMTcgMiA0IDQtNCA0IiAvPgogIDxwYXRoIGQ9Ik0zIDExdi0xYTQgNCAwIDAgMSA0LTRoMTQiIC8+CiAgPHBhdGggZD0ibTcgMjItNC00IDQtNCIgLz4KICA8cGF0aCBkPSJNMjEgMTN2MWE0IDQgMCAwIDEtNCA0SDMiIC8+Cjwvc3ZnPgo=) - https://lucide.dev/icons/repeat
+			* @preview ![img](data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogIHdpZHRoPSIyNCIKICBoZWlnaHQ9IjI0IgogIHZpZXdCb3g9IjAgMCAyNCAyNCIKICBmaWxsPSJub25lIgogIHN0cm9rZT0iIzAwMCIgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6ICNmZmY7IGJvcmRlci1yYWRpdXM6IDJweCIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8cGF0aCBkPSJNNiAyMmEyIDIgMCAwIDEtMi0yVjRhMiAyIDAgMCAxIDItMmg4YTIuNCAyLjQgMCAwIDEgMS43MDQuNzA2bDMuNTg4IDMuNTg4QTIuNCAyLjQgMCAwIDEgMjAgOHYxMmEyIDIgMCAwIDEtMiAyeiIgLz4KICA8cGF0aCBkPSJNMTQgMnY1YTEgMSAwIDAgMCAxIDFoNSIgLz4KICA8cGF0aCBkPSJtOSAxNSAyIDIgNC00IiAvPgo8L3N2Zz4K) - https://lucide.dev/icons/file-check
 			* @see https://lucide.dev/guide/packages/lucide-svelte - Documentation
 			*
 			* @param {Object} props - Lucide icons props and any valid SVG attribute
@@ -403,10 +396,9 @@ function Repeat($$renderer, $$props) {
 			*
 			*/
 			iconNode: [
-				["path", { "d": "m17 2 4 4-4 4" }],
-				["path", { "d": "M3 11v-1a4 4 0 0 1 4-4h14" }],
-				["path", { "d": "m7 22-4-4 4-4" }],
-				["path", { "d": "M21 13v1a4 4 0 0 1-4 4H3" }]
+				["path", { "d": "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" }],
+				["path", { "d": "M14 2v5a1 1 0 0 0 1 1h5" }],
+				["path", { "d": "m9 15 2 2 4-4" }]
 			],
 			children: ($$renderer) => {
 				$$renderer.push(`<!--[-->`);
@@ -501,78 +493,86 @@ function Trash_2($$renderer, $$props) {
 	]));
 }
 //#endregion
-//#region src/lib/components/shipments/StatsCards.svelte
-function StatsCards($$renderer, $$props) {
-	let { total, draft, finalized } = $$props;
-	const stats = derived(() => [
+//#region node_modules/lucide-svelte/dist/icons/repeat.svelte
+function Repeat($$renderer, $$props) {
+	const $$sanitized_props = sanitize_props($$props);
+	/**
+	* @license lucide-svelte v1.0.1 - ISC
+	*
+	* ISC License
+	*
+	* Copyright (c) 2026 Lucide Icons and Contributors
+	*
+	* Permission to use, copy, modify, and/or distribute this software for any
+	* purpose with or without fee is hereby granted, provided that the above
+	* copyright notice and this permission notice appear in all copies.
+	*
+	* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+	* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+	* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+	* ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+	* WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+	* ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+	* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+	*
+	* ---
+	*
+	* The following Lucide icons are derived from the Feather project:
+	*
+	* airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+	*
+	* The MIT License (MIT) (for the icons listed above)
+	*
+	* Copyright (c) 2013-present Cole Bemis
+	*
+	* Permission is hereby granted, free of charge, to any person obtaining a copy
+	* of this software and associated documentation files (the "Software"), to deal
+	* in the Software without restriction, including without limitation the rights
+	* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	* copies of the Software, and to permit persons to whom the Software is
+	* furnished to do so, subject to the following conditions:
+	*
+	* The above copyright notice and this permission notice shall be included in all
+	* copies or substantial portions of the Software.
+	*
+	* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	* SOFTWARE.
+	*
+	*/
+	Icon($$renderer, spread_props([
+		{ name: "repeat" },
+		$$sanitized_props,
 		{
-			label: "Total Shipments",
-			value: total,
-			tone: "text-foreground"
-		},
-		{
-			label: "Draft",
-			value: draft,
-			tone: "text-muted-foreground"
-		},
-		{
-			label: "Finalized",
-			value: finalized,
-			tone: "text-premium"
+			/**
+			* @component @name Repeat
+			* @description Lucide SVG icon component, renders SVG Element with children.
+			*
+			* @preview ![img](data:image/svg+xml;base64,PHN2ZyAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogIHdpZHRoPSIyNCIKICBoZWlnaHQ9IjI0IgogIHZpZXdCb3g9IjAgMCAyNCAyNCIKICBmaWxsPSJub25lIgogIHN0cm9rZT0iIzAwMCIgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6ICNmZmY7IGJvcmRlci1yYWRpdXM6IDJweCIKICBzdHJva2Utd2lkdGg9IjIiCiAgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIgogIHN0cm9rZS1saW5lam9pbj0icm91bmQiCj4KICA8cGF0aCBkPSJtMTcgMiA0IDQtNCA0IiAvPgogIDxwYXRoIGQ9Ik0zIDExdi0xYTQgNCAwIDAgMSA0LTRoMTQiIC8+CiAgPHBhdGggZD0ibTcgMjItNC00IDQtNCIgLz4KICA8cGF0aCBkPSJNMjEgMTN2MWE0IDQgMCAwIDEtNCA0SDMiIC8+Cjwvc3ZnPgo=) - https://lucide.dev/icons/repeat
+			* @see https://lucide.dev/guide/packages/lucide-svelte - Documentation
+			*
+			* @param {Object} props - Lucide icons props and any valid SVG attribute
+			* @returns {FunctionalComponent} Svelte component
+			*
+			*/
+			iconNode: [
+				["path", { "d": "m17 2 4 4-4 4" }],
+				["path", { "d": "M3 11v-1a4 4 0 0 1 4-4h14" }],
+				["path", { "d": "m7 22-4-4 4-4" }],
+				["path", { "d": "M21 13v1a4 4 0 0 1-4 4H3" }]
+			],
+			children: ($$renderer) => {
+				$$renderer.push(`<!--[-->`);
+				slot($$renderer, $$props, "default", {}, null);
+				$$renderer.push(`<!--]-->`);
+			},
+			$$slots: { default: true }
 		}
-	]);
-	$$renderer.push(`<dl class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><!--[-->`);
-	const each_array = ensure_array_like(stats());
-	for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
-		let stat = each_array[$$index];
-		$$renderer.push(`<div class="bg-muted p-4 rounded-lg shadow border border-border"><dt class="text-sm text-muted-foreground">${escape_html(stat.label)}</dt> <dd${attr_class(`text-2xl font-bold ${stringify(stat.tone)}`)}>${escape_html(stat.value)}</dd></div>`);
-	}
-	$$renderer.push(`<!--]--></dl>`);
-}
-//#endregion
-//#region src/lib/components/shipments/ShipmentFilters.svelte
-function ShipmentFilters($$renderer, $$props) {
-	$$renderer.component(($$renderer) => {
-		let { statusFilter, typeFilter, onStatusChange, onTypeChange } = $$props;
-		$$renderer.push(`<div class="bg-muted p-4 rounded-lg shadow border border-border mb-6"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label for="status-filter" class="block text-sm font-medium text-muted-foreground mb-1">Status</label> `);
-		$$renderer.select({
-			id: "status-filter",
-			value: statusFilter,
-			onchange: (e) => onStatusChange(e.currentTarget.value),
-			class: "w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
-		}, ($$renderer) => {
-			$$renderer.option({ value: "all" }, ($$renderer) => {
-				$$renderer.push(`All Statuses`);
-			});
-			$$renderer.option({ value: "draft" }, ($$renderer) => {
-				$$renderer.push(`Draft`);
-			});
-			$$renderer.option({ value: "finalized" }, ($$renderer) => {
-				$$renderer.push(`Finalized`);
-			});
-		});
-		$$renderer.push(`</div> <div><label for="type-filter" class="block text-sm font-medium text-muted-foreground mb-1">Type</label> `);
-		$$renderer.select({
-			id: "type-filter",
-			value: typeFilter,
-			onchange: (e) => onTypeChange(e.currentTarget.value),
-			class: "w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-nord-polar-2 text-foreground"
-		}, ($$renderer) => {
-			$$renderer.option({ value: "all" }, ($$renderer) => {
-				$$renderer.push(`All Types`);
-			});
-			$$renderer.option({ value: "Domestic" }, ($$renderer) => {
-				$$renderer.push(`Domestic`);
-			});
-			$$renderer.option({ value: "IntraGulf" }, ($$renderer) => {
-				$$renderer.push(`Intra-Gulf`);
-			});
-			$$renderer.option({ value: "International" }, ($$renderer) => {
-				$$renderer.push(`International`);
-			});
-		});
-		$$renderer.push(`</div></div></div>`);
-	});
+	]));
 }
 //#endregion
 //#region src/lib/components/shipments/ShipmentsTable.svelte

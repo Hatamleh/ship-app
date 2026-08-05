@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { User } from 'lucide-svelte'
+  import User from 'lucide-svelte/icons/user'
   import { t } from '$lib/translations'
 
   let { formData }: { formData: Record<string, any> } = $props()

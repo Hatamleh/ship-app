@@ -1,6 +1,7 @@
 <script lang="ts">
   import { untrack } from 'svelte'
-  import { Save, CheckCircle } from 'lucide-svelte'
+  import Save from 'lucide-svelte/icons/save'
+  import CheckCircle from 'lucide-svelte/icons/check-circle'
   import SenderCard from './cards/SenderCard.svelte'
   import DynamicCard from './DynamicCard.svelte'
   import ServiceSelectionCard from './cards/ServiceSelectionCard.svelte'

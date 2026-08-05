@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Settings } from 'lucide-svelte'
+  import Settings from 'lucide-svelte/icons/settings'
   import { t } from '$lib/translations'
 
   let {

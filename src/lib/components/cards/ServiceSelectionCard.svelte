@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Truck } from 'lucide-svelte'
+  import Truck from 'lucide-svelte/icons/truck'
   import type { ServiceOption } from '$lib/types'
   import { t } from '$lib/translations'
 
