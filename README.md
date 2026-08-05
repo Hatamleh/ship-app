@@ -1,6 +1,6 @@
 # ShipTest — Shipping Management App for Testing Education
 
-A Next.js application built to teach software testing: manual testing, UI automation,
+A SvelteKit application built to teach software testing: manual testing, UI automation,
 API testing, and now AI/agent testing. It simulates a shipping company operating across
 the Gulf, the Middle East and international destinations, with genuinely complex business
 rules that are worth writing test cases against.
@@ -12,12 +12,13 @@ rules that are worth writing test cases against.
 - 📋 **Shipment dashboard** — filter by status and type, edit, repeat, finalize, delete
 - 🤖 **AI agent** — LangChain agent with tools over your own shipments and the pricing engine
 - 📚 **RAG assistant** — answers questions about shipping rules from the project docs, with citations
-- 🧪 **Built for automation** — `data-testid` on every interactive element
+- 🧪 **Built for automation** — no test IDs, on purpose: every control is reachable
+  through accessible locators (`getByRole`, `getByLabel`)
 - 💾 **SQLite + Prisma** — file-based, no database server
 
 ## Technology Stack
 
-- **Frontend**: Next.js 14 (App Router), React 18, TypeScript
+- **Frontend**: SvelteKit 2, Svelte 5 (runes), TypeScript
 - **Styling**: Tailwind CSS
 - **Database**: SQLite via Prisma
 - **Auth**: bcrypt + JWT in an httpOnly cookie
@@ -84,9 +85,10 @@ message telling you what to set.
 
 | Script | What it does |
 |---|---|
-| `npm run dev` | Seed the database, then start the dev server |
+| `npm run dev` | Start the dev server |
 | `npm run build` | Production build |
-| `npm run start` | Start the production server |
+| `npm run check` | Type-check Svelte and TypeScript |
+| `npm run start` | Run the production build (adapter-node) |
 | `npm run setup` | Generate Prisma client, push schema, seed |
 | `npm run seed` | Reseed only |
 | `npm run ingest` | Index the docs for the AI assistant (needs an OpenRouter key) |
@@ -112,36 +114,39 @@ IntraGulf and International.
 
 ```
 ship-app/
-├── app/
-│   ├── page.tsx              # Create shipment (also ?edit=<id> and ?repeat=<id>)
-│   ├── login/, register/
-│   ├── shipments/            # Dashboard
-│   │   └── [id]/             # Shipment details
-│   ├── assistant/            # RAG documentation Q&A
-│   └── api/
-│       ├── auth/             # login, logout, me, register
-│       ├── rules/            # per-card rules (sender, receiver, package, service, options)
-│       ├── rates/            # price calculation
-│       ├── shipments/        # list, draft, finalize, [id]
-│       ├── agent/            # chat, health
-│       └── assistant/        # ask (RAG), search (retrieval only)
-├── components/
-│   ├── ShipmentForm.tsx      # Orchestrates the cards
-│   ├── DynamicCard.tsx       # Renders fields from a rules payload
-│   ├── cards/                # Sender, Receiver, Package, Service, Options, Rate
-│   ├── shipments/            # Table, filters, modals, kebab menu
-│   └── agent/ChatDrawer.tsx  # Floating AI assistant
-├── lib/
-│   ├── rules/*.json          # Business rules as data
-│   ├── validators/           # Server-side rule enforcement
-│   ├── services/             # rate-calculator.ts
-│   ├── ai/                   # llm, embeddings, retriever, tools, agent, rag
-│   └── translations.ts       # UI strings
-├── repositories/             # Prisma data access
-├── scripts/ingest.ts         # Builds the RAG index
-├── prisma/                   # schema.prisma, seed.ts
-├── logic.md                  # Full business-rules reference
-└── stories/                  # 120+ user stories
+├── src/
+│   ├── hooks.server.ts             # Resolves the session, fills event.locals.user
+│   ├── app.html, app.css, app.d.ts
+│   ├── routes/
+│   │   ├── +layout.server.ts       # Auth guard + redirects, before render
+│   │   ├── +layout.svelte          # Sidebar and the AI chat drawer
+│   │   ├── +page.svelte            # Create shipment (also ?edit= and ?repeat=)
+│   │   ├── login/, register/
+│   │   ├── shipments/              # Dashboard (server-loaded, filters in the URL)
+│   │   │   └── [id]/               # Shipment details (server-loaded)
+│   │   ├── assistant/              # RAG documentation Q&A
+│   │   └── api/
+│   │       ├── auth/               # login, logout, me, register
+│   │       ├── rules/              # per-card rules (sender, receiver, package, service, options)
+│   │       ├── rates/              # price calculation
+│   │       ├── shipments/          # list, draft, finalize, [id]
+│   │       ├── agent/              # chat, health
+│   │       └── assistant/          # ask (RAG), search (retrieval only)
+│   └── lib/
+│       ├── components/             # DynamicCard, ShipmentForm, cards/, shipments/, agent/
+│       ├── state/shipment-form.svelte.ts   # Progressive form state, Svelte 5 runes
+│       ├── rules/*.json            # Business rules as data
+│       ├── types/, translations.ts
+│       └── server/                 # Never reaches the browser
+│           ├── auth.ts, guard.ts, db.ts
+│           ├── validators/         # Server-side rule enforcement
+│           ├── services/           # rate-calculator.ts
+│           ├── repositories/       # Prisma data access
+│           └── ai/                 # llm, retriever, tools, agent, rag
+├── scripts/ingest.ts               # Builds the RAG index
+├── prisma/                         # schema.prisma, seed.ts
+├── logic.md                        # Full business-rules reference
+└── stories/                        # 120+ user stories
 ```
 
 ## Business Rules Reference
@@ -275,33 +280,42 @@ GET  /api/agent/health      # public; reports key + index state
 
 ### UI automation
 
-Every interactive element has a `data-testid`. The form generates them from the field
-name, so they are stable across UI copy changes:
+**There are no `data-testid` attributes, deliberately.** Playwright's own guidance
+puts user-facing locators ahead of test IDs, so this app forces the habit: if a
+control cannot be reached with `getByRole` or `getByLabel`, that is an
+accessibility bug, not a reason to add a hook.
 
-| Pattern | Example |
+What the markup gives you:
+
+| Thing | How to locate it |
 |---|---|
-| `{fieldName}-input` | `receiverName-input`, `weight-input` |
-| `{fieldName}-select` | `receiverCountry-select` |
-| `{fieldName}-checkbox` | `insurance-checkbox` |
-| `{fieldName}-error` | `weight-error` |
-| `service-{serviceId}` | `service-gulf_express` |
-| `pickup-{value}-radio` | `pickup-home-radio` |
+| Any form field | `getByLabel('Full Name')`, `getByLabel('Weight (kg)')` |
+| A whole card | `getByRole('group', { name: 'Receiver Information' })` |
+| A service option | `getByRole('radio', { name: /Gulf Express/ })` |
+| Pickup method | `getByRole('radio', { name: 'Home Pickup' })` |
+| An option toggle | `getByRole('checkbox', { name: /Insurance/ })` |
+| Validation errors | `getByRole('alert')` |
+| Buttons | `getByRole('button', { name: 'Finalize Shipment' })` |
+| Row actions menu | `getByRole('button', { name: /Actions for TR/ })` then `getByRole('menuitem', { name: 'Delete' })` |
+| The live total | `getByRole('status')` — the price is an `aria-live` region |
+| Promo overlay | `getByRole('dialog', { name: 'Special Offer!' })` |
+| Chat drawer | `getByRole('button', { name: 'Open assistant' })`, `getByRole('dialog', { name: 'Shipping Assistant' })` |
+| Tools the agent ran | `getByRole('list', { name: 'Tools used' })` |
 
-Fixed IDs: `page-title`, `email-input`, `password-input`, `login-button`,
-`register-button`, `save-draft-button`, `finalize-button`, `total-price`,
-`error-message`, `payment-error-message`, `promo-modal`, `promo-close`.
-
-AI surfaces: `agent-toggle`, `agent-panel`, `agent-input`, `agent-send`, `agent-close`,
-`agent-thinking`, `agent-error`, `agent-message-{n}` (carries `data-role`),
-`agent-tool-call-{toolName}`, `agent-latency-{n}`, `assistant-input`,
-`assistant-submit`, `assistant-answer`, `assistant-sources`,
-`assistant-source-{n}` (carries `data-source`).
+Cards are `<fieldset>` + `<legend>`, so you can scope a query to one section.
+Errors are wired with `aria-describedby` and `aria-invalid`, so you can assert the
+error is attached to the right field rather than merely present somewhere.
 
 ```javascript
-await page.getByTestId('receiverName-input').fill('Sara Al-Zoubi')
-await page.getByTestId('weight-input').fill('18')
-await page.getByTestId('finalize-button').click()
-await expect(page.getByTestId('pickupMethod-error')).toBeVisible()
+const receiver = page.getByRole('group', { name: 'Receiver Information' })
+await receiver.getByLabel('Full Name').fill('Sara Al-Zoubi')
+await page.getByLabel('Weight (kg)').fill('18')
+
+// Above 17 kg home pickup must be taken away
+await expect(page.getByRole('radio', { name: 'Home Pickup' })).toBeDisabled()
+
+await page.getByRole('button', { name: 'Finalize Shipment' }).click()
+await expect(page.getByRole('alert')).toContainText('Home pickup is not available')
 ```
 
 **A note on the promo modal**: `/shipments` shows an overlay on roughly 50% of visits, on
@@ -369,7 +383,7 @@ nondeterminism. Prefer `/api/assistant/search` and `toolCalls` assertions where 
 
 **Database location**: `prisma/dev.db`
 
-**Port in use**: `PORT=3001 npm run dev`
+**Port in use**: `npm run dev -- --port 3001`
 
 **Prisma client out of date**: `npx prisma generate`
 
@@ -381,9 +395,9 @@ the retriever caches chunks per server process.
 
 ## Learning Resources
 
-- Next.js: https://nextjs.org/docs
+- SvelteKit: https://svelte.dev/docs/kit
 - Prisma: https://www.prisma.io/docs
-- Playwright: https://playwright.dev
+- Playwright locators: https://playwright.dev/docs/locators
 - LangChain JS: https://docs.langchain.com/oss/javascript/langchain/overview
 - OpenRouter: https://openrouter.ai/docs
 
