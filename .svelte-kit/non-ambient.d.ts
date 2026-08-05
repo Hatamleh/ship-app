@@ -69,6 +69,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/api/agent/chat" | "/api/agent/health" | "/api/assistant/ask" | "/api/assistant/search" | "/api/auth/login" | "/api/auth/logout" | "/api/auth/me" | "/api/auth/register" | "/api/rates" | "/api/rules/additional-options" | "/api/rules/package" | "/api/rules/receiver" | "/api/rules/sender" | "/api/rules/service" | "/api/shipments" | "/api/shipments/draft" | "/api/shipments/finalize" | `/api/shipments/${string}` & {} | `/api/shipments/${string}/finalize` & {} | "/assistant" | "/login" | "/register" | "/shipments" | `/shipments/${string}` & {};
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/ship-logo.svg" | string & {};
+		Asset(): "/favicon.svg" | string & {};
 	}
 }

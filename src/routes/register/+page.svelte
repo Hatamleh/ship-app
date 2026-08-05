@@ -1,4 +1,5 @@
 <script lang="ts">
+  import QacartMark from '$lib/components/QacartMark.svelte'
   import { goto, invalidateAll } from '$app/navigation'
   import countriesData from '$lib/rules/countries.json'
   import { t } from '$lib/translations'
@@ -60,7 +61,7 @@
 <div class="min-h-screen bg-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-2xl w-full space-y-8">
     <div>
-      <img src="/ship-logo.svg" alt="ShipApp" class="mx-auto h-14 w-14" />
+      <span class="mx-auto block w-14 text-primary"><QacartMark /></span>
       <h1 class="mt-6 text-center text-3xl font-extrabold text-foreground font-display">
         {t('auth.registerTitle')}
       </h1>

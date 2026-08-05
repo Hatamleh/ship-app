@@ -4,6 +4,7 @@ import "../../chunks/navigation.js";
 import { t as Icon } from "../../chunks/Icon.js";
 import "../../chunks/Markdown.js";
 import { t } from "../../chunks/translations.js";
+import { t as QacartMark } from "../../chunks/QacartMark.js";
 //#region node_modules/lucide-svelte/dist/icons/bot.svelte
 function Bot($$renderer, $$props) {
 	const $$sanitized_props = sanitize_props($$props);
@@ -135,7 +136,9 @@ function _layout($$renderer, $$props) {
 			$$renderer.push(`<!---->`);
 		} else {
 			$$renderer.push("<!--[-1-->");
-			$$renderer.push(`<div class="flex h-screen bg-background"><aside class="w-64 bg-muted shadow-lg flex flex-col border-r border-border"><div class="p-6 border-b border-border"><div class="flex items-center gap-2"><svg class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg> <span class="text-xl font-bold text-foreground">My Shipments</span></div></div> <div class="p-6 border-b border-border"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center"><span class="text-primary font-semibold text-sm" aria-hidden="true">${escape_html(data.user.fullName.charAt(0).toUpperCase())}</span></div> <div class="flex-1 min-w-0"><p class="text-sm font-medium text-foreground truncate">${escape_html(data.user.fullName)}</p> <p class="text-xs text-muted-foreground truncate">${escape_html(data.user.email)}</p></div></div></div> <nav aria-label="Main" class="flex-1 p-4 space-y-2"><!--[-->`);
+			$$renderer.push(`<div class="flex h-screen bg-background"><aside class="w-64 bg-muted shadow-lg flex flex-col border-r border-border"><div class="p-6 border-b border-border"><a href="/" aria-label="QAcart — ShipTest home" class="flex items-center gap-3 text-foreground hover:text-primary transition-colors"><span class="w-8 shrink-0">`);
+			QacartMark($$renderer, {});
+			$$renderer.push(`<!----></span> <span class="font-display text-lg font-bold leading-tight">Ship<span class="grad">Test</span></span></a></div> <div class="p-6 border-b border-border"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center"><span class="text-primary font-semibold text-sm" aria-hidden="true">${escape_html(data.user.fullName.charAt(0).toUpperCase())}</span></div> <div class="flex-1 min-w-0"><p class="text-sm font-medium text-foreground truncate">${escape_html(data.user.fullName)}</p> <p class="text-xs text-muted-foreground truncate">${escape_html(data.user.email)}</p></div></div></div> <nav aria-label="Main" class="flex-1 p-4 space-y-2"><!--[-->`);
 			const each_array = ensure_array_like(navItems);
 			for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
 				let item = each_array[$$index];

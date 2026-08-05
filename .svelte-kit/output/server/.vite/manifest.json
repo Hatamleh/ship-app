@@ -24,6 +24,20 @@
       "_server.js"
     ]
   },
+  "_QacartMark.B5FacDR0.css": {
+    "file": "_app/immutable/assets/QacartMark.B5FacDR0.css",
+    "src": "_QacartMark.B5FacDR0.css"
+  },
+  "_QacartMark.js": {
+    "file": "chunks/QacartMark.js",
+    "name": "QacartMark",
+    "imports": [
+      "_server.js"
+    ],
+    "css": [
+      "_app/immutable/assets/QacartMark.B5FacDR0.css"
+    ]
+  },
   "_auth.js": {
     "file": "chunks/auth.js",
     "name": "auth",
@@ -226,10 +240,11 @@
       "_navigation.js",
       "_Icon.js",
       "_Markdown.js",
-      "_translations.js"
+      "_translations.js",
+      "_QacartMark.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.DQZmC5Kb.css"
+      "_app/immutable/assets/_layout.8fmz1IqE.css"
     ]
   },
   "src/routes/+page.svelte": {
@@ -461,7 +476,8 @@
     "imports": [
       "_server.js",
       "_navigation.js",
-      "_translations.js"
+      "_translations.js",
+      "_QacartMark.js"
     ]
   },
   "src/routes/register/+page.svelte": {
@@ -473,7 +489,8 @@
       "_server.js",
       "_countries.js",
       "_navigation.js",
-      "_translations.js"
+      "_translations.js",
+      "_QacartMark.js"
     ]
   },
   "src/routes/shipments/+page.server.ts": {

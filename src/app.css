@@ -204,17 +204,44 @@ legend {
   color: var(--text-muted);
 }
 
-/* Field controls: inset relative to the card they sit on. */
+/* Field controls: inset relative to the card they sit on.
+   min-height keeps <select> the same height as <input> — a select's intrinsic
+   height is driven by its own line box, so padding alone leaves it shorter. */
 .field {
   width: 100%;
+  min-height: 2.75rem;
   padding: 0.55rem 0.75rem;
   background: var(--bg-secondary);
   color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
   border: 1px solid var(--border);
   border-radius: 10px;
   transition:
     border-color 0.2s,
     box-shadow 0.2s;
+}
+
+/* The native select chevron does not follow the theme, so it is replaced with
+   one drawn in the accent colour. */
+select.field {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.25rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a7c080' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  cursor: pointer;
+}
+
+/* The dropdown list itself is drawn by the OS; give it readable colours. */
+select.field option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+textarea.field {
+  min-height: 0;
 }
 
 .field:focus {

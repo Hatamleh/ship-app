@@ -3,6 +3,7 @@
   import { page } from '$app/state'
   import { goto, invalidateAll } from '$app/navigation'
   import ChatDrawer from '$lib/components/agent/ChatDrawer.svelte'
+  import QacartMark from '$lib/components/QacartMark.svelte'
   import { t } from '$lib/translations'
   import type { LayoutData } from './$types'
 
@@ -37,23 +38,20 @@
   <div class="flex h-screen bg-background">
     <aside class="w-64 bg-muted shadow-lg flex flex-col border-r border-border">
       <div class="p-6 border-b border-border">
-        <div class="flex items-center gap-2">
-          <svg
-            class="h-8 w-8 text-primary"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-            />
-          </svg>
-          <span class="text-xl font-bold text-foreground">My Shipments</span>
-        </div>
+        <!-- QAcart monogram, same mark the site uses. It inherits currentColor,
+             so it picks up the accent on hover like the site's nav brand. -->
+        <a
+          href="/"
+          aria-label="QAcart — ShipTest home"
+          class="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
+        >
+          <span class="w-8 shrink-0">
+            <QacartMark />
+          </span>
+          <span class="font-display text-lg font-bold leading-tight">
+            Ship<span class="grad">Test</span>
+          </span>
+        </a>
       </div>
 
       <div class="p-6 border-b border-border">
