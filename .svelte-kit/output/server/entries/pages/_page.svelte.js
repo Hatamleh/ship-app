@@ -1,5 +1,6 @@
 import "../../chunks/internal.js";
 import { D as clsx, E as attr, O as escape_html, d as slot, f as spread_props, i as derived, o as ensure_array_like, p as stringify, pt as run, s as head, t as attr_class, u as sanitize_props } from "../../chunks/server.js";
+import "../../chunks/form-bridge.svelte.js";
 import { t as goto } from "../../chunks/client.js";
 import { t as page } from "../../chunks/state.js";
 import "../../chunks/navigation.js";
@@ -454,7 +455,7 @@ function DynamicCard($$renderer, $$props) {
 		function isFullWidth(name) {
 			return name.includes("Street") || name.includes("Country") || name.includes("Description");
 		}
-		$$renderer.push(`<fieldset${attr_class(`surface p-6 ${disabled || !rules ? "opacity-50" : ""}`)}><div class="flex items-center justify-between mb-4"><legend class="flex items-center gap-2 text-xl font-semibold text-primary">`);
+		$$renderer.push(`<fieldset${attr_class(`surface p-6 ${disabled || !rules ? "opacity-50" : ""}`)}><legend class="flex w-full items-center justify-between gap-2 text-xl font-semibold text-primary"><span class="flex items-center gap-2">`);
 		if (title().toLowerCase().includes("sender")) {
 			$$renderer.push("<!--[0-->");
 			User($$renderer, {
@@ -480,12 +481,12 @@ function DynamicCard($$renderer, $$props) {
 				"aria-hidden": "true"
 			});
 		}
-		$$renderer.push(`<!--]--> ${escape_html(title())}</legend> `);
+		$$renderer.push(`<!--]--> ${escape_html(title())}</span> `);
 		if (shipmentType) {
 			$$renderer.push("<!--[0-->");
-			$$renderer.push(`<span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded">${escape_html(shipmentType)}</span>`);
+			$$renderer.push(`<span class="tag border-primary text-primary">${escape_html(shipmentType)}</span>`);
 		} else $$renderer.push("<!--[-1-->");
-		$$renderer.push(`<!--]--></div> `);
+		$$renderer.push(`<!--]--></legend> `);
 		if (!rules) {
 			$$renderer.push("<!--[0-->");
 			$$renderer.push(`<p class="text-sm text-muted-foreground/70 text-center py-4">${escape_html(disabled ? t("form.completePreviousSection") : t("form.loadingCard"))}</p>`);

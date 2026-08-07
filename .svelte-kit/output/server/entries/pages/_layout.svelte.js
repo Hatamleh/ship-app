@@ -1,4 +1,5 @@
 import { E as attr, O as escape_html, d as slot, f as spread_props, i as derived, o as ensure_array_like, t as attr_class, u as sanitize_props } from "../../chunks/server.js";
+import "../../chunks/form-bridge.svelte.js";
 import { t as page } from "../../chunks/state.js";
 import "../../chunks/navigation.js";
 import { t as Icon } from "../../chunks/Icon.js";
@@ -116,20 +117,19 @@ function _layout($$renderer, $$props) {
 		const PUBLIC_ROUTES = ["/login", "/register"];
 		const isPublicRoute = derived(() => PUBLIC_ROUTES.includes(page.url.pathname));
 		let loggingOut = false;
-		const navItems = [
-			{
-				name: t("nav.createShipment"),
-				href: "/"
-			},
-			{
-				name: t("nav.myShipments"),
-				href: "/shipments"
-			},
-			{
-				name: "Assistant",
-				href: "/assistant"
-			}
-		];
+		/**
+		* The assistant is only useful where there is a shipment in front of you:
+		* the create/edit form (/) and a shipment's detail page. It is deliberately
+		* absent from the list and auth pages.
+		*/
+		const showAssistant = derived(() => page.url.pathname === "/" || /^\/shipments\/[^/]+$/.test(page.url.pathname));
+		const navItems = [{
+			name: t("nav.createShipment"),
+			href: "/"
+		}, {
+			name: t("nav.myShipments"),
+			href: "/shipments"
+		}];
 		if (isPublicRoute() || !data.user) {
 			$$renderer.push("<!--[0-->");
 			children($$renderer);
@@ -148,8 +148,11 @@ function _layout($$renderer, $$props) {
 			$$renderer.push(`<!--]--></nav> <div class="p-4 border-t border-border"><button type="button"${attr("disabled", loggingOut, true)} class="w-full flex items-center gap-3 px-4 py-3 text-muted-foreground hover:bg-ever-surface rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">${escape_html(t("nav.logout"))}</button></div></aside> <main class="flex-1 overflow-auto bg-background bg-grid-fade"><div class="p-8">`);
 			children($$renderer);
 			$$renderer.push(`<!----></div></main> `);
-			ChatDrawer($$renderer, {});
-			$$renderer.push(`<!----></div>`);
+			if (showAssistant()) {
+				$$renderer.push("<!--[0-->");
+				ChatDrawer($$renderer, {});
+			} else $$renderer.push("<!--[-1-->");
+			$$renderer.push(`<!--]--></div>`);
 		}
 		$$renderer.push(`<!--]-->`);
 	});

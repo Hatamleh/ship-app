@@ -3,14 +3,24 @@
   import Send from 'lucide-svelte/icons/send'
   import X from 'lucide-svelte/icons/x'
   import Wrench from 'lucide-svelte/icons/wrench'
+  import Check from 'lucide-svelte/icons/check'
   import Markdown from './Markdown.svelte'
+  import { formBridge } from '$lib/state/form-bridge.svelte'
   import { t } from '$lib/translations'
+
+  interface Proposal {
+    values: Record<string, any>
+    violations: Record<string, string>
+  }
 
   interface Message {
     role: 'user' | 'assistant'
     content: string
     toolCalls?: { name: string; args: Record<string, unknown> }[]
     latencyMs?: number
+    proposal?: Proposal | null
+    /** Set once the user has pressed Apply, so the button cannot be re-used. */
+    applied?: boolean
   }
 
   /**
@@ -48,7 +58,13 @@
       const response = await fetch('/api/agent/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: question, history }),
+        // Send whatever is currently typed into the form, when there is one,
+        // so the agent can answer about it instead of guessing.
+        body: JSON.stringify({
+          message: question,
+          history,
+          formContext: formBridge.read?.() ?? null,
+        }),
       })
 
       const data = await response.json()
@@ -65,6 +81,7 @@
           content: data.reply,
           toolCalls: data.toolCalls,
           latencyMs: data.latencyMs,
+          proposal: data.proposal ?? null,
         },
       ]
     } catch (err) {
@@ -72,6 +89,21 @@
     } finally {
       loading = false
     }
+  }
+
+  /**
+   * The agent never writes to the form itself — this runs only from the user
+   * pressing Apply, which is the consent step.
+   */
+  function applyProposal(index: number) {
+    const proposal = messages[index]?.proposal
+    if (!proposal || !formBridge.apply) return
+    formBridge.apply(proposal.values)
+    messages[index].applied = true
+  }
+
+  function fieldLabel(name: string) {
+    return name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase())
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -156,6 +188,37 @@
                 </li>
               {/each}
             </ul>
+          {/if}
+
+          {#if message.proposal}
+            <div class="mt-2 surface p-3 text-left">
+              <p class="eyebrow !mb-2">Suggested values</p>
+              <dl class="text-xs space-y-1 mb-3">
+                {#each Object.entries(message.proposal.values) as [name, value] (name)}
+                  <div class="flex justify-between gap-3">
+                    <dt class="text-muted-foreground">{fieldLabel(name)}</dt>
+                    <dd class="text-foreground text-right">{value}</dd>
+                  </div>
+                {/each}
+              </dl>
+
+              {#if Object.keys(message.proposal.violations).length > 0}
+                <p role="alert" class="text-xs text-destructive mb-2">
+                  {Object.values(message.proposal.violations).join(' ')}
+                </p>
+              {/if}
+
+              {#if message.applied}
+                <p role="status" class="text-xs text-premium flex items-center gap-1">
+                  <Check class="w-3 h-3" aria-hidden="true" />
+                  Applied to the form
+                </p>
+              {:else}
+                <button type="button" class="btn btn-primary text-xs w-full" onclick={() => applyProposal(i)}>
+                  Apply to form
+                </button>
+              {/if}
+            </div>
           {/if}
 
           {#if message.latencyMs !== undefined}

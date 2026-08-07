@@ -1,7 +1,7 @@
 import { createAgent } from 'langchain'
 import { HumanMessage, AIMessage } from '@langchain/core/messages'
 import { getChatModel } from './llm'
-import { buildTools } from './tools'
+import { buildTools, type FormContext } from './tools'
 
 const SYSTEM_PROMPT = `You are the shipping assistant for ShipTest, a shipping management app.
 
@@ -15,6 +15,15 @@ Rules you must follow:
 - If a tool returns an error or empty result, say what happened. Do not invent shipments, prices or tracking numbers.
 - Money is in USD. Weight is in kilograms, dimensions in centimetres.
 - Be concise. Prefer a direct answer plus the key numbers over a long explanation.
+
+When the customer is on the shipment form you also have read_form and
+propose_form_values:
+- Call read_form before answering anything about "my shipment", "this form" or
+  what is still missing. Do not guess what they have typed.
+- If they ask you to fill something in, or you can obviously complete it for
+  them, offer: call propose_form_values and tell them they can apply it. You
+  never write to the form yourself — they press Apply.
+- You cannot propose sender fields; those come from their account.
 
 Formatting: your answer is displayed in a narrow chat panel about 400px wide.
 - Do not use Markdown tables. Use short bullet points instead, one item per line.
@@ -30,6 +39,8 @@ export interface AgentToolCall {
 export interface AgentResult {
   reply: string
   toolCalls: AgentToolCall[]
+  /** Values the agent offered to fill in, awaiting the user's Apply. */
+  proposal: { values: Record<string, any>; violations: Record<string, string> } | null
   model: string
   latencyMs: number
 }
@@ -49,14 +60,14 @@ export async function runAgent(
   userId: number,
   message: string,
   history: ChatTurn[] = [],
-  options?: { maxSteps?: number }
+  options?: { maxSteps?: number; formContext?: FormContext | null }
 ): Promise<AgentResult> {
   const startedAt = Date.now()
   const llm = getChatModel()
 
   const agent = createAgent({
     model: llm,
-    tools: buildTools(userId),
+    tools: buildTools(userId, options?.formContext),
     systemPrompt: SYSTEM_PROMPT,
   })
 
@@ -98,6 +109,20 @@ export async function runAgent(
     }
   }
 
+  // Pull out the most recent form proposal, if the agent made one.
+  let proposal: AgentResult['proposal'] = null
+  for (const call of toolCalls) {
+    if (call.name !== 'propose_form_values' || !call.result) continue
+    try {
+      const parsed = JSON.parse(call.result)
+      if (parsed.proposed) {
+        proposal = { values: parsed.values, violations: parsed.violations ?? {} }
+      }
+    } catch {
+      // A malformed tool result simply means no proposal to offer.
+    }
+  }
+
   const last = produced[produced.length - 1]
   const reply =
     typeof last?.content === 'string'
@@ -109,6 +134,7 @@ export async function runAgent(
   return {
     reply,
     toolCalls,
+    proposal,
     model: llm.model,
     latencyMs: Date.now() - startedAt,
   }

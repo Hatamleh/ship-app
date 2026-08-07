@@ -63,8 +63,11 @@
     ? 'opacity-50'
     : ''}"
 >
-  <div class="flex items-center justify-between mb-4">
-    <legend class="flex items-center gap-2 text-xl font-semibold text-primary">
+  <!-- legend must be the fieldset's FIRST child to become its accessible name;
+       wrapped in a div it is just inline text and getByRole('group', { name })
+       stops matching. -->
+  <legend class="flex w-full items-center justify-between gap-2 text-xl font-semibold text-primary">
+    <span class="flex items-center gap-2">
       {#if title.toLowerCase().includes('sender')}
         <User class="w-5 h-5" aria-hidden="true" />
       {:else if title.toLowerCase().includes('receiver')}
@@ -75,13 +78,11 @@
         <CheckCircle class="w-5 h-5" aria-hidden="true" />
       {/if}
       {title}
-    </legend>
+    </span>
     {#if shipmentType}
-      <span class="text-xs bg-primary/20 text-primary px-2 py-1 rounded">
-        {shipmentType}
-      </span>
+      <span class="tag border-primary text-primary">{shipmentType}</span>
     {/if}
-  </div>
+  </legend>
 
   {#if !rules}
     <p class="text-sm text-muted-foreground/70 text-center py-4">

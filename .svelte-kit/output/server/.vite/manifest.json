@@ -76,6 +76,13 @@
       "_server.js"
     ]
   },
+  "_form-bridge.svelte.js": {
+    "file": "chunks/form-bridge.svelte.js",
+    "name": "form-bridge.svelte",
+    "imports": [
+      "_server.js"
+    ]
+  },
   "_guard.js": {
     "file": "chunks/guard.js",
     "name": "guard"
@@ -236,6 +243,7 @@
     "isEntry": true,
     "imports": [
       "_server.js",
+      "_form-bridge.svelte.js",
       "_state.js",
       "_navigation.js",
       "_Icon.js",
@@ -244,7 +252,7 @@
       "_QacartMark.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.8fmz1IqE.css"
+      "_app/immutable/assets/_layout.D1CaxrOQ.css"
     ]
   },
   "src/routes/+page.svelte": {
@@ -255,6 +263,7 @@
     "imports": [
       "_internal.js",
       "_server.js",
+      "_form-bridge.svelte.js",
       "_client.js",
       "_state.js",
       "_navigation.js",
@@ -274,6 +283,7 @@
       "_service-card.js",
       "_countries.js",
       "_shipment-validator.js",
+      "_form-bridge.svelte.js",
       "_guard.js"
     ]
   },

@@ -204,6 +204,21 @@ legend {
   color: var(--text-muted);
 }
 
+/* A <legend> is painted on the fieldset's border by default, which leaves card
+   titles floating outside the card. Floating it makes it lay out as a normal
+   block inside the padding box instead. */
+fieldset > legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+/* Clear the floated legend so the fields start below it. */
+fieldset > legend + * {
+  clear: both;
+}
+
 /* Field controls: inset relative to the card they sit on.
    min-height keeps <select> the same height as <input> — a select's intrinsic
    height is driven by its own line box, so padding alone leaves it shorter. */

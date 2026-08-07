@@ -12,6 +12,9 @@ import {
 import serviceCardRules from '$lib/rules/service-card.json'
 import countriesData from '$lib/rules/countries.json'
 import { retrieve } from './retriever'
+import { AGENT_WRITABLE_FIELDS } from '$lib/state/form-bridge.svelte'
+
+const WRITABLE_FIELDS = new Set<string>(AGENT_WRITABLE_FIELDS)
 
 /**
  * Every tool is built for one specific authenticated user.
@@ -22,7 +25,18 @@ import { retrieve } from './retriever'
  * still resolves through findById(id, userId) and returns nothing if that
  * shipment belongs to someone else.
  */
-export function buildTools(userId: number) {
+export interface FormContext {
+  /** Values currently typed into the shipment form. */
+  values: Record<string, any>
+  /** Which cards the form considers complete. */
+  completed: { sender: boolean; receiver: boolean; package: boolean }
+  /** Validation errors currently shown. */
+  errors: Record<string, string>
+  /** Detected shipment type, if the form has got that far. */
+  shipmentType: string | null
+}
+
+export function buildTools(userId: number, formContext?: FormContext | null) {
   const searchShipments = tool(
     async ({ status, shipmentType, limit }) => {
       const { shipments, total } = await shipmentRepository.findByUserId(userId, {
@@ -411,7 +425,99 @@ export function buildTools(userId: number) {
     }
   )
 
+
+  /**
+   * Form-aware tools. These only exist when the user is actually on the
+   * shipment form — elsewhere the agent simply does not have them, so it cannot
+   * claim to see or change a form that is not there.
+   */
+  const formTools = !formContext
+    ? []
+    : [
+        tool(
+          async () =>
+            JSON.stringify({
+              values: formContext.values,
+              completedCards: formContext.completed,
+              validationErrors: formContext.errors,
+              shipmentType: formContext.shipmentType,
+              emptyFields: Object.entries(formContext.values)
+                .filter(([, v]) => v === '' || v === null || v === undefined)
+                .map(([k]) => k),
+            }),
+          {
+            name: 'read_form',
+            description:
+              "Read what the customer has currently typed into the shipment form on screen, including which cards are complete, which fields are still empty, and any validation errors. Use this before answering questions about 'my shipment', 'this form', or what is missing.",
+            schema: z.object({}),
+          }
+        ),
+
+        tool(
+          async (input) => {
+            const proposed: Record<string, any> = {}
+            for (const [key, value] of Object.entries(input)) {
+              if (value !== undefined && WRITABLE_FIELDS.has(key)) proposed[key] = value
+            }
+
+            if (Object.keys(proposed).length === 0) {
+              return JSON.stringify({
+                proposed: false,
+                error: `No writable fields supplied. Allowed: ${[...WRITABLE_FIELDS].join(', ')}.`,
+              })
+            }
+
+            // Check the proposal against the real rules before offering it, so
+            // the agent cannot suggest something the form would reject.
+            const merged = { ...formContext.values, ...proposed }
+            const shipmentType = determineShipmentType(
+              merged.senderCountry,
+              merged.receiverCountry
+            )
+            const violations = {
+              ...validateReceiverData(merged as any, merged.senderCountry).errors,
+              ...validateAdditionalOptions({
+                ...merged,
+                weight: parseFloat(merged.weight) || 0,
+              } as any).errors,
+            }
+
+            return JSON.stringify({
+              proposed: true,
+              values: proposed,
+              shipmentType,
+              violations,
+              note: 'Nothing has been written yet. The customer sees an "Apply to form" button and decides.',
+            })
+          },
+          {
+            name: 'propose_form_values',
+            description:
+              "Offer to fill part of the shipment form for the customer. This does NOT write anything — it shows them the values with an Apply button, and they choose. Supply only the fields you are confident about. Sender fields cannot be proposed; they come from the account. After calling this, tell the customer what you are proposing and that they can apply it.",
+            schema: z.object({
+              receiverName: z.string().optional(),
+              receiverPhone: z.string().optional(),
+              receiverCountry: z.string().optional(),
+              receiverCity: z.string().optional(),
+              receiverStreet: z.string().optional(),
+              receiverPostalCode: z.string().optional(),
+              weight: z.string().optional().describe('Weight in kg, as a string'),
+              length: z.string().optional().describe('Length in cm, as a string'),
+              width: z.string().optional().describe('Width in cm, as a string'),
+              height: z.string().optional().describe('Height in cm, as a string'),
+              itemDescription: z.string().optional(),
+              pickupMethod: z.enum(['home', 'postal_office']).optional(),
+              signatureRequired: z.boolean().optional(),
+              containsLiquid: z.boolean().optional(),
+              insurance: z.boolean().optional(),
+              packaging: z.boolean().optional(),
+            }),
+          }
+        ),
+      ]
+
   return [
+    ...formTools,
     searchShipments,
     getShipment,
     quotePrice,

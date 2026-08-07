@@ -8,6 +8,7 @@
   import AdditionalOptionsCard from './cards/AdditionalOptionsCard.svelte'
   import RateCard from './cards/RateCard.svelte'
   import { ShipmentForm } from '$lib/state/shipment-form.svelte'
+  import { registerForm, unregisterForm } from '$lib/state/form-bridge.svelte'
   import { t } from '$lib/translations'
   import type { User } from '$lib/types'
 
@@ -21,6 +22,27 @@
   // {#key} block, so switching between create / edit / repeat rebuilds the
   // whole form rather than mutating the existing one.
   const state = untrack(() => new ShipmentForm(user, editId, repeatId))
+
+  // Let the assistant panel read this form, and write to it when the user
+  // presses Apply on a proposal.
+  $effect(() => {
+    registerForm(
+      () => ({
+        values: { ...state.form },
+        completed: {
+          sender: state.senderCompleted,
+          receiver: state.receiverCompleted,
+          package: state.packageCompleted,
+        },
+        errors: { ...state.errors },
+        shipmentType: state.shipmentType,
+      }),
+      (values) => {
+        for (const [name, value] of Object.entries(values)) state.setField(name, value)
+      }
+    )
+    return unregisterForm
+  })
 </script>
 
 <form

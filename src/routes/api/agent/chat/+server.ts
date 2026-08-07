@@ -43,7 +43,11 @@ export const POST: RequestHandler = async (event) => {
           .slice(-10)
       : []
 
-    return json(await runAgent(user.id, message, history))
+    // The form context is supplied by the client and is display-only data the
+    // user typed themselves; it never carries identity or pricing authority.
+    const formContext = body?.formContext ?? null
+
+    return json(await runAgent(user.id, message, history, { formContext }))
   } catch (err) {
     if (err instanceof MissingApiKeyError) {
       return json({ error: err.message }, { status: 503 })
