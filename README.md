@@ -1,410 +1,224 @@
-# ShipTest — Shipping Management App for Testing Education
+# ShipTest
 
-A SvelteKit application built to teach software testing: manual testing, UI automation,
-API testing, and now AI/agent testing. It simulates a shipping company operating across
-the Gulf, the Middle East and international destinations, with genuinely complex business
-rules that are worth writing test cases against.
+A shipping management app used for teaching software testing — manual testing,
+UI automation, API testing, and AI/agent testing.
 
-## Features
+It ships with an AI assistant: a LangChain agent that can read your shipments,
+price them with the real pricing engine, answer questions about the shipping
+rules from the project documentation, and offer to fill the shipment form for
+you.
 
-- 📦 **Progressive shipment form** — cards unlock in sequence (sender → receiver → package → service → options → rate)
-- ⚖️ **Rules served as data** — validation rules come from `/api/rules/*`, driven by `lib/rules/*.json`
-- 📋 **Shipment dashboard** — filter by status and type, edit, repeat, finalize, delete
-- 🤖 **AI agent** — LangChain agent with tools over your own shipments and the pricing engine
-- 📚 **RAG assistant** — answers questions about shipping rules from the project docs, with citations
-- 🧪 **Built for automation** — no test IDs, on purpose: every control is reachable
-  through accessible locators (`getByRole`, `getByLabel`)
-- 💾 **SQLite + Prisma** — file-based, no database server
-
-## Technology Stack
-
-- **Frontend**: SvelteKit 2, Svelte 5 (runes), TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: SQLite via Prisma
-- **Auth**: bcrypt + JWT in an httpOnly cookie
-- **AI**: LangChain v1 + OpenRouter (chat and embeddings)
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 18+
-- npm
-
-### Installation
-
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Create your `.env`**:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Set up the database**:
-   ```bash
-   npm run setup
-   ```
-   Generates the Prisma client, creates `prisma/dev.db`, and seeds 5 users and 6 shipments.
-
-4. **Start the dev server**:
-   ```bash
-   npm run dev
-   ```
-
-5. Open [http://localhost:3000](http://localhost:3000)
-
-### Enabling the AI features (optional)
-
-The agent and the RAG assistant run through [OpenRouter](https://openrouter.ai), and
-**each student uses their own key** — nothing is shared.
-
-1. Get a key at [openrouter.ai/keys](https://openrouter.ai/keys)
-2. Set `OPENROUTER_API_KEY` in `.env`
-3. Build the documentation index (one-off, costs a fraction of a cent):
-   ```bash
-   npm run ingest
-   ```
-4. Restart the dev server
-
-Check it worked:
-```bash
-curl http://localhost:3000/api/agent/health
-# { "ok": true, "apiKeyConfigured": true, "indexedChunks": 235, ... }
-```
-
-`OPENROUTER_MODEL` in `.env` selects the model — any tool-capable model on OpenRouter
-works. The default is a cheap one so a whole class can hammer it.
-
-Without a key the rest of the app works normally; the AI endpoints return `503` with a
-message telling you what to set.
-
-## Available Scripts
-
-| Script | What it does |
-|---|---|
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
-| `npm run check` | Type-check Svelte and TypeScript |
-| `npm run start` | Run the production build (adapter-node) |
-| `npm run setup` | Generate Prisma client, push schema, seed |
-| `npm run seed` | Reseed only |
-| `npm run ingest` | Index the docs for the AI assistant (needs an OpenRouter key) |
-| `npm run reset` | Delete the database and re-run setup |
-
-## Test Users
-
-All five share the password **`Test@1234`**. The signed-in user's details pre-fill the
-sender card, so which one you log in as changes which business rules fire.
-
-| Email | Name | Country | Gulf? |
-|---|---|---|---|
-| `ksa@qacart.com` | Khalid Al-Otaibi | Saudi Arabia | yes |
-| `uae@qacart.com` | Mohammed Al-Mansouri | United Arab Emirates | yes |
-| `kwt@qacart.com` | Fahad Al-Ajmi | Kuwait | yes |
-| `jor@qacart.com` | Ahmad Khalil | Jordan | no |
-| `egy@qacart.com` | Omar Hassan | Egypt | no |
-
-The seed creates 6 shipments: 5 `finalized` and 1 `draft`, spread across Domestic,
-IntraGulf and International.
-
-## Application Structure
-
-```
-ship-app/
-├── src/
-│   ├── hooks.server.ts             # Resolves the session, fills event.locals.user
-│   ├── app.html, app.css, app.d.ts
-│   ├── routes/
-│   │   ├── +layout.server.ts       # Auth guard + redirects, before render
-│   │   ├── +layout.svelte          # Sidebar and the AI chat drawer
-│   │   ├── +page.svelte            # Create shipment (also ?edit= and ?repeat=)
-│   │   ├── login/, register/
-│   │   ├── shipments/              # Dashboard (server-loaded, filters in the URL)
-│   │   │   └── [id]/               # Shipment details (server-loaded)
-│   │   ├── assistant/              # RAG documentation Q&A
-│   │   └── api/
-│   │       ├── auth/               # login, logout, me, register
-│   │       ├── rules/              # per-card rules (sender, receiver, package, service, options)
-│   │       ├── rates/              # price calculation
-│   │       ├── shipments/          # list, draft, finalize, [id]
-│   │       ├── agent/              # chat, health
-│   │       └── assistant/          # ask (RAG), search (retrieval only)
-│   └── lib/
-│       ├── components/             # DynamicCard, ShipmentForm, cards/, shipments/, agent/
-│       ├── state/shipment-form.svelte.ts   # Progressive form state, Svelte 5 runes
-│       ├── rules/*.json            # Business rules as data
-│       ├── types/, translations.ts
-│       └── server/                 # Never reaches the browser
-│           ├── auth.ts, guard.ts, db.ts
-│           ├── validators/         # Server-side rule enforcement
-│           ├── services/           # rate-calculator.ts
-│           ├── repositories/       # Prisma data access
-│           └── ai/                 # llm, retriever, tools, agent, rag
-├── scripts/ingest.ts               # Builds the RAG index
-├── prisma/                         # schema.prisma, seed.ts
-├── logic.md                        # Full business-rules reference
-└── stories/                        # 120+ user stories
-```
-
-## Business Rules Reference
-
-`logic.md` and `stories/` are the authoritative source. Summary:
-
-### Shipment types (detected from the two countries)
-
-| Type | Condition | Max weight |
-|---|---|---|
-| Domestic | Same country | 50 kg |
-| IntraGulf | Both countries are Gulf | 30 kg |
-| International | Anything else | 25 kg |
-
-**Gulf countries**: Saudi Arabia, United Arab Emirates, Kuwait, Bahrain, Qatar, Oman.
-**Non-Gulf**: Egypt, Jordan, Lebanon, Iraq.
-
-### Services and pricing
-
-| Shipment type | Service id | Base | Per kg | Max weight | Days |
-|---|---|---|---|---|---|
-| Domestic | `domestic_standard` | $15 | $0.50 | 50 kg | 3 |
-| Domestic | `domestic_express` | $30 | $1.00 | 30 kg | 1 |
-| IntraGulf | `gulf_standard` | $25 | $1.50 | 30 kg | 5 |
-| IntraGulf | `gulf_express` | $45 | $2.50 | 20 kg | 2 |
-| International | `international_economy` | $35 | $2.00 | 25 kg | 10 |
-| International | `international_standard` | $50 | $3.00 | 25 kg | 7 |
-
-Services are filtered by weight — a 25 kg package hides `gulf_express`.
-
-### Additional fees
-
-| Option | Fee |
-|---|---|
-| Signature | $5.00 |
-| Contains liquid | $10.00 |
-| Insurance | $15.00 |
-| Professional packaging | $8.00 |
-| Home pickup | $6–$20, by sender country |
-| Postal office drop-off | $2–$8, by sender country |
-
-**Total** = base + (weight × per kg) + pickup fee + selected options.
-
-Worked example — 12 kg, Saudi Arabia → Egypt, `international_economy`, home pickup, insurance:
-`$35 + ($2 × 12) + $8 + $15 = $82.00`
-
-### Conditional rules (the interesting ones to test)
-
-| Rule | Trigger | Effect |
-|---|---|---|
-| Gulf street | Sender or receiver in a Gulf country | Street address becomes required |
-| Gulf → Iraq | Gulf sender + Iraq receiver | **Blocked** |
-| Item description | Non-Gulf → Gulf | Description required, min 5 chars |
-| Mandatory signature | Receiver in Jordan or Egypt | Signature forced on, cannot be unchecked |
-| Home pickup limit | Weight > 17 kg | Home pickup disabled, forced to postal office |
-| Iraq exception | Sender in Iraq | Home pickup stays available above 17 kg |
-
-### Field validation
-
-- **Phone**: 10–15 digits (non-digits stripped before counting)
-- **Name**: minimum 2 characters
-- **City**: minimum 2 characters
-- **Postal code**: 3–10 characters
-- **Weight**: > 0, and ≤ the limit for the shipment type and service
-- **Dimensions**: each between 1 and 200 cm
-
-### Status model
-
-Shipments are `draft` or `finalized`. Only drafts can be edited or finalized.
-There is no multi-step delivery workflow.
-
-## API Reference
-
-Base URL: `http://localhost:3000/api`
-
-All endpoints except `/api/auth/*` and `/api/agent/health` require the `auth_session`
-cookie, and every shipment query is scoped to the signed-in user.
-
-### Auth
-
-```http
-POST /api/auth/register    # { email, password, fullName, phone, country, city, street, postalCode }
-POST /api/auth/login       # { email, password }  → sets auth_session cookie
-POST /api/auth/logout
-GET  /api/auth/me
-```
-
-### Shipments
-
-```http
-GET    /api/shipments?status=draft&shipmentType=IntraGulf&sortBy=createdAt&sortOrder=desc&page=1&limit=10
-POST   /api/shipments/draft        # save a draft, minimal validation
-POST   /api/shipments/finalize     # create + finalize, FULL business-rule validation
-GET    /api/shipments/{id}
-PUT    /api/shipments/{id}         # drafts only
-DELETE /api/shipments/{id}
-POST   /api/shipments/{id}/finalize
-```
-
-`status` accepts `draft` or `finalized`. `sortBy` accepts `createdAt`, `totalCost`, `status`.
-
-### Rules and rates
-
-```http
-POST /api/rules/sender              # { from: { country } }
-POST /api/rules/receiver            # { from: { country }, to: { country } }
-POST /api/rules/package             # { from, to }  → also returns the detected shipmentType
-POST /api/rules/service             # { shipmentType, package: { weight } }
-POST /api/rules/additional-options  # { from, to, package: { weight } }
-POST /api/rates                     # { serviceId, weight, senderCountry, receiverCountry, pickupMethod, ... }
-```
-
-### AI
-
-```http
-POST /api/agent/chat        # { message, history? }  → { reply, toolCalls, model, latencyMs }
-POST /api/assistant/ask     # { question, k? }       → { answer, sources, model, latencyMs }
-POST /api/assistant/search  # { query, k?, minScore? } → retrieval only, NO model call
-GET  /api/agent/health      # public; reports key + index state
-```
-
-## Testing Opportunities
-
-### Manual testing
-
-1. **Progressive unlocking** — each card stays disabled until the previous is complete
-2. **Boundary values** — exactly 17.0 vs 17.1 kg for home pickup; exactly 30 vs 30.1 kg for IntraGulf
-3. **Conditional fields** — log in as `egy@` and ship to Saudi Arabia: the item description appears
-4. **Forced state** — ship to Jordan: signature is checked *and* disabled
-5. **Blocked route** — log in as `ksa@` and pick Iraq as the receiver
-
-### UI automation
-
-**There are no `data-testid` attributes, deliberately.** Playwright's own guidance
-puts user-facing locators ahead of test IDs, so this app forces the habit: if a
-control cannot be reached with `getByRole` or `getByLabel`, that is an
-accessibility bug, not a reason to add a hook.
-
-What the markup gives you:
-
-| Thing | How to locate it |
-|---|---|
-| Any form field | `getByLabel('Full Name')`, `getByLabel('Weight (kg)')` |
-| A whole card | `getByRole('group', { name: 'Receiver Information' })` |
-| A service option | `getByRole('radio', { name: /Gulf Express/ })` |
-| Pickup method | `getByRole('radio', { name: 'Home Pickup' })` |
-| An option toggle | `getByRole('checkbox', { name: /Insurance/ })` |
-| Validation errors | `getByRole('alert')` |
-| Buttons | `getByRole('button', { name: 'Finalize Shipment' })` |
-| Row actions menu | `getByRole('button', { name: /Actions for TR/ })` then `getByRole('menuitem', { name: 'Delete' })` |
-| The live total | `getByRole('status')` — the price is an `aria-live` region |
-| Promo overlay | `getByRole('dialog', { name: 'Special Offer!' })` |
-| Chat drawer | `getByRole('button', { name: 'Open assistant' })`, `getByRole('dialog', { name: 'Shipping Assistant' })` |
-| Tools the agent ran | `getByRole('list', { name: 'Tools used' })` |
-
-Cards are `<fieldset>` + `<legend>`, so you can scope a query to one section.
-Errors are wired with `aria-describedby` and `aria-invalid`, so you can assert the
-error is attached to the right field rather than merely present somewhere.
-
-```javascript
-const receiver = page.getByRole('group', { name: 'Receiver Information' })
-await receiver.getByLabel('Full Name').fill('Sara Al-Zoubi')
-await page.getByLabel('Weight (kg)').fill('18')
-
-// Above 17 kg home pickup must be taken away
-await expect(page.getByRole('radio', { name: 'Home Pickup' })).toBeDisabled()
-
-await page.getByRole('button', { name: 'Finalize Shipment' }).click()
-await expect(page.getByRole('alert')).toContainText('Home pickup is not available')
-```
-
-**A note on the promo modal**: `/shipments` shows an overlay on roughly 50% of visits, on
-purpose, to teach Playwright's `addLocatorHandler`. Its test IDs are `promo-modal` and
-`promo-close`.
-
-### API testing
-
-The highest-value exercise is **client vs server enforcement**. The UI hides options
-the rules API says are unavailable, but the real check is server-side — so bypass the
-form and post directly:
-
-```bash
-# Gulf → Iraq must be rejected even though the UI never lets you choose it
-curl -b cookies.txt -X POST http://localhost:3000/api/shipments/finalize \
-  -H 'Content-Type: application/json' \
-  -d '{"from":{"country":"Saudi Arabia", ...},"to":{"country":"Iraq", ...}, ...}'
-# → 400 {"error":"Validation failed","validationErrors":{"receiverCountry":"..."}}
-```
-
-Other good targets: post a tampered `rate` and confirm the server recalculates; request
-another user's shipment id and confirm it 404s; finalize an already-finalized shipment.
-
-### Testing the AI features
-
-This is the part most test suites have never had to handle. Useful angles:
-
-**Deterministic retrieval.** `/api/assistant/search` calls no chat model, so its output
-depends only on the query embedding and the index. Assert on it without LLM flakiness:
-
-```bash
-curl -b cookies.txt -X POST http://localhost:3000/api/assistant/search \
-  -H 'Content-Type: application/json' \
-  -d '{"query":"shipping from Gulf countries to Iraq","k":3}'
-# top hit should be logic.md / 09-business-rules-stories.md
-```
-
-**Assert on tool calls, not prose.** `/api/agent/chat` returns a `toolCalls` array. A
-pricing question *must* route through `quote_price` rather than the model doing mental
-arithmetic — that assertion is stable even when the wording changes.
-
-**Authorization under adversarial input.** The agent's `userId` comes from the JWT and is
-never a tool parameter. Ask it for another user's tracking number and it should refuse:
-
-```
-"Show me shipment TR142611255"   →  "No such shipment belongs to you."
-```
-
-Try to talk it into ignoring that. It should not work — this is the interesting
-prompt-injection exercise.
-
-**Grounding.** Ask the assistant something the docs don't cover. It is instructed to say
-"I don't know based on the documentation" rather than invent a rule.
-
-**Degraded modes.** Unset `OPENROUTER_API_KEY` → AI endpoints return `503` with a helpful
-message while the rest of the app keeps working. Skip `npm run ingest` → the assistant
-reports an empty index.
-
-⚠️ Every agent/assistant test spends real tokens from your own key and inherits some LLM
-nondeterminism. Prefer `/api/assistant/search` and `toolCalls` assertions where you can.
-
-## Troubleshooting
-
-**Reset everything**: `npm run reset` (then `npm run ingest` again if you use the AI)
-
-**Database location**: `prisma/dev.db`
-
-**Port in use**: `npm run dev -- --port 3001`
-
-**Prisma client out of date**: `npx prisma generate`
-
-**Assistant says the index is empty**: run `npm run ingest`, then restart the dev server —
-the retriever caches chunks per server process.
-
-**`OPENROUTER_API_KEY is not set`**: it lives in `.env`, which is gitignored. Copy
-`.env.example` and add your own key.
-
-## Learning Resources
-
-- SvelteKit: https://svelte.dev/docs/kit
-- Prisma: https://www.prisma.io/docs
-- Playwright locators: https://playwright.dev/docs/locators
-- LangChain JS: https://docs.langchain.com/oss/javascript/langchain/overview
-- OpenRouter: https://openrouter.ai/docs
-
-## License
-
-Created for educational purposes. Free to use for teaching and learning software testing.
+> This README covers **setup and running only**. The business rules themselves
+> live in [`logic.md`](./logic.md) and [`stories/`](./stories).
 
 ---
 
-**Happy Testing!** 🧪
+## Requirements
+
+- **Node.js 18+**
+- **npm**
+
+Nothing else. The database is a local SQLite file — no database server, no
+Docker, no cloud account needed to run the app.
+
+---
+
+## Setup
+
+**1. Install dependencies**
+
+```bash
+npm install
+```
+
+**2. Create your environment file**
+
+```bash
+cp .env.example .env
+```
+
+`.env` is git-ignored and never committed. `.env.example` is the template.
+
+**3. Create and seed the database**
+
+```bash
+npm run setup
+```
+
+This generates the Prisma client, creates `prisma/dev.db`, and seeds test users
+and sample shipments.
+
+**4. Start the app**
+
+```bash
+npm run dev
+```
+
+Open **http://localhost:3000**
+
+---
+
+## Logging in
+
+The seed creates five users. They all share the same password:
+
+| Email | Password |
+|---|---|
+| `ksa@qacart.com` | `Test@1234` |
+| `uae@qacart.com` | `Test@1234` |
+| `kwt@qacart.com` | `Test@1234` |
+| `jor@qacart.com` | `Test@1234` |
+| `egy@qacart.com` | `Test@1234` |
+
+Each user is based in a different country, which changes which shipping rules
+apply. You can also register a new account from the sign-up page.
+
+---
+
+## Enabling the AI assistant (optional)
+
+The app runs fine without this. The AI features simply return a `503` with a
+message telling you what is missing.
+
+The assistant runs through **OpenRouter**, and **every student uses their own
+API key** — nothing is shared.
+
+**1. Get an API key**
+
+Sign up and create a key at:
+
+### 👉 https://openrouter.ai/keys
+
+OpenRouter is pay-as-you-go. Indexing the docs costs a fraction of a cent, and
+normal use during a course costs very little.
+
+**2. Add the key to `.env`**
+
+```bash
+OPENROUTER_API_KEY=sk-or-v1-your-key-here
+```
+
+**3. Build the documentation index**
+
+```bash
+npm run ingest
+```
+
+This reads the project documentation, creates embeddings via OpenRouter, and
+stores them locally. Run it once — and again whenever the docs change.
+
+**4. Restart the dev server**
+
+```bash
+npm run dev
+```
+
+**5. Check it worked**
+
+```bash
+curl http://localhost:3000/api/agent/health
+```
+
+Expected:
+
+```json
+{ "ok": true, "apiKeyConfigured": true, "indexedChunks": 235 }
+```
+
+If `ok` is `false`, the `hints` field in that response tells you what to fix.
+
+### Choosing a model
+
+`OPENROUTER_MODEL` in `.env` selects the chat model. Any tool-capable model from
+https://openrouter.ai/models works.
+
+| Model | Notes |
+|---|---|
+| `openai/gpt-5.6-terra` | Default. Reliable multi-step tool use. |
+| `google/gemini-3.5-flash` | Also reliable, a little slower. |
+| `google/gemini-3.5-flash-lite` | **Avoid** — returns empty replies after tool calls. |
+
+Where to find the assistant once it is enabled:
+
+- The **chat bubble** in the bottom-right of the create / edit / repeat shipment
+  page. It can read the form and offer to fill it in.
+- The **Shipping Rules Assistant** at `/assistant`, which answers from the
+  project documentation and shows its sources.
+
+---
+
+## Available scripts
+
+| Script | What it does |
+|---|---|
+| `npm run dev` | Start the dev server on port 3000 |
+| `npm run build` | Production build |
+| `npm run start` | Run the production build |
+| `npm run check` | Type-check Svelte and TypeScript |
+| `npm run setup` | Generate Prisma client, create the DB, seed it |
+| `npm run seed` | Re-seed only |
+| `npm run reset` | Delete the database and set it up again |
+| `npm run ingest` | Build the AI documentation index (needs an API key) |
+
+---
+
+## Tech stack
+
+- **SvelteKit 2** with **Svelte 5** (runes) and TypeScript
+- **Tailwind CSS**
+- **SQLite** via **Prisma**
+- **LangChain** with **OpenRouter** for the agent and the RAG assistant
+
+---
+
+## Troubleshooting
+
+**Reset everything**
+
+```bash
+npm run reset
+npm run ingest   # only if you use the AI features
+```
+
+**Port 3000 already in use**
+
+```bash
+npm run dev -- --port 3001
+```
+
+**`OPENROUTER_API_KEY is not set`**
+
+The key lives in `.env`, which is not committed. Copy `.env.example` to `.env`
+and add your own key from https://openrouter.ai/keys
+
+**The assistant says the index is empty**
+
+Run `npm run ingest`, then restart the dev server.
+
+**Prisma client is out of date**
+
+```bash
+npx prisma generate
+```
+
+**Database file location**
+
+`prisma/dev.db` — delete it and run `npm run setup` to start clean.
+
+---
+
+## Notes for automation
+
+There are **no `data-testid` attributes**, deliberately. Every control is
+reachable through accessible locators — `getByRole`, `getByLabel` — which is what
+Playwright recommends. If something cannot be located that way, treat it as an
+accessibility bug.
+
+No tests are included. Writing them is the exercise.
+
+---
+
+## License
+
+Created for educational purposes. Free to use for teaching and learning software
+testing.

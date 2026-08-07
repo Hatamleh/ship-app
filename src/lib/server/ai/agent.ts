@@ -131,8 +131,18 @@ export async function runAgent(
         ? last.content.map((p: any) => p?.text ?? '').join('')
         : ''
 
+  // Some models occasionally end their turn with no text at all after running a
+  // tool. The tool results are still valid, so say so rather than rendering an
+  // empty bubble. If this fires often, the model is the problem — see
+  // OPENROUTER_MODEL in .env.
+  const safeReply =
+    reply.trim() ||
+    (toolCalls.length > 0
+      ? `I looked that up (${toolCalls.map((c) => c.name).join(', ')}) but could not phrase an answer. Please ask again.`
+      : 'I could not produce an answer. Please try rephrasing.')
+
   return {
-    reply,
+    reply: safeReply,
     toolCalls,
     proposal,
     model: llm.model,

@@ -46,3 +46,7 @@ lessons
 # env
 .env
 .env.local
+
+# svelte-kit generated output
+.svelte-kit
+/build

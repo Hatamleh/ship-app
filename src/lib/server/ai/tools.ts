@@ -12,7 +12,7 @@ import {
 import serviceCardRules from '$lib/rules/service-card.json'
 import countriesData from '$lib/rules/countries.json'
 import { retrieve } from './retriever'
-import { AGENT_WRITABLE_FIELDS } from '$lib/state/form-bridge.svelte'
+import { AGENT_WRITABLE_FIELDS } from '$lib/shipment-fields'
 
 const WRITABLE_FIELDS = new Set<string>(AGENT_WRITABLE_FIELDS)
 

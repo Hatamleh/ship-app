@@ -25,22 +25,4 @@ export function unregisterForm() {
   formBridge.apply = null
 }
 
-/** Fields the assistant is allowed to propose. Sender comes from the account. */
-export const AGENT_WRITABLE_FIELDS = [
-  'receiverName',
-  'receiverPhone',
-  'receiverCountry',
-  'receiverCity',
-  'receiverStreet',
-  'receiverPostalCode',
-  'weight',
-  'length',
-  'width',
-  'height',
-  'itemDescription',
-  'pickupMethod',
-  'signatureRequired',
-  'containsLiquid',
-  'insurance',
-  'packaging',
-] as const
+export { AGENT_WRITABLE_FIELDS } from '$lib/shipment-fields'
