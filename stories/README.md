@@ -126,31 +126,20 @@ The shipping application is a full-featured platform for creating, managing, and
 
 Each story follows this structure:
 
-```markdown
 ## US-XXX: Story Title
-
 **As a** [user type]
 **I want to** [action]
 **So that** [benefit]
-
 ### Acceptance Criteria
-
 | # | Criterion | Expected Behavior |
 |---|-----------|-------------------|
 | 1 | ... | ... |
-
 ### Business Rules
-
 [Detailed rules and logic]
-
 ### API Endpoint
-
 [Request/Response examples]
-
 ### Test Scenarios
-
 [Test cases table]
-```
 
 ---
 

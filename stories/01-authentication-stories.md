@@ -33,24 +33,7 @@ This document contains all user stories related to user authentication, registra
 
 ### API Endpoint
 
-```
-POST /api/auth/register
-```
-
-### Request Body
-
-```json
-{
-  "email": "user@example.com",
-  "password": "securePassword123",
-  "fullName": "Ahmad Mohammed",
-  "phone": "+966501234567",
-  "country": "Saudi Arabia",
-  "city": "Riyadh",
-  "street": "King Fahd Road",
-  "postalCode": "12345"
-}
-```
+**Endpoint:** POST /api/auth/register
 
 ### Response Codes
 
@@ -90,18 +73,7 @@ POST /api/auth/register
 
 ### API Endpoint
 
-```
-POST /api/auth/login
-```
-
-### Request Body
-
-```json
-{
-  "email": "user@example.com",
-  "password": "securePassword123"
-}
-```
+**Endpoint:** POST /api/auth/login
 
 ### Response Codes
 
@@ -137,17 +109,7 @@ POST /api/auth/login
 
 ### API Endpoint
 
-```
-POST /api/auth/logout
-```
-
-### Response
-
-```json
-{
-  "message": "تم تسجيل الخروج بنجاح"
-}
-```
+**Endpoint:** POST /api/auth/logout
 
 ---
 
@@ -174,26 +136,7 @@ POST /api/auth/logout
 
 ### API Endpoint
 
-```
-GET /api/auth/me
-```
-
-### Response
-
-```json
-{
-  "id": 1,
-  "email": "user@example.com",
-  "fullName": "Ahmad Mohammed",
-  "phone": "+966501234567",
-  "country": "Saudi Arabia",
-  "city": "Riyadh",
-  "street": "King Fahd Road",
-  "postalCode": "12345",
-  "createdAt": "2024-01-15T10:30:00.000Z",
-  "updatedAt": "2024-01-15T10:30:00.000Z"
-}
-```
+**Endpoint:** GET /api/auth/me
 
 ### Response Codes
 

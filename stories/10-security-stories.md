@@ -20,16 +20,6 @@ This document contains all user stories related to security, authentication, dat
 | 4 | Verify on login | Compare hash, not plaintext |
 | 5 | Never expose | Password never returned in API responses |
 
-### Implementation
-
-```javascript
-// Hashing
-const hashedPassword = await bcrypt.hash(password, 10);
-
-// Verification
-const isValid = await bcrypt.compare(password, hashedPassword);
-```
-
 ### Security Properties
 
 | Property | Value |
@@ -66,14 +56,6 @@ const isValid = await bcrypt.compare(password, hashedPassword);
 | Payload | { userId, email, iat, exp } |
 | Secret Source | JWT_SECRET env variable |
 
-### Token Structure
-
-```
-Header: { "alg": "HS256", "typ": "JWT" }
-Payload: { "userId": 1, "email": "user@example.com", "iat": 1234567890, "exp": 1237159890 }
-Signature: HMACSHA256(base64(header) + "." + base64(payload), secret)
-```
-
 ---
 
 ## US-112: Secure Cookie Configuration
@@ -93,16 +75,6 @@ Signature: HMACSHA256(base64(header) + "." + base64(payload), secret)
 | 5 | Path | Root path (/) |
 
 ### Cookie Configuration
-
-```javascript
-const cookieConfig = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
-  maxAge: 2592000, // 30 days in seconds
-  path: '/'
-};
-```
 
 ### Security Properties
 
@@ -131,40 +103,13 @@ const cookieConfig = {
 | 4 | Cannot edit others | 401 for unauthorized modification |
 | 5 | Cannot delete others | 401 for unauthorized deletion |
 
-### Implementation
-
-```javascript
-// All shipment queries include user check
-async findByUserId(userId, filters) {
-  return prisma.shipment.findMany({
-    where: {
-      userId: userId, // Always filter by user
-      ...additionalFilters
-    }
-  });
-}
-
-// Single shipment access check
-async findById(id, userId) {
-  const shipment = await prisma.shipment.findFirst({
-    where: {
-      id: id,
-      userId: userId // Must match user
-    }
-  });
-  return shipment; // null if not owned
-}
-```
-
 ### Authorization Flow
 
-```
 1. User requests /api/shipments/123
 2. Extract userId from JWT token
 3. Query: WHERE id = 123 AND userId = [extracted]
 4. If null → 404 Not Found
 5. If found → Return shipment
-```
 
 ---
 
@@ -197,21 +142,6 @@ async findById(id, userId) {
 | /api/shipments/draft | POST | Yes |
 | /api/shipments/finalize | POST | Yes |
 
-### Authentication Middleware
-
-```javascript
-async function requireAuth(request) {
-  const user = await getCurrentUser(request);
-  if (!user) {
-    return NextResponse.json(
-      { error: 'غير مصرح' },
-      { status: 401 }
-    );
-  }
-  return user;
-}
-```
-
 ---
 
 ## US-115: Email Uniqueness
@@ -228,19 +158,6 @@ async function requireAuth(request) {
 | 2 | Pre-check | Check before insert |
 | 3 | Error response | 409 Conflict if duplicate |
 | 4 | Error message | "Email already registered" |
-
-### Implementation
-
-```javascript
-// Check before creating
-const existing = await userRepository.findByEmail(email);
-if (existing) {
-  return NextResponse.json(
-    { error: 'البريد الإلكتروني مسجل مسبقاً' },
-    { status: 409 }
-  );
-}
-```
 
 ---
 
@@ -262,15 +179,6 @@ if (existing) {
 | Weight | Positive number, within limits |
 | Dimensions | Positive, max 200 cm |
 
-### Email Validation
-
-```javascript
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (!emailPattern.test(email)) {
-  return { error: 'Invalid email format' };
-}
-```
-
 ---
 
 ## US-117: Server-Side Rate Calculation
@@ -287,21 +195,6 @@ if (!emailPattern.test(email)) {
 | 2 | On finalization | Recalculate before storage |
 | 3 | Validation | Ensure calculation succeeds |
 | 4 | Security logging | Log rate mismatches |
-
-### Security Measure
-
-```javascript
-// On finalize, ignore frontend prices
-const serverRates = calculateRates({
-  serviceId: data.serviceType,
-  weight: data.weight,
-  senderCountry: data.senderCountry,
-  // ... other inputs
-});
-
-// Store server-calculated rates, not frontend values
-await createShipment(userId, data, serverRates);
-```
 
 ---
 
@@ -322,18 +215,14 @@ await createShipment(userId, data, serverRates);
 
 ### Expiration Timeline
 
-```
 Day 0: User logs in
-       → JWT created with 30-day expiry
-       → Cookie set with 30-day maxAge
-
+→ JWT created with 30-day expiry
+→ Cookie set with 30-day maxAge
 Day 29: Token still valid
-        → User can access features
-
+→ User can access features
 Day 30: Token expires
-        → 401 response on API calls
-        → Redirect to login
-```
+→ 401 response on API calls
+→ Redirect to login
 
 ---
 
@@ -370,12 +259,6 @@ Day 30: Token expires
 **So that** cross-origin attacks are prevented
 
 ### Cookie Settings for CSRF
-
-```javascript
-{
-  sameSite: 'lax' // Prevents CSRF on cross-origin POST
-}
-```
 
 ### SameSite Policy
 

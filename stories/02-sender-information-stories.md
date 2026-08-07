@@ -26,19 +26,6 @@ This document contains all user stories related to the sender information card i
 - User cannot modify sender information in shipment form
 - To change sender info, user must update their profile
 
-### Pre-filled Data Source
-
-```json
-{
-  "senderName": "user.fullName",
-  "senderPhone": "user.phone",
-  "senderCountry": "user.country",
-  "senderCity": "user.city",
-  "senderStreet": "user.street",
-  "senderPostalCode": "user.postalCode"
-}
-```
-
 ---
 
 ## US-011: Sender Name Validation
@@ -55,16 +42,6 @@ This document contains all user stories related to the sender information card i
 | 2 | Characters allowed | Letters, spaces, hyphens, apostrophes only |
 | 3 | No numbers | Numbers are not allowed in name |
 | 4 | No special characters | Special characters rejected |
-
-### Validation Rules
-
-```javascript
-{
-  "minLength": 2,
-  "pattern": "^[a-zA-Z\\s\\-']+$",
-  "errorMessage": "Name must be at least 2 characters and contain only letters"
-}
-```
 
 ---
 
@@ -84,13 +61,6 @@ This document contains all user stories related to the sender information card i
 | 4 | International support | Country codes accepted |
 
 ### Validation Logic
-
-```javascript
-function validatePhone(phone) {
-  const digitsOnly = phone.replace(/\D/g, '');
-  return digitsOnly.length >= 10;
-}
-```
 
 ### Valid Examples
 
@@ -152,11 +122,9 @@ function validatePhone(phone) {
 
 ### Business Rule
 
-```
 IF sender.country IN [Saudi Arabia, UAE, Kuwait, Bahrain, Qatar, Oman]
 THEN street.required = true
 ELSE street.required = false
-```
 
 ### Gulf Countries
 
@@ -217,98 +185,13 @@ ELSE street.required = false
 | 3 | Enables next step | Receiver card becomes enabled |
 | 4 | Auto-complete | Since fields are pre-filled, card is typically complete on load |
 
-### Completion Check
-
-```javascript
-const senderComplete =
-  senderName.length >= 2 &&
-  phoneDigits.length >= 10 &&
-  senderCountry !== '' &&
-  senderCity.length >= 2 &&
-  senderPostalCode.length >= 3 &&
-  (!isGulfCountry || senderStreet !== '');
-```
-
 ---
 
 ## API Endpoint
 
 ### Get Sender Rules
 
-```
-POST /api/rules/sender
-```
-
-### Request
-
-```json
-{
-  "from": {
-    "country": "Saudi Arabia"
-  }
-}
-```
-
-### Response
-
-```json
-{
-  "cardName": "sender",
-  "title": "معلومات المرسل",
-  "enabled": true,
-  "fields": {
-    "senderName": {
-      "type": "text",
-      "label": "الاسم",
-      "required": true,
-      "validation": {
-        "minLength": 2,
-        "errorMessage": "الاسم يجب أن يكون حرفين على الأقل"
-      }
-    },
-    "senderPhone": {
-      "type": "text",
-      "label": "رقم الهاتف",
-      "required": true,
-      "validation": {
-        "minLength": 10,
-        "errorMessage": "رقم الهاتف يجب أن يكون 10 أرقام على الأقل"
-      }
-    },
-    "senderCountry": {
-      "type": "select",
-      "label": "الدولة",
-      "required": true,
-      "options": [/* country list */]
-    },
-    "senderCity": {
-      "type": "text",
-      "label": "المدينة",
-      "required": true,
-      "validation": {
-        "minLength": 2
-      }
-    },
-    "senderStreet": {
-      "type": "text",
-      "label": "العنوان",
-      "required": true,  // true for Gulf countries
-      "validation": {
-        "errorMessage": "العنوان مطلوب لدول الخليج"
-      }
-    },
-    "senderPostalCode": {
-      "type": "text",
-      "label": "الرمز البريدي",
-      "required": true,
-      "validation": {
-        "minLength": 3,
-        "maxLength": 10
-      }
-    }
-  }
-}
-```
+**Endpoint:** POST /api/rules/sender
 
 ---
 

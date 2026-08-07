@@ -49,10 +49,8 @@ This document contains all user stories related to additional shipping options i
 
 ### Business Rule (Standard)
 
-```
 Signature is optional for most destinations.
 When selected, adds $5.00 to total.
-```
 
 ---
 
@@ -74,13 +72,11 @@ When selected, adds $5.00 to total.
 
 ### Business Rule
 
-```
 IF receiver.country = "Jordan"
 THEN signature.required = true
-     signature.disabled = true
-     signature.value = true
-     signature.fee = $5.00
-```
+signature.disabled = true
+signature.value = true
+signature.fee = $5.00
 
 ---
 
@@ -101,13 +97,11 @@ THEN signature.required = true
 
 ### Business Rule
 
-```
 IF receiver.country = "Egypt"
 THEN signature.required = true
-     signature.disabled = true
-     signature.value = true
-     signature.fee = $5.00
-```
+signature.disabled = true
+signature.value = true
+signature.fee = $5.00
 
 ### Signature Requirement Matrix
 
@@ -143,10 +137,8 @@ THEN signature.required = true
 
 ### Business Rule
 
-```
 Contains Liquid is always optional.
 When selected, adds $10.00 to total for special handling.
-```
 
 ---
 
@@ -167,10 +159,8 @@ When selected, adds $10.00 to total for special handling.
 
 ### Business Rule
 
-```
 Insurance is always optional.
 When selected, adds $15.00 to total.
-```
 
 ---
 
@@ -190,10 +180,8 @@ When selected, adds $15.00 to total.
 
 ### Business Rule
 
-```
 Professional Packaging is always optional.
 When selected, adds $8.00 to total.
-```
 
 ---
 
@@ -249,12 +237,10 @@ When selected, adds $8.00 to total.
 
 ### Business Rule
 
-```
 IF package.weight > 17 kg
-   AND sender.country != "Iraq"
+AND sender.country != "Iraq"
 THEN pickupMethod.home.disabled = true
-     pickupMethod.value = "postal_office"
-```
+pickupMethod.value = "postal_office"
 
 ### Weight vs Pickup Matrix
 
@@ -289,10 +275,8 @@ THEN pickupMethod.home.disabled = true
 
 ### Business Rule
 
-```
 IF sender.country = "Iraq"
 THEN pickupMethod.home.disabled = false (always available)
-```
 
 ---
 
@@ -300,116 +284,7 @@ THEN pickupMethod.home.disabled = false (always available)
 
 ### Get Additional Options Rules
 
-```
-POST /api/rules/additional-options
-```
-
-### Request
-
-```json
-{
-  "from": {
-    "country": "Saudi Arabia"
-  },
-  "to": {
-    "country": "Jordan"
-  },
-  "package": {
-    "weight": 20
-  }
-}
-```
-
-### Response (Heavy Package to Jordan)
-
-```json
-{
-  "cardName": "additionalOptions",
-  "title": "خيارات إضافية",
-  "enabled": true,
-  "fields": {
-    "signatureRequired": {
-      "type": "checkbox",
-      "label": "توقيع مطلوب",
-      "required": true,
-      "disabled": true,
-      "defaultValue": true,
-      "fee": 5,
-      "message": "التوقيع مطلوب للشحنات إلى الأردن"
-    },
-    "containsLiquid": {
-      "type": "checkbox",
-      "label": "يحتوي على سوائل",
-      "required": false,
-      "fee": 10
-    },
-    "insurance": {
-      "type": "checkbox",
-      "label": "تأمين",
-      "required": false,
-      "fee": 15
-    },
-    "packaging": {
-      "type": "checkbox",
-      "label": "تغليف احترافي",
-      "required": false,
-      "fee": 8
-    },
-    "pickupMethod": {
-      "type": "radio",
-      "label": "طريقة الاستلام",
-      "required": true,
-      "options": [
-        {
-          "value": "home",
-          "label": "استلام من المنزل",
-          "fee": 8,
-          "disabled": true,
-          "message": "غير متاح للطرود التي تزيد عن 17 كجم"
-        },
-        {
-          "value": "postal_office",
-          "label": "تسليم في مكتب البريد",
-          "fee": 3,
-          "disabled": false
-        }
-      ],
-      "defaultValue": "postal_office"
-    }
-  }
-}
-```
-
-### Response (Iraq Sender - Heavy Package)
-
-```json
-{
-  "cardName": "additionalOptions",
-  "fields": {
-    "signatureRequired": {
-      "required": false,
-      "disabled": false,
-      "defaultValue": false
-    },
-    "pickupMethod": {
-      "options": [
-        {
-          "value": "home",
-          "label": "استلام من المنزل",
-          "fee": 18,
-          "disabled": false
-        },
-        {
-          "value": "postal_office",
-          "label": "تسليم في مكتب البريد",
-          "fee": 6,
-          "disabled": false
-        }
-      ]
-    }
-  }
-}
-```
+**Endpoint:** POST /api/rules/additional-options
 
 ---
 

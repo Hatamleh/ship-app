@@ -124,11 +124,9 @@ This document contains all user stories related to the receiver information card
 
 ### Business Rule
 
-```
 IF receiver.country IN [Saudi Arabia, UAE, Kuwait, Bahrain, Qatar, Oman]
 THEN receiverStreet.required = true
 ELSE receiverStreet.required = false
-```
 
 ---
 
@@ -150,11 +148,9 @@ ELSE receiverStreet.required = false
 
 ### Business Rule
 
-```
 IF sender.country IN [Saudi Arabia, UAE, Kuwait, Bahrain, Qatar, Oman]
-   AND receiver.country = Iraq
+AND receiver.country = Iraq
 THEN BLOCK with error "الشحن من دول الخليج إلى العراق غير متاح حالياً"
-```
 
 ### Test Matrix
 
@@ -220,19 +216,6 @@ THEN BLOCK with error "الشحن من دول الخليج إلى العراق �
 | 3 | Package card enabled | Next section becomes available |
 | 4 | Shipment type determined | Domestic/IntraGulf/International set |
 
-### Completion Logic
-
-```javascript
-const receiverComplete =
-  receiverName.length >= 2 &&
-  phoneDigits.length >= 10 &&
-  receiverCountry !== '' &&
-  receiverCity.length >= 2 &&
-  receiverPostalCode.length >= 3 &&
-  (!isGulfDestination || receiverStreet !== '') &&
-  !isGulfToIraq;
-```
-
 ---
 
 ## US-029: Auto-Detect Shipment Type
@@ -253,23 +236,6 @@ const receiverComplete =
 
 ### Shipment Type Logic
 
-```javascript
-function determineShipmentType(senderCountry, receiverCountry) {
-  if (senderCountry === receiverCountry) {
-    return 'Domestic';
-  }
-
-  const senderIsGulf = GULF_COUNTRIES.includes(senderCountry);
-  const receiverIsGulf = GULF_COUNTRIES.includes(receiverCountry);
-
-  if (senderIsGulf && receiverIsGulf) {
-    return 'IntraGulf';
-  }
-
-  return 'International';
-}
-```
-
 ### Shipment Type Matrix
 
 | Sender | Receiver | Type |
@@ -287,55 +253,7 @@ function determineShipmentType(senderCountry, receiverCountry) {
 
 ### Get Receiver Rules
 
-```
-POST /api/rules/receiver
-```
-
-### Request
-
-```json
-{
-  "from": {
-    "country": "Saudi Arabia"
-  },
-  "to": {
-    "country": "Iraq"
-  }
-}
-```
-
-### Success Response (Non-blocked route)
-
-```json
-{
-  "cardName": "receiver",
-  "title": "معلومات المستلم",
-  "enabled": true,
-  "fields": {
-    "receiverName": { /* field config */ },
-    "receiverPhone": { /* field config */ },
-    "receiverCountry": { /* field config */ },
-    "receiverCity": { /* field config */ },
-    "receiverStreet": {
-      "required": true,
-      /* ... */
-    },
-    "receiverPostalCode": { /* field config */ }
-  }
-}
-```
-
-### Error Response (Gulf to Iraq)
-
-```json
-{
-  "cardName": "receiver",
-  "enabled": true,
-  "validationErrors": {
-    "receiverCountry": "الشحن من دول الخليج إلى العراق غير متاح حالياً"
-  }
-}
-```
+**Endpoint:** POST /api/rules/receiver
 
 ---
 

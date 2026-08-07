@@ -175,13 +175,11 @@ Each service shows:
 
 ### Selection Flow
 
-```
 1. User views available services
 2. User clicks/selects desired service
 3. System marks service as selected
 4. System calculates rates with selected service
 5. Rate card updates with pricing breakdown
-```
 
 ---
 
@@ -206,138 +204,9 @@ Each service shows:
 
 ### Get Available Services
 
-```
-POST /api/rules/service
-```
-
-### Request
-
-```json
-{
-  "shipmentType": "IntraGulf",
-  "package": {
-    "weight": 15
-  }
-}
-```
-
-### Response
-
-```json
-{
-  "cardName": "service",
-  "title": "اختر خدمة الشحن",
-  "enabled": true,
-  "services": [
-    {
-      "id": "gulf_standard",
-      "name": "Gulf Standard",
-      "nameAr": "الخليج العادي",
-      "description": "Standard delivery between Gulf countries",
-      "descriptionAr": "توصيل عادي بين دول الخليج",
-      "basePrice": 25,
-      "pricePerKg": 1.5,
-      "deliveryDays": 5,
-      "maxWeight": 30
-    },
-    {
-      "id": "gulf_express",
-      "name": "Gulf Express",
-      "nameAr": "الخليج السريع",
-      "description": "Express delivery between Gulf countries",
-      "descriptionAr": "توصيل سريع بين دول الخليج",
-      "basePrice": 45,
-      "pricePerKg": 2.5,
-      "deliveryDays": 2,
-      "maxWeight": 20
-    }
-  ]
-}
-```
-
-### Response (Weight Exceeds All Services)
-
-```json
-{
-  "cardName": "service",
-  "enabled": true,
-  "services": [],
-  "message": "لا توجد خدمات متاحة لهذا الوزن"
-}
-```
+**Endpoint:** POST /api/rules/service
 
 ---
-
-## All Services Reference
-
-### Domestic Services
-
-```json
-[
-  {
-    "id": "domestic_standard",
-    "name": "Domestic Standard",
-    "basePrice": 15,
-    "pricePerKg": 0.5,
-    "deliveryDays": 3,
-    "maxWeight": 50
-  },
-  {
-    "id": "domestic_express",
-    "name": "Domestic Express",
-    "basePrice": 30,
-    "pricePerKg": 1.0,
-    "deliveryDays": 1,
-    "maxWeight": 30
-  }
-]
-```
-
-### IntraGulf Services
-
-```json
-[
-  {
-    "id": "gulf_standard",
-    "name": "Gulf Standard",
-    "basePrice": 25,
-    "pricePerKg": 1.5,
-    "deliveryDays": 5,
-    "maxWeight": 30
-  },
-  {
-    "id": "gulf_express",
-    "name": "Gulf Express",
-    "basePrice": 45,
-    "pricePerKg": 2.5,
-    "deliveryDays": 2,
-    "maxWeight": 20
-  }
-]
-```
-
-### International Services
-
-```json
-[
-  {
-    "id": "international_economy",
-    "name": "International Economy",
-    "basePrice": 35,
-    "pricePerKg": 2.0,
-    "deliveryDays": 10,
-    "maxWeight": 25
-  },
-  {
-    "id": "international_standard",
-    "name": "International Standard",
-    "basePrice": 50,
-    "pricePerKg": 3.0,
-    "deliveryDays": 7,
-    "maxWeight": 25
-  }
-]
-```
 
 ---
 

@@ -51,12 +51,10 @@ This document contains all user stories related to viewing, managing, and tracki
 
 ### Stats Cards Display
 
-```
 ┌─────────────┬─────────────┬─────────────┐
 │   Total     │   Drafts    │  Finalized  │
 │     15      │      3      │     12      │
 └─────────────┴─────────────┴─────────────┘
-```
 
 ---
 
@@ -169,18 +167,6 @@ This document contains all user stories related to viewing, managing, and tracki
 | page | 1 | Current page number |
 | limit | 10 | Items per page |
 
-### Response Format
-
-```json
-{
-  "shipments": [...],
-  "total": 25,
-  "page": 1,
-  "limit": 10,
-  "totalPages": 3
-}
-```
-
 ---
 
 ## US-076: View Shipment Details
@@ -263,37 +249,7 @@ This document contains all user stories related to viewing, managing, and tracki
 
 ### API Endpoint
 
-```
-POST /api/shipments/draft
-```
-
-### Request
-
-```json
-{
-  "from": { /* sender data */ },
-  "to": { /* receiver data */ },
-  "package": { /* package data */ },
-  "service": { /* service data */ },
-  "additional": { /* options */ },
-  "rates": { /* calculated rates */ }
-}
-```
-
-### Response
-
-```json
-{
-  "success": true,
-  "message": "تم حفظ المسودة بنجاح",
-  "shipment": {
-    "id": 123,
-    "status": "draft",
-    "trackingNumber": null,
-    /* ... other fields */
-  }
-}
-```
+**Endpoint:** POST /api/shipments/draft
 
 ---
 
@@ -316,33 +272,7 @@ POST /api/shipments/draft
 
 ### API Endpoint
 
-```
-POST /api/shipments/finalize
-```
-
-### Response
-
-```json
-{
-  "success": true,
-  "message": "تم تأكيد الشحنة بنجاح",
-  "shipment": {
-    "id": 123,
-    "status": "finalized",
-    "trackingNumber": "TR123456789",
-    "estimatedDelivery": "2024-01-20",
-    /* ... other fields */
-  },
-  "rateBreakdown": {
-    "baseCost": 47.50,
-    "signatureCost": 5.00,
-    "insuranceCost": 0.00,
-    "packagingCost": 0.00,
-    "liquidCost": 0.00,
-    "total": 52.50
-  }
-}
-```
+**Endpoint:** POST /api/shipments/finalize
 
 ---
 
@@ -364,19 +294,15 @@ POST /api/shipments/finalize
 
 ### Edit Flow
 
-```
 1. User clicks Edit on draft shipment
 2. Navigate to form with ?edit=shipmentId
 3. Form loads existing shipment data
 4. User makes changes
 5. User saves as draft or finalizes
-```
 
 ### API Endpoint
 
-```
-PUT /api/shipments/[id]
-```
+**Endpoint:** PUT /api/shipments/[id]
 
 ---
 
@@ -398,7 +324,6 @@ PUT /api/shipments/[id]
 
 ### Delete Confirmation Modal
 
-```
 ┌────────────────────────────────────────┐
 │         Delete Shipment?               │
 │                                        │
@@ -408,13 +333,10 @@ PUT /api/shipments/[id]
 │                                        │
 │        [Cancel]    [Delete]            │
 └────────────────────────────────────────┘
-```
 
 ### API Endpoint
 
-```
-DELETE /api/shipments/[id]
-```
+**Endpoint:** DELETE /api/shipments/[id]
 
 ---
 
@@ -436,14 +358,12 @@ DELETE /api/shipments/[id]
 
 ### Repeat Flow
 
-```
 1. User views finalized shipment details
 2. User clicks "Repeat" button
 3. Navigate to form with ?repeat=shipmentId
 4. Form loads with previous shipment's data
 5. User reviews and modifies if needed
 6. User saves as draft or finalizes as new shipment
-```
 
 ---
 
@@ -482,23 +402,9 @@ DELETE /api/shipments/[id]
 
 ### Tracking Number Format
 
-```
 TR123456789
 │ └──────── 9 random digits
 └────────── Prefix "TR"
-```
-
-### Generation Logic
-
-```javascript
-function generateTrackingNumber() {
-  const digits = Math.random()
-    .toString()
-    .slice(2, 11)
-    .padStart(9, '0');
-  return `TR${digits}`;
-}
-```
 
 ---
 
@@ -506,9 +412,7 @@ function generateTrackingNumber() {
 
 ### List Shipments
 
-```
-GET /api/shipments
-```
+**Endpoint:** GET /api/shipments
 
 Query Parameters:
 - `status`: all | draft | finalized
@@ -520,39 +424,27 @@ Query Parameters:
 
 ### Get Single Shipment
 
-```
-GET /api/shipments/[id]
-```
+**Endpoint:** GET /api/shipments/[id]
 
 ### Create Shipment
 
-```
-POST /api/shipments
-```
+**Endpoint:** POST /api/shipments
 
 ### Save Draft
 
-```
-POST /api/shipments/draft
-```
+**Endpoint:** POST /api/shipments/draft
 
 ### Finalize Shipment
 
-```
-POST /api/shipments/finalize
-```
+**Endpoint:** POST /api/shipments/finalize
 
 ### Update Shipment
 
-```
-PUT /api/shipments/[id]
-```
+**Endpoint:** PUT /api/shipments/[id]
 
 ### Delete Shipment
 
-```
-DELETE /api/shipments/[id]
-```
+**Endpoint:** DELETE /api/shipments/[id]
 
 ---
 

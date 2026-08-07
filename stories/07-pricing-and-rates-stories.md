@@ -62,9 +62,7 @@ This document contains all user stories related to shipping pricing calculations
 
 ### Calculation Formula
 
-```
 serviceBaseCost = service.basePrice + (package.weight × service.pricePerKg)
-```
 
 ### Examples
 
@@ -109,15 +107,6 @@ serviceBaseCost = service.basePrice + (package.weight × service.pricePerKg)
 | Iraq | $18.00 | $6.00 |
 | Other (Default) | $20.00 | $8.00 |
 
-### Calculation Logic
-
-```javascript
-function getPickupFee(country, method) {
-  const countryFees = PRICING.pickupFees[country] || PRICING.defaultPickupFees;
-  return method === 'home' ? countryFees.home : countryFees.postal_office;
-}
-```
-
 ---
 
 ## US-063: Calculate Signature Fee
@@ -136,11 +125,9 @@ function getPickupFee(country, method) {
 
 ### Business Rule
 
-```
 IF signatureRequired = true
 THEN signatureFee = $5.00
 ELSE signatureFee = $0.00
-```
 
 ---
 
@@ -159,11 +146,9 @@ ELSE signatureFee = $0.00
 
 ### Business Rule
 
-```
 IF containsLiquid = true
 THEN liquidFee = $10.00
 ELSE liquidFee = $0.00
-```
 
 ---
 
@@ -182,11 +167,9 @@ ELSE liquidFee = $0.00
 
 ### Business Rule
 
-```
 IF insurance = true
 THEN insuranceFee = $15.00
 ELSE insuranceFee = $0.00
-```
 
 ---
 
@@ -205,11 +188,9 @@ ELSE insuranceFee = $0.00
 
 ### Business Rule
 
-```
 IF packaging = true
 THEN packagingFee = $8.00
 ELSE packagingFee = $0.00
-```
 
 ---
 
@@ -229,25 +210,21 @@ ELSE packagingFee = $0.00
 
 ### Total Price Formula
 
-```
 totalPrice = serviceBaseCost
-           + pickupFee
-           + signatureFee
-           + liquidFee
-           + insuranceFee
-           + packagingFee
-```
++ pickupFee
++ signatureFee
++ liquidFee
++ insuranceFee
++ packagingFee
 
 ### Complete Calculation Example
 
-```
 Sender: Kuwait
 Receiver: Saudi Arabia
 Weight: 5 kg
 Service: Gulf Standard
 Pickup: Home
 Options: Signature, Insurance
-
 Calculation:
 - Service Base: $25.00
 - Weight: 5 kg × $1.50 = $7.50
@@ -256,9 +233,7 @@ Calculation:
 - Insurance: $15.00
 - Liquid: $0.00
 - Packaging: $0.00
-
 Total: $25.00 + $7.50 + $7.00 + $5.00 + $15.00 = $59.50
-```
 
 ---
 
@@ -279,45 +254,7 @@ Total: $25.00 + $7.50 + $7.00 + $5.00 + $15.00 = $59.50
 
 ### API Endpoint
 
-```
-POST /api/rates
-```
-
-### Request
-
-```json
-{
-  "serviceId": "gulf_standard",
-  "weight": 5,
-  "senderCountry": "Kuwait",
-  "receiverCountry": "Saudi Arabia",
-  "pickupMethod": "home",
-  "signatureRequired": true,
-  "containsLiquid": false,
-  "insurance": true,
-  "packaging": false
-}
-```
-
-### Response
-
-```json
-{
-  "totalPrice": 59.50,
-  "breakdown": {
-    "baseCost": 39.50,
-    "signatureCost": 5.00,
-    "insuranceCost": 15.00,
-    "packagingCost": 0.00,
-    "liquidCost": 0.00
-  },
-  "context": {
-    "service": "Gulf Standard",
-    "pickupMethod": "home",
-    "pickupFee": 7.00
-  }
-}
-```
+**Endpoint:** POST /api/rates
 
 ---
 
@@ -339,14 +276,12 @@ POST /api/rates
 
 ### Business Rule
 
-```
 On finalization:
 1. Receive form data from frontend
 2. IGNORE any prices/rates in the request
 3. Recalculate using server-side logic
 4. Use recalculated rates for storage
 5. Return rate breakdown in response
-```
 
 ### Security Considerations
 
@@ -387,9 +322,7 @@ On finalization:
 
 ### Calculate Rates (Frontend Preview)
 
-```
-POST /api/rates
-```
+**Endpoint:** POST /api/rates
 
 - No authentication required
 - Returns calculated price breakdown
@@ -397,9 +330,7 @@ POST /api/rates
 
 ### Finalize Shipment (Server Calculation)
 
-```
-POST /api/shipments/finalize
-```
+**Endpoint:** POST /api/shipments/finalize
 
 - Authentication required
 - Server recalculates rates
@@ -423,17 +354,13 @@ POST /api/shipments/finalize
 ### Calculation Verification
 
 **Test Case: IntraGulf with options**
-```
 Service: Gulf Standard
 Weight: 15 kg
 Sender: Kuwait
 Pickup: Home
-
 Base: $25.00
 Weight: 15 × $1.50 = $22.50
 Home Pickup (Kuwait): $7.00
 Signature: $5.00
 Insurance: $15.00
-
 Total: $25.00 + $22.50 + $7.00 + $5.00 + $15.00 = $74.50 ✓
-```

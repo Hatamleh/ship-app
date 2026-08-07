@@ -42,11 +42,9 @@ This document contains all user stories related to the core business rules, vali
 
 ### Business Rule
 
-```
 IF country IN [Saudi Arabia, UAE, Kuwait, Bahrain, Qatar, Oman]
 THEN street.required = true
 ELSE street.required = false
-```
 
 ### Acceptance Criteria
 
@@ -79,11 +77,9 @@ ELSE street.required = false
 
 ### Business Rule
 
-```
 IF sender.country IN Gulf Countries
-   AND receiver.country = "Iraq"
+AND receiver.country = "Iraq"
 THEN BLOCK with error
-```
 
 ### Acceptance Criteria
 
@@ -121,13 +117,11 @@ THEN BLOCK with error
 
 ### Business Rule
 
-```
 IF sender.country NOT IN Gulf Countries
-   AND receiver.country IN Gulf Countries
+AND receiver.country IN Gulf Countries
 THEN itemDescription.required = true
-     itemDescription.visible = true
-     itemDescription.minLength = 5
-```
+itemDescription.visible = true
+itemDescription.minLength = 5
 
 ### Acceptance Criteria
 
@@ -160,26 +154,6 @@ THEN itemDescription.required = true
 **So that** correct services and limits are applied
 
 ### Business Rules
-
-```javascript
-function getShipmentType(sender, receiver) {
-  // Same country = Domestic
-  if (sender === receiver) {
-    return 'Domestic';
-  }
-
-  const senderIsGulf = isGulfCountry(sender);
-  const receiverIsGulf = isGulfCountry(receiver);
-
-  // Both Gulf = IntraGulf
-  if (senderIsGulf && receiverIsGulf) {
-    return 'IntraGulf';
-  }
-
-  // All other cases = International
-  return 'International';
-}
-```
 
 ### Shipment Type Matrix
 
@@ -253,13 +227,6 @@ function getShipmentType(sender, receiver) {
 
 ### Filtering Logic
 
-```javascript
-function getAvailableServices(shipmentType, weight) {
-  const services = SERVICES[shipmentType];
-  return services.filter(s => weight <= s.maxWeight);
-}
-```
-
 ### Examples
 
 | Type | Weight | Available Services |
@@ -305,12 +272,10 @@ function getAvailableServices(shipmentType, weight) {
 
 ### Business Rule
 
-```
 IF package.weight > 17 kg
-   AND sender.country != "Iraq"
+AND sender.country != "Iraq"
 THEN pickupMethod.home.disabled = true
-     pickupMethod.defaultValue = "postal_office"
-```
+pickupMethod.defaultValue = "postal_office"
 
 ### Acceptance Criteria
 
@@ -343,12 +308,10 @@ THEN pickupMethod.home.disabled = true
 
 ### Business Rule
 
-```
 IF receiver.country IN ["Jordan", "Egypt"]
 THEN signature.required = true
-     signature.disabled = true
-     signature.value = true
-```
+signature.disabled = true
+signature.value = true
 
 ### Acceptance Criteria
 

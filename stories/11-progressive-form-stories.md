@@ -23,49 +23,47 @@ This document contains all user stories related to the progressive form unlockin
 
 ### Form Unlock Sequence
 
-```
 ┌─────────────────────────────────────────────────┐
 │ Step 1: Sender Information                      │
 │ ✓ Always enabled on load                        │
 │ → Pre-filled with user profile (disabled)       │
 └─────────────────────────────────────────────────┘
-                    │
-                    ▼ (Complete)
+│
+▼ (Complete)
 ┌─────────────────────────────────────────────────┐
 │ Step 2: Receiver Information                    │
 │ → Unlocks after sender complete                 │
 │ → User enters recipient details                 │
 └─────────────────────────────────────────────────┘
-                    │
-                    ▼ (Complete)
+│
+▼ (Complete)
 ┌─────────────────────────────────────────────────┐
 │ Step 3: Package Information                     │
 │ → Unlocks after receiver complete               │
 │ → User enters weight and dimensions             │
 └─────────────────────────────────────────────────┘
-                    │
-                    ▼ (Complete)
+│
+▼ (Complete)
 ┌─────────────────────────────────────────────────┐
 │ Step 4: Service Selection                       │
 │ → Unlocks after package complete                │
 │ → Shows services based on type and weight       │
 └─────────────────────────────────────────────────┘
-                    │
-                    ▼ (Complete)
+│
+▼ (Complete)
 ┌─────────────────────────────────────────────────┐
 │ Step 5: Additional Options                      │
 │ → Unlocks after package complete                │
 │ → Signature, insurance, pickup method           │
 └─────────────────────────────────────────────────┘
-                    │
-                    ▼ (Service Selected)
+│
+▼ (Service Selected)
 ┌─────────────────────────────────────────────────┐
 │ Step 6: Rate Card                               │
 │ → Shows after service selected                  │
 │ → Displays pricing breakdown                    │
 │ → Save/Finalize buttons                         │
 └─────────────────────────────────────────────────┘
-```
 
 ---
 
@@ -84,23 +82,6 @@ This document contains all user stories related to the progressive form unlockin
 | 3 | Read-only | Fields are disabled (cannot edit) |
 | 4 | Auto-complete | Card marked complete if profile valid |
 
-### Initial State
-
-```javascript
-const formState = {
-  senderCard: {
-    enabled: true,
-    completed: user.profile.isValid,
-    data: user.profile
-  },
-  receiverCard: { enabled: false },
-  packageCard: { enabled: false },
-  serviceCard: { enabled: false },
-  optionsCard: { enabled: false },
-  rateCard: { visible: false }
-};
-```
-
 ---
 
 ## US-132: Receiver Card Unlock
@@ -117,17 +98,6 @@ const formState = {
 | 2 | Visual change | Card becomes interactive |
 | 3 | Focus shift | First receiver field gains focus |
 | 4 | Rules loaded | Receiver rules fetched based on sender country |
-
-### Unlock Trigger
-
-```javascript
-useEffect(() => {
-  if (senderCardComplete) {
-    setReceiverCardEnabled(true);
-    fetchReceiverRules(senderCountry);
-  }
-}, [senderCardComplete]);
-```
 
 ---
 
@@ -147,19 +117,6 @@ useEffect(() => {
 | 4 | Weight limits set | Max weight based on shipment type |
 | 5 | Description visibility | Shows if non-Gulf to Gulf |
 
-### Unlock Trigger
-
-```javascript
-useEffect(() => {
-  if (receiverCardComplete && !hasBlockedRoute) {
-    setPackageCardEnabled(true);
-    const type = determineShipmentType(senderCountry, receiverCountry);
-    setShipmentType(type);
-    fetchPackageRules(senderCountry, receiverCountry);
-  }
-}, [receiverCardComplete]);
-```
-
 ---
 
 ## US-134: Service Card Unlock
@@ -177,17 +134,6 @@ useEffect(() => {
 | 3 | Dimensions valid | All within 200 cm |
 | 4 | Description valid | If required, min 5 chars |
 | 5 | Services filtered | Only compatible services shown |
-
-### Unlock Trigger
-
-```javascript
-useEffect(() => {
-  if (packageCardComplete) {
-    setServiceCardEnabled(true);
-    fetchAvailableServices(shipmentType, weight);
-  }
-}, [packageCardComplete]);
-```
 
 ---
 
@@ -232,24 +178,6 @@ useEffect(() => {
 | 4 | Total shown | Final price prominent |
 | 5 | Buttons available | Save Draft and Finalize |
 
-### Rate Card Visibility
-
-```javascript
-useEffect(() => {
-  if (selectedService) {
-    setRateCardVisible(true);
-    calculateRates({
-      serviceId: selectedService,
-      weight,
-      senderCountry,
-      receiverCountry,
-      pickupMethod,
-      options
-    });
-  }
-}, [selectedService, options]);
-```
-
 ---
 
 ## US-137: Form Validation on Blur
@@ -269,13 +197,11 @@ useEffect(() => {
 
 ### Validation Flow
 
-```
 1. User enters value in field
 2. User clicks/tabs to next field
 3. Blur event triggers validation
 4. If invalid → Show error message
 5. If valid → Clear error, update completion status
-```
 
 ---
 
@@ -320,11 +246,9 @@ useEffect(() => {
 
 ### Error Priority
 
-```
 1. Client-side (immediate feedback)
 2. API validation (authoritative)
 3. API errors override client errors
-```
 
 ---
 
@@ -346,23 +270,17 @@ useEffect(() => {
 
 ### API Endpoints Called
 
-```
 Form Load:
-  → POST /api/rules/sender
-
+→ POST /api/rules/sender
 After Sender:
-  → POST /api/rules/receiver
-
+→ POST /api/rules/receiver
 After Receiver:
-  → POST /api/rules/package
-
+→ POST /api/rules/package
 After Package:
-  → POST /api/rules/service
-  → POST /api/rules/additional-options
-
+→ POST /api/rules/service
+→ POST /api/rules/additional-options
 After Service Selection:
-  → POST /api/rates
-```
+→ POST /api/rates
 
 ---
 
@@ -374,7 +292,6 @@ After Service Selection:
 
 ### Layout Structure
 
-```
 ┌─────────────────────────────────────────────────────────┐
 │                    Header / Navigation                   │
 ├─────────────────────────────┬───────────────────────────┤
@@ -396,7 +313,6 @@ After Service Selection:
 │  └──────────────────────┘   │  └──────────────────────┘  │
 │                             │                            │
 └─────────────────────────────┴───────────────────────────┘
-```
 
 ### Responsive Behavior
 
@@ -422,15 +338,6 @@ After Service Selection:
 | Card error | Top of card |
 | Form error | Top of form |
 | API error | Modal or toast |
-
-### Error Message Format
-
-```html
-<div class="error">
-  <span class="error-icon">⚠️</span>
-  <span class="error-text">الاسم يجب أن يكون حرفين على الأقل</span>
-</div>
-```
 
 ---
 

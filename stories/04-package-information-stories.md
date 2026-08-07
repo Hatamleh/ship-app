@@ -57,26 +57,6 @@ This document contains all user stories related to the package information card 
 
 ### Business Rule
 
-```javascript
-function validateWeight(weight, shipmentType) {
-  if (weight <= 0) {
-    return "Weight must be greater than 0";
-  }
-
-  const limits = {
-    Domestic: 50,
-    IntraGulf: 30,
-    International: 25
-  };
-
-  if (weight > limits[shipmentType]) {
-    return `Weight cannot exceed ${limits[shipmentType]} kg for ${shipmentType} shipments`;
-  }
-
-  return null; // valid
-}
-```
-
 ### Test Cases
 
 | Weight | Shipment Type | Valid | Error |
@@ -112,14 +92,6 @@ function validateWeight(weight, shipmentType) {
 
 ### Validation Rules
 
-```javascript
-const dimensionValidation = {
-  min: 0.1,  // must be greater than 0
-  max: 200,  // maximum 200 cm
-  errorMessage: "Dimension must be between 0 and 200 cm"
-};
-```
-
 ### Test Cases
 
 | Dimension | Value | Valid | Error |
@@ -153,12 +125,10 @@ const dimensionValidation = {
 
 ### Business Rule
 
-```
 IF sender.country NOT IN Gulf Countries
-   AND receiver.country IN Gulf Countries
+AND receiver.country IN Gulf Countries
 THEN itemDescription.required = true AND itemDescription.visible = true
 ELSE itemDescription.visible = false
-```
 
 ### Visibility Matrix
 
@@ -197,18 +167,6 @@ ELSE itemDescription.visible = false
 | 3 | Dimensions within limits | All ≤ 200 cm |
 | 4 | Description if required | Filled with min 5 chars |
 | 5 | Service card enabled | Next section becomes available |
-
-### Completion Logic
-
-```javascript
-const packageComplete =
-  weight > 0 &&
-  weight <= maxWeightForShipmentType &&
-  length > 0 && length <= 200 &&
-  width > 0 && width <= 200 &&
-  height > 0 && height <= 200 &&
-  (!descriptionRequired || itemDescription.length >= 5);
-```
 
 ---
 
@@ -255,104 +213,7 @@ const packageComplete =
 
 ### Get Package Rules
 
-```
-POST /api/rules/package
-```
-
-### Request
-
-```json
-{
-  "from": {
-    "country": "Egypt"
-  },
-  "to": {
-    "country": "Saudi Arabia"
-  }
-}
-```
-
-### Response (Non-Gulf to Gulf - Description Required)
-
-```json
-{
-  "cardName": "package",
-  "title": "معلومات الطرد",
-  "enabled": true,
-  "shipmentType": "IntraGulf",
-  "maxWeight": 30,
-  "fields": {
-    "weight": {
-      "type": "number",
-      "label": "الوزن (كجم)",
-      "required": true,
-      "validation": {
-        "min": 0.1,
-        "max": 30,
-        "errorMessage": "الوزن يجب أن يكون بين 0 و 30 كجم"
-      }
-    },
-    "length": {
-      "type": "number",
-      "label": "الطول (سم)",
-      "required": true,
-      "validation": {
-        "min": 0.1,
-        "max": 200
-      }
-    },
-    "width": {
-      "type": "number",
-      "label": "العرض (سم)",
-      "required": true,
-      "validation": {
-        "min": 0.1,
-        "max": 200
-      }
-    },
-    "height": {
-      "type": "number",
-      "label": "الارتفاع (سم)",
-      "required": true,
-      "validation": {
-        "min": 0.1,
-        "max": 200
-      }
-    },
-    "itemDescription": {
-      "type": "text",
-      "label": "وصف المحتويات",
-      "required": true,
-      "visible": true,
-      "validation": {
-        "minLength": 5,
-        "errorMessage": "وصف المحتويات مطلوب (5 أحرف على الأقل)"
-      }
-    }
-  }
-}
-```
-
-### Response (Gulf to Gulf - No Description)
-
-```json
-{
-  "cardName": "package",
-  "shipmentType": "IntraGulf",
-  "maxWeight": 30,
-  "fields": {
-    "weight": { /* ... */ },
-    "length": { /* ... */ },
-    "width": { /* ... */ },
-    "height": { /* ... */ },
-    "itemDescription": {
-      "type": "text",
-      "required": false,
-      "visible": false
-    }
-  }
-}
-```
+**Endpoint:** POST /api/rules/package
 
 ---
 

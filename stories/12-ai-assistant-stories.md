@@ -283,31 +283,7 @@ prose.
 
 ### API Endpoint
 
-```
-POST /api/agent/chat
-```
-
-### Request Body
-
-```json
-{
-  "message": "How much for 12kg to Egypt?",
-  "history": [],
-  "formContext": null
-}
-```
-
-### Response
-
-```json
-{
-  "reply": "...",
-  "toolCalls": [{ "name": "quote_price", "args": {}, "result": "..." }],
-  "proposal": null,
-  "model": "openai/gpt-5.6-terra",
-  "latencyMs": 2100
-}
-```
+**Endpoint:** POST /api/agent/chat
 
 ---
 
@@ -328,9 +304,7 @@ POST /api/agent/chat
 
 ### API Endpoint
 
-```
-POST /api/assistant/ask
-```
+**Endpoint:** POST /api/assistant/ask
 
 ---
 
@@ -351,9 +325,7 @@ POST /api/assistant/ask
 
 ### API Endpoint
 
-```
-POST /api/assistant/search
-```
+**Endpoint:** POST /api/assistant/search
 
 ### Test Scenarios
 
@@ -383,9 +355,7 @@ POST /api/assistant/search
 
 ### API Endpoint
 
-```
-GET /api/agent/health
-```
+**Endpoint:** GET /api/agent/health
 
 ### Test Scenarios
 
