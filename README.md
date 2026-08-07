@@ -8,8 +8,8 @@ price them with the real pricing engine, answer questions about the shipping
 rules from the project documentation, and offer to fill the shipment form for
 you.
 
-> This README covers **setup and running only**. The business rules themselves
-> live in [`logic.md`](./logic.md) and [`stories/`](./stories).
+> This README covers **setup and running only**. The business rules and the AI
+> behaviour are documented as user stories in [`stories/`](./stories).
 
 ---
 

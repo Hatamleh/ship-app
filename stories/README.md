@@ -25,6 +25,7 @@ The shipping application is a full-featured platform for creating, managing, and
 | 09 | [Business Rules Stories](./09-business-rules-stories.md) | All validation rules and constraints | US-090 to US-103 |
 | 10 | [Security Stories](./10-security-stories.md) | Authentication, authorization, data protection | US-110 to US-120 |
 | 11 | [Progressive Form Stories](./11-progressive-form-stories.md) | Form flow, unlocking sequence, UI/UX | US-130 to US-143 |
+| 12 | [AI Assistant Stories](./12-ai-assistant-stories.md) | Shipment agent, RAG assistant, form read/fill, AI security | US-150 to US-162 |
 
 ---
 
@@ -155,11 +156,11 @@ Each story follows this structure:
 
 ## Related Documentation
 
-- `/logic.md` - Complete business logic rules document
 - `/lib/rules/*.json` - Configuration files for rules
-- `/lib/validators/` - Validation implementation
-- `/lib/services/` - Business logic services
-- `/app/api/` - API route implementations
+- `/src/lib/rules/*.json` - Rules as configuration
+- `/src/lib/server/validators/` - Server-side rule enforcement
+- `/src/lib/server/services/` - Rate calculation
+- `/src/routes/api/` - API route implementations
 
 ---
 

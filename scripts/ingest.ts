@@ -5,8 +5,8 @@
  * Run with: npm run ingest
  *
  * Sources:
- *   - logic.md                the complete business-rules document
- *   - stories/*.md            the user stories (README excluded, it is just an index)
+ *   - stories/*.md            the user stories, which are the source of truth
+ *                             for business rules (README excluded, it is an index)
  *   - src/lib/rules/*.json    the machine-readable rules, rendered to text
  *
  * README.md is deliberately NOT indexed: it still documents endpoints and prices
@@ -16,11 +16,13 @@ import { PrismaClient } from '@prisma/client'
 import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters'
 import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { getEmbeddings, hasApiKey } from '../src/lib/server/ai/llm'
 
 const prisma = new PrismaClient()
 
-const ROOT = path.resolve(__dirname, '..')
+// package.json sets "type": "module", so __dirname does not exist here.
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const CHUNK_SIZE = 900
 const CHUNK_OVERLAP = 120
 const EMBED_BATCH = 64
@@ -101,10 +103,7 @@ async function main() {
   console.log('Collecting documents...')
   const chunks: RawChunk[] = []
 
-  // logic.md — the authoritative business-rules document
-  chunks.push(...(await chunkMarkdown(path.join(ROOT, 'logic.md'), 'logic.md')))
-
-  // stories/*.md — the user stories
+  // stories/*.md — the authoritative business-rules documentation
   const storiesDir = path.join(ROOT, 'stories')
   const storyFiles = fs
     .readdirSync(storiesDir)
@@ -121,7 +120,7 @@ async function main() {
     chunks.push(...chunkRulesJson(path.join(rulesDir, file), `src/lib/rules/${file}`))
   }
 
-  console.log(`Collected ${chunks.length} chunks from ${storyFiles.length + 1} documents.`)
+  console.log(`Collected ${chunks.length} chunks from ${storyFiles.length} documents.`)
 
   console.log('Embedding (this calls OpenRouter and costs a fraction of a cent)...')
   const embeddings = getEmbeddings()
