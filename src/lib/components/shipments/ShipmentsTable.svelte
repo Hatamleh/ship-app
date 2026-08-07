@@ -19,10 +19,36 @@
   } = $props()
 
   /**
-   * Which row's action menu is open. The menu is rendered inline and positioned
-   * with CSS, rather than measured and portalled as the React version did.
+   * Which row's action menu is open, and where to draw it.
+   *
+   * The menu cannot be a positioned child of the row: the table wrapper needs
+   * overflow-x for wide tables, and once overflow-x is auto the spec computes
+   * overflow-y to auto as well — so the container clips the dropdown. The menu
+   * is therefore position: fixed, measured from the trigger button.
    */
   let openMenuId = $state<number | null>(null)
+  let menuPos = $state({ top: 0, left: 0 })
+
+  const MENU_WIDTH = 192 // w-48
+  const MENU_MAX_HEIGHT = 220
+
+  function toggleMenu(id: number, event: MouseEvent) {
+    if (openMenuId === id) {
+      openMenuId = null
+      return
+    }
+
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+
+    // Flip above the button when there is not enough room below, and keep the
+    // menu inside the viewport horizontally.
+    const opensUpward = rect.bottom + MENU_MAX_HEIGHT > window.innerHeight
+    menuPos = {
+      top: opensUpward ? rect.top - MENU_MAX_HEIGHT - 4 : rect.bottom + 4,
+      left: Math.min(rect.left, window.innerWidth - MENU_WIDTH - 8),
+    }
+    openMenuId = id
+  }
 
   function label(shipment: Shipment) {
     return shipment.status === 'draft' ? `draft shipment ${shipment.id}` : shipment.trackingNumber
@@ -37,7 +63,11 @@
   onkeydown={(e) => {
     if (e.key === 'Escape') openMenuId = null
   }}
+  onresize={() => (openMenuId = null)}
 />
+
+<!-- A fixed menu would otherwise stay put while the page moves under it. -->
+<svelte:document onscrollcapture={() => (openMenuId = null)} />
 
 {#if shipments.length === 0}
   <div class="text-center py-12">
@@ -102,10 +132,10 @@
       <tbody class="bg-muted divide-y divide-border">
         {#each shipments as shipment (shipment.id)}
           <tr class="hover:bg-ever-surface">
-            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium relative" data-menu-root>
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-menu-root>
               <button
                 type="button"
-                onclick={() => (openMenuId = openMenuId === shipment.id ? null : shipment.id)}
+                onclick={(e) => toggleMenu(shipment.id, e)}
                 aria-label="Actions for {label(shipment)}"
                 aria-haspopup="menu"
                 aria-expanded={openMenuId === shipment.id}
@@ -118,7 +148,8 @@
                 <div
                   role="menu"
                   aria-label="Actions for {label(shipment)}"
-                  class="absolute left-0 top-full mt-1 z-20 w-48 bg-muted border border-border rounded-md shadow-lg py-1"
+                  class="fixed z-50 w-48 surface shadow-glow py-1 overflow-hidden"
+                  style="top: {menuPos.top}px; left: {menuPos.left}px;"
                 >
                   <a
                     role="menuitem"

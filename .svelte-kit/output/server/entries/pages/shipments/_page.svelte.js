@@ -1,4 +1,4 @@
-import { E as attr, O as escape_html, d as slot, f as spread_props, i as derived, o as ensure_array_like, p as stringify, s as head, t as attr_class, u as sanitize_props } from "../../../chunks/server.js";
+import { D as attr, a as derived, c as head, d as sanitize_props, f as slot, k as escape_html, m as stringify, n as attr_style, p as spread_props, s as ensure_array_like, t as attr_class } from "../../../chunks/server.js";
 import { n as invalidateAll, t as goto } from "../../../chunks/client.js";
 import { t as page } from "../../../chunks/state.js";
 import "../../../chunks/navigation.js";
@@ -580,10 +580,18 @@ function ShipmentsTable($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		let { shipments, onDelete, onFinalize } = $$props;
 		/**
-		* Which row's action menu is open. The menu is rendered inline and positioned
-		* with CSS, rather than measured and portalled as the React version did.
+		* Which row's action menu is open, and where to draw it.
+		*
+		* The menu cannot be a positioned child of the row: the table wrapper needs
+		* overflow-x for wide tables, and once overflow-x is auto the spec computes
+		* overflow-y to auto as well — so the container clips the dropdown. The menu
+		* is therefore position: fixed, measured from the trigger button.
 		*/
 		let openMenuId = null;
+		let menuPos = {
+			top: 0,
+			left: 0
+		};
 		function label(shipment) {
 			return shipment.status === "draft" ? `draft shipment ${shipment.id}` : shipment.trackingNumber;
 		}
@@ -596,7 +604,7 @@ function ShipmentsTable($$renderer, $$props) {
 			const each_array = ensure_array_like(shipments);
 			for (let $$index = 0, $$length = each_array.length; $$index < $$length; $$index++) {
 				let shipment = each_array[$$index];
-				$$renderer.push(`<tr class="hover:bg-ever-surface"><td class="px-4 py-4 whitespace-nowrap text-sm font-medium relative" data-menu-root=""><button type="button"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} aria-haspopup="menu"${attr("aria-expanded", openMenuId === shipment.id)} class="text-muted-foreground hover:text-primary p-1 rounded hover:bg-ever-surface">`);
+				$$renderer.push(`<tr class="hover:bg-ever-surface"><td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-menu-root=""><button type="button"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} aria-haspopup="menu"${attr("aria-expanded", openMenuId === shipment.id)} class="text-muted-foreground hover:text-primary p-1 rounded hover:bg-ever-surface">`);
 				Ellipsis_vertical($$renderer, {
 					class: "w-5 h-5",
 					"aria-hidden": "true"
@@ -604,7 +612,7 @@ function ShipmentsTable($$renderer, $$props) {
 				$$renderer.push(`<!----></button> `);
 				if (openMenuId === shipment.id) {
 					$$renderer.push("<!--[0-->");
-					$$renderer.push(`<div role="menu"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} class="absolute left-0 top-full mt-1 z-20 w-48 bg-muted border border-border rounded-md shadow-lg py-1"><a role="menuitem"${attr("href", `/shipments/${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors">`);
+					$$renderer.push(`<div role="menu"${attr("aria-label", `Actions for ${stringify(label(shipment))}`)} class="fixed z-50 w-48 surface shadow-glow py-1 overflow-hidden"${attr_style(`top: ${stringify(menuPos.top)}px; left: ${stringify(menuPos.left)}px;`)}><a role="menuitem"${attr("href", `/shipments/${stringify(shipment.id)}`)} class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors">`);
 					Eye($$renderer, {
 						class: "w-4 h-4",
 						"aria-hidden": "true"

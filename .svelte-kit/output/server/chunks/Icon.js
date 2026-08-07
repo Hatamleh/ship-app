@@ -1,4 +1,4 @@
-import { D as clsx, a as element, d as slot, dt as fallback, l as rest_props, n as attributes, o as ensure_array_like, r as bind_props, u as sanitize_props } from "./server.js";
+import { O as clsx, d as sanitize_props, f as slot, ft as fallback, i as bind_props, o as element, r as attributes, s as ensure_array_like, u as rest_props } from "./server.js";
 //#region node_modules/lucide-svelte/dist/defaultAttributes.js
 /**
 * @license lucide-svelte v1.0.1 - ISC

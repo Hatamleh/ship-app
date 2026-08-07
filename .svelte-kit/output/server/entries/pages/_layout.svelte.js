@@ -1,4 +1,4 @@
-import { E as attr, O as escape_html, d as slot, f as spread_props, i as derived, o as ensure_array_like, t as attr_class, u as sanitize_props } from "../../chunks/server.js";
+import { D as attr, a as derived, d as sanitize_props, f as slot, k as escape_html, p as spread_props, s as ensure_array_like, t as attr_class } from "../../chunks/server.js";
 import "../../chunks/form-bridge.svelte.js";
 import { t as page } from "../../chunks/state.js";
 import "../../chunks/navigation.js";
@@ -118,11 +118,11 @@ function _layout($$renderer, $$props) {
 		const isPublicRoute = derived(() => PUBLIC_ROUTES.includes(page.url.pathname));
 		let loggingOut = false;
 		/**
-		* The assistant is only useful where there is a shipment in front of you:
-		* the create/edit form (/) and a shipment's detail page. It is deliberately
-		* absent from the list and auth pages.
+		* The assistant only appears where there is an editable form: creating a
+		* shipment, and the ?edit= / ?repeat= variants of the same route. The detail
+		* page is read-only and the list has nothing to act on, so it stays off there.
 		*/
-		const showAssistant = derived(() => page.url.pathname === "/" || /^\/shipments\/[^/]+$/.test(page.url.pathname));
+		const showAssistant = derived(() => page.url.pathname === "/");
 		const navItems = [{
 			name: t("nav.createShipment"),
 			href: "/"

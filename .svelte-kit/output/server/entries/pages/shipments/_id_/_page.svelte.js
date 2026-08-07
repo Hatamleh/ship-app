@@ -1,4 +1,4 @@
-import { E as attr, O as escape_html, i as derived, o as ensure_array_like, p as stringify, s as head } from "../../../../chunks/server.js";
+import { D as attr, a as derived, c as head, k as escape_html, m as stringify, s as ensure_array_like } from "../../../../chunks/server.js";
 import "../../../../chunks/navigation.js";
 import { t } from "../../../../chunks/translations.js";
 //#region src/routes/shipments/[id]/+page.svelte

@@ -1,1 +1,0 @@
-import{et as e}from"./Ce_Ma__k.js";var t=e({read:null,apply:null});function n(e,n){t.read=e,t.apply=n}function r(){t.read=null,t.apply=null}export{n,r,t};

@@ -1,4 +1,4 @@
-import { E as attr, O as escape_html, d as slot, f as spread_props, o as ensure_array_like, s as head, u as sanitize_props } from "../../../chunks/server.js";
+import { D as attr, c as head, d as sanitize_props, f as slot, k as escape_html, p as spread_props, s as ensure_array_like } from "../../../chunks/server.js";
 import { t as Icon } from "../../../chunks/Icon.js";
 import "../../../chunks/Markdown.js";
 import { t } from "../../../chunks/translations.js";

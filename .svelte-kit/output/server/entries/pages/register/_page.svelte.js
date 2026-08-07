@@ -1,4 +1,4 @@
-import { E as attr, O as escape_html, o as ensure_array_like, s as head } from "../../../chunks/server.js";
+import { D as attr, c as head, k as escape_html, s as ensure_array_like } from "../../../chunks/server.js";
 import { t as countries_default } from "../../../chunks/countries.js";
 import "../../../chunks/navigation.js";
 import { t } from "../../../chunks/translations.js";

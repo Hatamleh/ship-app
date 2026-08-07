@@ -1,5 +1,5 @@
 import "./internal.js";
-import { v as getContext } from "./server.js";
+import { y as getContext } from "./server.js";
 import { r as stores } from "./client.js";
 stores.updated.check;
 //#endregion

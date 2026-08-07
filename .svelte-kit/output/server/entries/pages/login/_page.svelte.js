@@ -1,4 +1,4 @@
-import { E as attr, O as escape_html, s as head } from "../../../chunks/server.js";
+import { D as attr, c as head, k as escape_html } from "../../../chunks/server.js";
 import "../../../chunks/navigation.js";
 import { t } from "../../../chunks/translations.js";
 import { t as QacartMark } from "../../../chunks/QacartMark.js";
