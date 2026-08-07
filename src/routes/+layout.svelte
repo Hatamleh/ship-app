@@ -15,13 +15,11 @@
   let loggingOut = $state(false)
 
   /**
-   * The assistant is only useful where there is a shipment in front of you:
-   * the create/edit form (/) and a shipment's detail page. It is deliberately
-   * absent from the list and auth pages.
+   * The assistant only appears where there is an editable form: creating a
+   * shipment, and the ?edit= / ?repeat= variants of the same route. The detail
+   * page is read-only and the list has nothing to act on, so it stays off there.
    */
-  const showAssistant = $derived(
-    page.url.pathname === '/' || /^\/shipments\/[^/]+$/.test(page.url.pathname)
-  )
+  const showAssistant = $derived(page.url.pathname === '/')
 
   const navItems = [
     { name: t('nav.createShipment'), href: '/' },
