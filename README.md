@@ -173,12 +173,9 @@ Where to find the assistant once it is enabled:
 
 ## Troubleshooting
 
-**Reset everything**
-
-```bash
-npm run reset
-npm run ingest   # only if you use the AI features
-```
+The app reports setup problems itself — a missing API key or an unbuilt index
+come back as a clear message, and `GET /api/agent/health` lists what is missing.
+This section is only for things it cannot tell you.
 
 **Port 3000 already in use**
 
@@ -186,24 +183,25 @@ npm run ingest   # only if you use the AI features
 npm run dev -- --port 3001
 ```
 
-**`OPENROUTER_API_KEY is not set`**
+**Start over with a clean database**
 
-The key lives in `.env`, which is not committed. Copy `.env.example` to `.env`
-and add your own key from https://openrouter.ai/keys
+```bash
+npm run reset      # deletes prisma/dev.db, recreates and re-seeds it
+npm run ingest     # only if you use the AI features
+```
 
-**The assistant says the index is empty**
+**`@prisma/client did not initialize yet`**
 
-Run `npm run ingest`, then restart the dev server.
-
-**Prisma client is out of date**
+The generated client is out of date after a schema change:
 
 ```bash
 npx prisma generate
 ```
 
-**Database file location**
+**Changes to the docs are not reflected in the assistant**
 
-`prisma/dev.db` — delete it and run `npm run setup` to start clean.
+The index is built once and cached per server process. Re-run `npm run ingest`,
+then restart the dev server.
 
 ---
 
