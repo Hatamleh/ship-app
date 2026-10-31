@@ -27,7 +27,7 @@
 
 <div class="mb-8">
   <p class="eyebrow">{editId ? 'Editing' : repeatId ? 'Repeating' : 'New shipment'}</p>
-  <h1 class="text-3xl font-bold text-foreground mb-2">
+  <h1 data-testid="order-form-heading" class="text-3xl font-bold text-foreground mb-2">
     {heading.split(' ').slice(0, -1).join(' ')}
     <span class="grad">{heading.split(' ').slice(-1)}</span>
   </h1>

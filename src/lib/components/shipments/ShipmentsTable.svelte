@@ -131,10 +131,11 @@
       </thead>
       <tbody class="bg-muted divide-y divide-border">
         {#each shipments as shipment (shipment.id)}
-          <tr class="hover:bg-ever-surface">
+          <tr data-testid="shipments-row" class="hover:bg-ever-surface">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-menu-root>
               <button
                 type="button"
+                data-testid="shipments-row-menu-button"
                 onclick={(e) => toggleMenu(shipment.id, e)}
                 aria-label="Actions for {label(shipment)}"
                 aria-haspopup="menu"
@@ -153,6 +154,7 @@
                 >
                   <a
                     role="menuitem"
+                    data-testid="shipments-menu-view"
                     href="/shipments/{shipment.id}"
                     class="flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:bg-primary/20 hover:text-primary transition-colors"
                   >
@@ -172,6 +174,7 @@
                     <button
                       role="menuitem"
                       type="button"
+                      data-testid="shipments-menu-finalize"
                       onclick={() => {
                         openMenuId = null
                         onFinalize(shipment.id)
@@ -212,7 +215,7 @@
               {shipment.status === 'draft' ? '-' : shipment.trackingNumber}
             </th>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">{shipment.from.name}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-foreground">{shipment.to.name}</td>
+            <td data-testid="shipments-receiver-name" class="px-6 py-4 whitespace-nowrap text-sm text-foreground">{shipment.to.name}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
               {shipment.to.city}, {shipment.to.country}
             </td>
@@ -222,12 +225,14 @@
             <td class="px-6 py-4 whitespace-nowrap">
               {#if shipment.status === 'draft'}
                 <span
+                  data-testid="shipments-row-status"
                   class="tag"
                 >
                   {t('status.Draft')}
                 </span>
               {:else}
                 <span
+                  data-testid="shipments-row-status"
                   class="tag border-premium text-premium"
                 >
                   Finalized

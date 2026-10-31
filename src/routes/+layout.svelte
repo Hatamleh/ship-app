@@ -68,8 +68,8 @@
             </span>
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-foreground truncate">{data.user.fullName}</p>
-            <p class="text-xs text-muted-foreground truncate">{data.user.email}</p>
+            <p data-testid="sidebar-user-name" class="text-sm font-medium text-foreground truncate">{data.user.fullName}</p>
+            <p data-testid="sidebar-user-email" class="text-xs text-muted-foreground truncate">{data.user.email}</p>
           </div>
         </div>
       </div>

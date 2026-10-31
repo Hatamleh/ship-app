@@ -73,6 +73,7 @@
           </label>
           <input
             id="email"
+            data-testid="login-email"
             name="email"
             type="email"
             autocomplete="email"
@@ -89,6 +90,7 @@
           </label>
           <input
             id="password"
+            data-testid="login-password"
             name="password"
             type="password"
             autocomplete="current-password"
@@ -102,6 +104,7 @@
 
       <button
         type="submit"
+        data-testid="login-submit"
         disabled={loading}
         class="btn btn-primary w-full"
       >

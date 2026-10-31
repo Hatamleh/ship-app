@@ -12,6 +12,7 @@
     "setup": "prisma generate && prisma db push && prisma db seed",
     "seed": "prisma db seed",
     "ingest": "tsx scripts/ingest.ts",
+    "test:e2e": "playwright test",
     "reset": "rm -f prisma/dev.db prisma/dev.db-shm prisma/dev.db-wal && npm run setup"
   },
   "prisma": {
@@ -33,11 +34,12 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@sveltejs/adapter-node": "^5.5.7",
     "@sveltejs/kit": "^2.70.2",
     "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "@types/bcrypt": "^6.0.0",
-    "@types/node": "^20.10.6",
+    "@types/node": "^20.19.43",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "prisma": "^5.7.1",

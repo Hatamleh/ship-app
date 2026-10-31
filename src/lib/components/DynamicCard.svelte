@@ -27,6 +27,7 @@
     disabled = false,
     shipmentType,
     cardTitle,
+    testIdPrefix,
   }: {
     rules?: CardRules | null
     formData: Record<string, any>
@@ -36,7 +37,15 @@
     disabled?: boolean
     shipmentType?: string | null
     cardTitle?: string
+    testIdPrefix?: string
   } = $props()
+
+  // receiverName -> receiver-name, weight (prefix "package") -> package-weight
+  function testId(name: string) {
+    const kebab = name.replace(/([A-Z])/g, '-$1').toLowerCase()
+    if (!testIdPrefix) return undefined
+    return kebab.startsWith(`${testIdPrefix}-`) ? kebab : `${testIdPrefix}-${kebab}`
+  }
 
   const title = $derived(rules?.title || cardTitle || 'Loading...')
 
@@ -134,6 +143,7 @@
             {#if rule.type === 'select'}
               <select
                 id={name}
+                data-testid={testId(name)}
                 {name}
                 {value}
                 onchange={(e) => onChange(name, e.currentTarget.value)}
@@ -153,6 +163,7 @@
               <input
                 type="number"
                 id={name}
+                data-testid={testId(name)}
                 {name}
                 {value}
                 oninput={(e) => onChange(name, e.currentTarget.value)}
@@ -171,6 +182,7 @@
               <input
                 type="text"
                 id={name}
+                data-testid={testId(name)}
                 {name}
                 {value}
                 oninput={(e) => onChange(name, e.currentTarget.value)}

@@ -89,6 +89,7 @@
 {#if showSuccess}
   <div
     role="status"
+    data-testid="shipments-success-message"
     class="mb-6 bg-premium/20 border border-premium text-premium px-4 py-3 rounded"
   >
     Shipment saved successfully!

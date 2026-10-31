@@ -86,6 +86,7 @@
             </label>
             <input
               id="email"
+              data-testid="register-email"
               type="email"
               autocomplete="email"
               required
@@ -99,6 +100,7 @@
             </label>
             <input
               id="password"
+              data-testid="register-password"
               type="password"
               autocomplete="new-password"
               required
@@ -115,6 +117,7 @@
             </label>
             <input
               id="confirmPassword"
+              data-testid="register-confirm-password"
               type="password"
               autocomplete="new-password"
               required
@@ -138,6 +141,7 @@
             </label>
             <input
               id="fullName"
+              data-testid="register-full-name"
               type="text"
               autocomplete="name"
               required
@@ -151,6 +155,7 @@
             </label>
             <input
               id="phone"
+              data-testid="register-phone"
               type="tel"
               autocomplete="tel"
               required
@@ -164,6 +169,7 @@
             </label>
             <select
               id="country"
+              data-testid="register-country"
               required
               bind:value={form.country}
               class="field"
@@ -180,6 +186,7 @@
             </label>
             <input
               id="city"
+              data-testid="register-city"
               type="text"
               required
               bind:value={form.city}
@@ -192,6 +199,7 @@
             </label>
             <input
               id="postalCode"
+              data-testid="register-postal-code"
               type="text"
               autocomplete="postal-code"
               required
@@ -205,6 +213,7 @@
             </label>
             <input
               id="street"
+              data-testid="register-street"
               type="text"
               autocomplete="street-address"
               required
@@ -217,6 +226,7 @@
 
       <button
         type="submit"
+        data-testid="register-submit"
         disabled={loading}
         class="btn btn-primary w-full"
       >

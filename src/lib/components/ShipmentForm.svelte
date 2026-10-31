@@ -83,6 +83,7 @@
         onBlur={(n) => state.blurField(n)}
         disabled={!state.senderCompleted}
         cardTitle={t('form.receiverInformation')}
+        testIdPrefix="receiver"
       />
 
       <DynamicCard
@@ -94,6 +95,7 @@
         disabled={!state.receiverCompleted}
         shipmentType={state.shipmentType}
         cardTitle={t('form.packageDetails')}
+        testIdPrefix="package"
       />
     </div>
 
@@ -128,6 +130,7 @@
   <div class="flex justify-end gap-4">
     <button
       type="button"
+      data-testid="order-form-save-draft"
       onclick={() => state.submit(true)}
       disabled={state.loading}
       class="btn"

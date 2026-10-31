@@ -46,6 +46,7 @@
         {t('rate.totalPrice')}
       </span>
       <output
+        data-testid="rate-total-price"
         aria-labelledby="total-price-label"
         aria-live="polite"
         class="text-2xl font-bold text-primary"

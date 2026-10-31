@@ -51,6 +51,7 @@
           <div class="flex items-start gap-3">
             <input
               type="radio"
+              data-testid="service-{service.id}"
               name="serviceType"
               value={service.id}
               {checked}

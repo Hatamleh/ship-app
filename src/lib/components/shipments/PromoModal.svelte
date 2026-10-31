@@ -23,6 +23,7 @@
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div
       role="dialog"
+      data-testid="promo-modal"
       aria-modal="true"
       aria-labelledby="promo-title"
       class="surface max-w-md w-full mx-4 shadow-glow p-8 text-center"
@@ -36,6 +37,7 @@
       <p class="text-muted-foreground mb-6">Get 20% off express shipping this week only!</p>
       <button
         type="button"
+        data-testid="promo-close"
         onclick={() => (show = false)}
         class="btn btn-primary text-sm"
       >

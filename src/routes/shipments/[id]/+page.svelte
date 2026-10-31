@@ -71,7 +71,7 @@
 
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold text-foreground">
+      <h1 data-testid="shipment-details-heading" class="text-3xl font-bold text-foreground">
         {isDraft ? `Draft Shipment #${shipment.id}` : shipment.trackingNumber}
       </h1>
       <p class="mt-2 text-muted-foreground">
@@ -81,7 +81,7 @@
 
     <div class="flex items-center gap-4">
       {#if isDraft}
-        <span class="chip">
+        <span class="chip" data-testid="shipment-details-status">
           Draft
         </span>
         <a
@@ -92,6 +92,7 @@
         </a>
         <button
           type="button"
+          data-testid="shipment-details-finalize"
           onclick={finalize}
           disabled={working}
           class="btn btn-primary text-sm"
@@ -100,6 +101,7 @@
         </button>
       {:else}
         <span
+          data-testid="shipment-details-status"
           class="chip border-premium text-premium"
         >
           Finalized
