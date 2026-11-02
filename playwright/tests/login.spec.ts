@@ -17,6 +17,8 @@ test.describe('Login', () => {
 
     await test.step('Log in with a valid account', async () => {
       await loginPage.goto()
+      // The form is ready once the page JavaScript is attached; an earlier click would submit it natively.
+      await expect(loginPage.formLocator).toHaveAttribute('data-ready', 'true')
       await loginPage.fillForm(credentials)
       await loginPage.submit()
     }, { box: true })

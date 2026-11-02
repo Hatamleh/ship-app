@@ -1,7 +1,12 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import QacartMark from '$lib/components/QacartMark.svelte'
   import { goto, invalidateAll } from '$app/navigation'
   import { t } from '$lib/translations'
+
+  // Marks the form as interactive (JavaScript attached) so tests can wait for it before submitting.
+  let ready = $state(false)
+  onMount(() => (ready = true))
 
   let email = $state('')
   let password = $state('')
@@ -56,7 +61,7 @@
       </h1>
     </div>
 
-    <form class="mt-8 space-y-6" onsubmit={submit}>
+    <form data-testid="login-form" data-ready={ready} class="mt-8 space-y-6" onsubmit={submit}>
       {#if errorMessage}
         <div
           role="alert"

@@ -13,6 +13,7 @@ export interface RegisterFormData {
 }
 
 export class RegisterPage {
+  readonly formLocator: Locator = this.page.getByTestId('register-form')
   readonly emailLocator: Locator = this.page.getByTestId('register-email')
   readonly passwordLocator: Locator = this.page.getByTestId('register-password')
   readonly confirmPasswordLocator: Locator = this.page.getByTestId('register-confirm-password')

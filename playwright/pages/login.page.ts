@@ -6,6 +6,7 @@ export interface LoginFormData {
 }
 
 export class LoginPage {
+  readonly formLocator: Locator = this.page.getByTestId('login-form')
   readonly emailLocator: Locator = this.page.getByTestId('login-email')
   readonly passwordLocator: Locator = this.page.getByTestId('login-password')
   readonly submitButtonLocator: Locator = this.page.getByTestId('login-submit')

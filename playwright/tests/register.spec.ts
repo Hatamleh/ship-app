@@ -24,6 +24,8 @@ test.describe('Register', () => {
 
     await test.step('Fill the registration form and submit', async () => {
       await registerPage.goto()
+      // The form is ready once the page JavaScript is attached; an earlier click would submit it natively.
+      await expect(registerPage.formLocator).toHaveAttribute('data-ready', 'true')
       await registerPage.fillForm(user)
       await registerPage.submit()
     }, { box: true })
