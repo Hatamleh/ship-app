@@ -27,7 +27,7 @@ export class RegisterPage {
   constructor(private readonly page: Page) {}
 
   async goto() {
-    await this.page.goto('/register')
+    await this.page.goto('/register', { waitUntil: 'networkidle' })
   }
 
   async fillForm(data: RegisterFormData) {
