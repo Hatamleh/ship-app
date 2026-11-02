@@ -13,7 +13,7 @@ export class LoginPage {
   constructor(private readonly page: Page) {}
 
   async goto(): Promise<void> {
-    await this.page.goto('/login', { waitUntil: 'networkidle' })
+    await this.page.goto('/login')
   }
 
   async fillForm(data: LoginFormData): Promise<void> {
